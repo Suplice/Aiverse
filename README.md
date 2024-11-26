@@ -32,3 +32,5 @@ Kolejnym krokiem jest push do swojej gałęzi:
 Na samym końcu należy udać się na stronę githuba i utworzyć pull request, który zostanie sprawdzony i kod zmergowany do głównej gałęzi main
 
 # Nie commitujemy do gałęzi main!
+
+# W razie jakichkolwiek pytań piszcie na discordzie lub na messengerze
