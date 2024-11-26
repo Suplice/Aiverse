@@ -23,3 +23,5 @@ services:
     volumes:
       - ./Client:/app
       - /app/node_modules
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
