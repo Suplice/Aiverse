@@ -34,7 +34,6 @@ Powinny zainstalować nam się wszystkie paczki, a syntax podświetlić na popra
  - JavaScript (ES6) code snippets
  - PowerShell
  - Prettier
- - React
  - Tailwind CSS IntelliSense
  - WSL
 
