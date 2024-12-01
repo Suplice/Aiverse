@@ -23,7 +23,7 @@ const FirstComponent: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-4">
       {count}
       <button
         className="px-10 py-5 border-2 border-black"
@@ -32,6 +32,14 @@ const FirstComponent: React.FC = () => {
         }}
       >
         Click me!
+      </button>
+      <button
+        className="px-10 py-5 border-2 border-black"
+        onClick={() => {
+          setCount(count - 1);
+        }}
+      >
+        Don't click me!
       </button>
     </div>
   );
