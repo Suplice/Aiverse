@@ -31,7 +31,7 @@ const FirstComponent: React.FC = () => {
           setCount(count + 1);
         }}
       >
-        Click me!
+        Add value
       </button>
     </div>
   );

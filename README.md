@@ -69,3 +69,6 @@ Na samym końcu należy udać się na stronę githuba i utworzyć pull request, 
 # Nie commitujemy do gałęzi main!
 
 # W razie jakichkolwiek pytań piszcie na discordzie lub na messengerze
+
+#TEST
+
