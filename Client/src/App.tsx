@@ -1,11 +1,7 @@
-import FirstComponent from "./Components/FirstComponent";
+import AppRouter from "./Components/AppRouter/AppRouter";
 
 function App() {
-  return (
-    <>
-      <FirstComponent />
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;
