@@ -14,16 +14,14 @@ const SignIn = () => {
             AIVERSE.
           </h1>
         </div>
-        <div className="flex flex-col sm:w-[550px]    w-full justify-center h-full  ">
-          <h2 className="font-semibold text-3xl text-center font-serif">
-            Sign In
-          </h2>
+        <div className="flex flex-col md:w-[350px] lg:w-[550px] gap-2   w-full justify-center h-full  ">
+          <h2 className="font-bold text-3xl text-center font-serif">Sign In</h2>
           <div className="flex md:flex-row justify-around w-full my-12 text-center text-2xl font-medium tracking-tight flex-col gap-6 ">
-            <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-2">
+            <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200">
               <FcGoogle />
               <p>Google</p>
             </div>
-            <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-2">
+            <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200">
               <FaFacebook color="blue" />
               <p>Facebook</p>
             </div>
