@@ -1,16 +1,24 @@
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="h-screen w-screen flex flex-row items-center justify-center">
       <div className="md:w-1/2 hidden md:flex">
         App preview component /To be done/
       </div>
-      <div className="md:w-1/2 flex flex-col  xl:py-16 lg:py-12 py-8 h-full w-full items-center xl:px-24 lg:px-18 md:px-12 px-6 border">
+      <div className="md:w-1/2 flex flex-col  xl:py-16 lg:py-12 py-8 h-full w-full items-center xl:px-24 lg:px-18 md:px-12 px-6  bg-slate-50/30">
         <div className="flex items-start w-full h-24">
-          <h1 className="font-bold font-mono text-3xl tracking-tighter ">
+          <h1
+            className="font-bold font-mono text-3xl tracking-tighter hover:cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
             AIVERSE.
           </h1>
         </div>
@@ -58,7 +66,7 @@ const SignIn = () => {
                 <div className="flex flex-row items-center mt-1 ml-1 gap-1">
                   <input
                     type="checkbox"
-                    className="transition-all duration-200 accent-black"
+                    className="transition-all duration-200 accent-black hover:cursor-pointer"
                   />
                   <p className="font-semibold">Remember me</p>
                 </div>
@@ -69,7 +77,12 @@ const SignIn = () => {
               </button>
               <div className=" flex flex-row items-center justify-center gap-2 text-lg">
                 <p className="text-center">Not registered yet? </p>
-                <p className="underline-offset-auto underline font-bold ">
+                <p
+                  className="underline-offset-auto underline font-bold hover:cursor-pointer"
+                  onClick={() => {
+                    navigate("/auth/signup");
+                  }}
+                >
                   Sign up
                 </p>
               </div>
