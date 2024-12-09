@@ -15,11 +15,11 @@ const SignUp = () => {
   const { registerWithEmailAndPassword } = useAuth();
 
   const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    confirmPassword: yup
+    Email: yup.string().email().required(),
+    Password: yup.string().required(),
+    ConfirmPassword: yup
       .string()
-      .oneOf([yup.ref("password")], "Passwords must match")
+      .oneOf([yup.ref("Password")], "Passwords must match")
       .required(),
   });
 
@@ -90,13 +90,13 @@ const SignUp = () => {
                   type="email"
                   placeholder="Email"
                   className={`border-2  rounded-lg px-4 py-2 transition-all duration-200 outline-none  ${
-                    errors.email
+                    errors.Email
                       ? "border-red focus:border-red "
                       : "border-gray-400 focus:border-black"
                   }`}
-                  {...register("email")}
+                  {...register("Email")}
                 />
-                <p className="text-red text-sm">{errors.email?.message}</p>
+                <p className="text-red text-sm">{errors.Email?.message}</p>
               </div>
               <div className="flex flex-col">
                 <label className="font-semibold flex flex-row ">
@@ -107,13 +107,13 @@ const SignUp = () => {
                   type="password"
                   placeholder="Password"
                   className={`border-2  rounded-lg px-4 py-2 transition-all duration-200 outline-none  ${
-                    errors.password
+                    errors.Password
                       ? "border-red focus:border-red "
                       : "border-gray-400 focus:border-black"
                   }`}
-                  {...register("password")}
+                  {...register("Password")}
                 />
-                <p className="text-red text-sm">{errors.password?.message}</p>
+                <p className="text-red text-sm">{errors.Password?.message}</p>
               </div>
               <div className="flex flex-col">
                 <label className="font-semibold flex flex-row ">
@@ -124,14 +124,14 @@ const SignUp = () => {
                   type="password"
                   placeholder="Confirm Password"
                   className={`border-2  rounded-lg px-4 py-2 transition-all duration-200 outline-none  ${
-                    errors.confirmPassword
+                    errors.ConfirmPassword
                       ? "border-red focus:border-red "
                       : "border-gray-400 focus:border-black"
                   }`}
-                  {...register("confirmPassword")}
+                  {...register("ConfirmPassword")}
                 />
                 <p className="text-red text-sm">
-                  {errors.confirmPassword?.message}
+                  {errors.ConfirmPassword?.message}
                 </p>
               </div>
 
