@@ -15,9 +15,9 @@ const SignIn = () => {
   const { loginWithEmailAndPassword } = useAuth();
 
   const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    rememberMe: yup.boolean().required(),
+    Email: yup.string().email().required(),
+    Password: yup.string().required(),
+    RememberMe: yup.boolean().required(),
   });
 
   const {
@@ -89,9 +89,9 @@ const SignIn = () => {
                   type="email"
                   placeholder="Email"
                   className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
-                  {...register("email")}
+                  {...register("Email")}
                 />
-                <p className="text-red text-sm">{errors.email?.message}</p>
+                <p className="text-red text-sm">{errors.Email?.message}</p>
               </div>
               <div className="flex flex-col">
                 <label className="font-semibold flex flex-row ">
@@ -102,14 +102,14 @@ const SignIn = () => {
                   type="password"
                   placeholder="Password"
                   className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
-                  {...register("password")}
+                  {...register("Password")}
                 />
-                <p className="text-red text-sm">{errors.password?.message}</p>
+                <p className="text-red text-sm">{errors.Password?.message}</p>
                 <div className="flex flex-row items-center mt-1 ml-1 gap-1">
                   <input
                     type="checkbox"
                     className="transition-all duration-200 accent-black hover:cursor-pointer"
-                    {...register("rememberMe")}
+                    {...register("RememberMe")}
                   />
                   <p className="font-semibold">Remember me</p>
                 </div>

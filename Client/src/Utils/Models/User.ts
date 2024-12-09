@@ -1,22 +1,22 @@
 export type User = {
   Id: number;
   Email: string;
-  provider: string;
+  Provider: string;
   Name?: string;
   Picture?: string;
   CreatedAt: string;
-  role: "USER" | "ADMIN" | "MODERATOR";
+  Role: "USER" | "ADMIN" | "MODERATOR";
 };
 
 export type SignInFormData = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
+  Email: string;
+  Password: string;
+  RememberMe: boolean;
 };
 
 export type SignUpFormData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  provider?: string;
+  Email: string;
+  Password: string;
+  ConfirmPassword: string;
+  Provider?: string;
 };
