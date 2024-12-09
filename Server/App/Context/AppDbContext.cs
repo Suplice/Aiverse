@@ -23,6 +23,8 @@ public class AppDbContext : DbContext
 
         modelBuilder.Ignore<Supabase.Postgrest.ClientOptions>();
         modelBuilder.Entity<WeatherForecast>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<User>().Ignore(e => e.BaseUrl);
     }
     public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+    public DbSet<User> Users { get; set; }
 }
