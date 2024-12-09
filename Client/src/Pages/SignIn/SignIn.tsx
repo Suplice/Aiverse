@@ -2,9 +2,37 @@ import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { motion } from "motion/react";
+
+type SignInFormData = {
+  email: string;
+  password: string;
+  isRemember: boolean;
+};
 
 const SignIn = () => {
   const navigate = useNavigate();
+
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+    isRemember: yup.boolean().required(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const onSubmitHandler = (data: SignInFormData) => {
+    console.log(data);
+    reset();
+  };
 
   return (
     <div className="h-screen w-screen flex flex-row items-center justify-center">
@@ -13,16 +41,24 @@ const SignIn = () => {
       </div>
       <div className="md:w-1/2 flex flex-col  xl:py-16 lg:py-12 py-8 h-full w-full items-center xl:px-24 lg:px-18 md:px-12 px-6  bg-slate-50/30">
         <div className="flex items-start w-full h-24">
-          <h1
+          <motion.h1
+            initial={{ scale: 1, opacity: 0, y: -35 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="font-bold font-mono text-3xl tracking-tighter hover:cursor-pointer"
             onClick={() => {
               navigate("/");
             }}
           >
             AIVERSE.
-          </h1>
+          </motion.h1>
         </div>
-        <div className="flex flex-col md:w-[350px] lg:w-[550px] gap-2   w-full justify-center h-full  ">
+        <motion.div
+          initial={{ scale: 1, opacity: 0, y: 35 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:w-[350px] lg:w-[550px] gap-2   w-full justify-center h-full  "
+        >
           <h2 className="font-bold text-3xl text-center font-serif">Sign In</h2>
           <div className="flex md:flex-row justify-around w-full my-12 text-center text-2xl font-medium tracking-tight flex-col gap-6 ">
             <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200">
@@ -40,7 +76,11 @@ const SignIn = () => {
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
 
-          <form>
+          <form
+            onSubmit={handleSubmit(onSubmitHandler)}
+            className="h-[400px]"
+            autoComplete="off"
+          >
             <div className="flex flex-col gap-6 mt-6">
               <div className="flex flex-col ">
                 <label className="font-semibold flex flex-row">
@@ -51,7 +91,9 @@ const SignIn = () => {
                   type="email"
                   placeholder="Email"
                   className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
+                  {...register("email")}
                 />
+                <p className="text-red text-sm">{errors.email?.message}</p>
               </div>
               <div className="flex flex-col">
                 <label className="font-semibold flex flex-row ">
@@ -62,11 +104,14 @@ const SignIn = () => {
                   type="password"
                   placeholder="Password"
                   className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
+                  {...register("password")}
                 />
+                <p className="text-red text-sm">{errors.password?.message}</p>
                 <div className="flex flex-row items-center mt-1 ml-1 gap-1">
                   <input
                     type="checkbox"
                     className="transition-all duration-200 accent-black hover:cursor-pointer"
+                    {...register("isRemember")}
                   />
                   <p className="font-semibold">Remember me</p>
                 </div>
@@ -88,7 +133,7 @@ const SignIn = () => {
               </div>
             </div>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
