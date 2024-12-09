@@ -41,7 +41,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const registerWithEmailAndPassword = async (data: SignUpFormData) => {
     try {
-      console.log(data);
+      // Set provider to EMAIL
+      data.provider = "EMAIL";
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/register`,
