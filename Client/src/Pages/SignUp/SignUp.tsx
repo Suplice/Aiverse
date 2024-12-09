@@ -7,12 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
 import { useAuth } from "../../Utils/Context/AuthContext";
-
-type SignUpFormData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import { SignUpFormData } from "../../Utils/Models/User";
 
 const SignUp = () => {
   const navigate = useNavigate();
