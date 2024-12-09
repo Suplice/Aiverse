@@ -6,20 +6,18 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
-
-type SignInFormData = {
-  email: string;
-  password: string;
-  isRemember: boolean;
-};
+import { SignInFormData } from "../../Utils/Models/User";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 const SignIn = () => {
   const navigate = useNavigate();
 
+  const { loginWithEmailAndPassword } = useAuth();
+
   const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
-    isRemember: yup.boolean().required(),
+    rememberMe: yup.boolean().required(),
   });
 
   const {
@@ -29,8 +27,8 @@ const SignIn = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmitHandler = (data: SignInFormData) => {
-    console.log(data);
+  const onSubmitHandler = async (data: SignInFormData) => {
+    await loginWithEmailAndPassword(data);
     reset();
   };
 
@@ -111,7 +109,7 @@ const SignIn = () => {
                   <input
                     type="checkbox"
                     className="transition-all duration-200 accent-black hover:cursor-pointer"
-                    {...register("isRemember")}
+                    {...register("rememberMe")}
                   />
                   <p className="font-semibold">Remember me</p>
                 </div>

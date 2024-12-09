@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 type SignUpFormData = {
   email: string;
@@ -16,6 +17,8 @@ type SignUpFormData = {
 const SignUp = () => {
   const navigate = useNavigate();
 
+  const { registerWithEmailAndPassword } = useAuth();
+
   const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
@@ -23,7 +26,6 @@ const SignUp = () => {
       .string()
       .oneOf([yup.ref("password")], "Passwords must match")
       .required(),
-    isRemember: yup.boolean().required(),
   });
 
   const {
@@ -33,8 +35,9 @@ const SignUp = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmitHandler = (data: SignUpFormData) => {
+  const onSubmitHandler = async (data: SignUpFormData) => {
     console.log(data);
+    await registerWithEmailAndPassword(data);
     reset();
   };
 
