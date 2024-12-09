@@ -10,6 +10,10 @@ public class AuthController: ControllerBase{
 
     private readonly IAuthService _authService;
 
+    public AuthController(IAuthService authService){
+        _authService = authService;
+    }
+
     private Dictionary<string, List<string>?> GetModelStateErrors (ModelStateDictionary modelState)
         {
             var errors = modelState.ToDictionary(
@@ -40,18 +44,11 @@ public class AuthController: ControllerBase{
 
         var RegisterResult = await _authService.Register(RegisterData);
 
-        // if(RegisterResult == null)
-        //     return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
+    if(RegisterResult == null)
+        return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
 
-        // var correctResponse = new ApiResponse<ResponseRegisterDTO>(true, "ModelState is right", RegisterResult);
+    var correctResponse = new ApiResponse<ResponseRegisterDTO>(true, "ModelState is right", RegisterResult);
 
-        var fakeregister = new ResponseRegisterDTO{
-            Id = 1,
-            Email = "cos@tam.pl",
-            Name = "",
-            Role = "USER"
-        };
-
-        return Ok(fakeregister);
+        return Ok(correctResponse);
     } 
 }
