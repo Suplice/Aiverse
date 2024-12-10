@@ -1,5 +1,9 @@
 
+using Server.App.Models;
+
 public interface IAuthService{
-    //Task<ResponseLoginDTO> Login(RequestLoginDTO loginData);
-    Task<ResponseRegisterDTO> Register(RequestRegisterDTO RegisterData);
+    Task<User?> FindUserAsync(String Email);
+    Task<ResponseAuthDTO> Login(RequestLoginDTO LoginData);
+    Task<ResponseAuthDTO> Register(RequestRegisterDTO RegisterData);
+
 }
