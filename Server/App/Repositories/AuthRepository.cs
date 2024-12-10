@@ -30,23 +30,34 @@ public class AuthRepository: IAuthRepository{
     }
 
     public async Task<User> Register(User user){
-    try
-    {
-        // Log the serialized JSON payload
-        var jsonPayload = JsonConvert.SerializeObject(user);
-        Console.WriteLine($"Payload being sent: {jsonPayload}");
+        try
+        {
+            // Log the serialized JSON payload
+            var jsonPayload = JsonConvert.SerializeObject(user);
 
-        var response = await _supabaseClient.From<User>().Insert(user);
-        Console.WriteLine(response);
+            var response = await _supabaseClient.From<User>().Insert(user);
 
-        return response.Model;
+            return response.Model;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+
     }
-    catch (Exception e)
-    {
-        Console.WriteLine($"Insert failed: {e.Message}");
-        return null;
-    }
 
+    public async Task<User?> GetUserById(String UserId){
+        try {
+            var id = long.Parse(UserId);
+            var responseUser = await _supabaseClient.From<User>()
+                                    .Where(u => u.Id == id)
+                                    .Get();
+            return responseUser.Model;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
 
 }

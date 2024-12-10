@@ -65,5 +65,25 @@ public class AuthService : IAuthService {
         return responseAuthDTO;
     }
 
+
+    public async Task<ResponseAuthDTO> GetUserById(String UserId){
+        var user = await _authRepository.GetUserById(UserId);
+
+        if(user == null){
+            return null;
+        }
+
+        ResponseAuthDTO responseAuthDTO = new ResponseAuthDTO {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role,
+            Provider = user.Provider
+        };
+
+        return responseAuthDTO;
+
     }
+
+}
 }

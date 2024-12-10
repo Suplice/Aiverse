@@ -12,7 +12,7 @@ namespace Server.App.Models {
 public class User: BaseModel {
 
     public User(){}
-    [PrimaryKey("id",false)]
+    [PrimaryKey("Id",false)]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonIgnore] 
     public long Id { get; set; }

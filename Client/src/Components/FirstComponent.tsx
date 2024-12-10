@@ -1,45 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "../Utils/Context/AuthContext";
 
 const FirstComponent: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const { user, Logout } = useAuth();
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await fetch(
-          import.meta.env.VITE_API_URL + "/api/GetWeatherForecast"
-        );
-
-        console.log(response);
-
-        const data = await response.json();
-
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getData();
+    console.log(user);
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      {count}
+      <div>Data:</div>
+      <div>Id: {user?.Id}</div>
+      <div>Name: {user?.Name}</div>
+      <div>Email: {user?.Email}</div>
+      <div>Provider: {user?.Provider}</div>
       <button
-        className="px-10 py-5 border-2 border-black"
-        onClick={() => {
-          setCount(count + 1);
+        className="px-4 py-2 text-white bg-red rounded-md hover:bg-red/70 duration-200 transition-all"
+        onClick={async () => {
+          await Logout();
         }}
       >
-        Add value
-      </button>
-      <button
-        className="px-10 py-5 border-2 border-black"
-        onClick={() => {
-          setCount(count - 1);
-        }}
-      >
-        Don't click me!
+        Logout
       </button>
     </div>
   );

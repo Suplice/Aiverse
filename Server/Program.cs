@@ -20,8 +20,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<AppDbContext>();
 
-builder.Services.AddScoped<IAppRepository, AppRepository>();
-builder.Services.AddScoped<IAppService, AppService>();
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
