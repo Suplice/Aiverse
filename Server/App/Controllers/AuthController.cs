@@ -23,16 +23,24 @@ public class AuthController: ControllerBase{
             return errors;
         }
 
-    // [HttpPost("login")]
-    // public async Task<IActionResult> Login(RequestLoginDTO data){
-    //     if(!ModelState.IsValid){
-    //         var errors = GetModelStateErrors(ModelState);
-    //         var response = new ApiResponse<RequestLoginDTO>(false, "ModelState is invalid", data, errors);
-    //         return BadRequest(response);
-    //     }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(RequestLoginDTO LoginData){
+        if(!ModelState.IsValid){
+            var errors = GetModelStateErrors(ModelState);
+            var response = new ApiResponse<RequestLoginDTO>(false, "ModelState is invalid", LoginData, errors);
+            return BadRequest(response);
+        }
 
-    //     var LoginResult = await _authService.Login(data);
-    // } 
+        var LoginResult = await _authService.Login(LoginData);
+
+        if(LoginResult == null){
+            return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
+        }
+
+        var correctResponse = new ApiResponse<ResponseAuthDTO>(true, "ModelState is right", LoginResult);
+
+        return Ok(correctResponse);
+    } 
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RequestRegisterDTO RegisterData){
@@ -47,7 +55,7 @@ public class AuthController: ControllerBase{
     if(RegisterResult == null)
         return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
 
-    var correctResponse = new ApiResponse<ResponseRegisterDTO>(true, "ModelState is right", RegisterResult);
+    var correctResponse = new ApiResponse<ResponseAuthDTO>(true, "ModelState is right", RegisterResult);
 
         return Ok(correctResponse);
     } 

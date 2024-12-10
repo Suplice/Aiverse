@@ -51,8 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
-          credentials: "include",
+          body: JSON.stringify(data)
         }
       );
 
@@ -60,6 +59,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const user = await response.json();
         console.log(user);
       } else {
+        const result = await response.json();
+        console.log(result);
         console.error("Failed to register");
       }
     } catch (error) {

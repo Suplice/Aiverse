@@ -12,6 +12,23 @@ public class AuthRepository: IAuthRepository{
         _supabaseClient = supabaseClient;
     }
 
+    public async Task<User?> FindUserAsync(String Email){
+
+        try
+        {
+        var responseUser = await _supabaseClient.From<User>()
+                                    .Where(u => u.Email == Email)
+                                    .Get();
+        Console.WriteLine(responseUser.Model);
+        return responseUser.Model;
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine($"{e.Message}");
+            return null;
+        }
+    }
+
     public async Task<User> Register(User user){
     try
     {
@@ -22,7 +39,7 @@ public class AuthRepository: IAuthRepository{
         var response = await _supabaseClient.From<User>().Insert(user);
         Console.WriteLine(response);
 
-        return user;
+        return response.Model;
     }
     catch (Exception e)
     {

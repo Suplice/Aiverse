@@ -9,11 +9,37 @@ public class AuthService : IAuthService {
         _authRepository = authRepository;
     }
 
-    // public Task<ResponseLoginDTO> Login(RequestLoginDTO LoginData){
+    public async Task<User?> FindUserAsync(String Email){
+        return await _authRepository.FindUserAsync(Email);
+    }
 
-    // }
+    public async Task<ResponseAuthDTO> Login(RequestLoginDTO LoginData){
 
-    public async Task<ResponseRegisterDTO> Register(RequestRegisterDTO RegisterData){
+        User? user = await FindUserAsync(LoginData.Email);
+
+        if(user == null){
+            return null;
+        }
+
+        var VerifyPassword = BCrypt.Net.BCrypt.EnhancedVerify(LoginData.Password, user.Password);
+
+        if(!VerifyPassword){
+            return null;
+        }
+
+        ResponseAuthDTO responseAuthDTO = new ResponseAuthDTO {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role
+        };
+         
+        return responseAuthDTO;
+
+    }
+
+    public async Task<ResponseAuthDTO> Register(RequestRegisterDTO RegisterData){
+
         var CryptedPassword =  BCrypt.Net.BCrypt.EnhancedHashPassword(RegisterData.Password, 10);
 
         User user = new User {
@@ -26,15 +52,18 @@ public class AuthService : IAuthService {
 
         var result = await _authRepository.Register(user);
 
-        ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO {
+        if(result==null){
+            return null;
+        }
+        ResponseAuthDTO responseAuthDTO = new ResponseAuthDTO {
             Id = result.Id,
             Email = result.Email,
             Name = result.Name,
             Role = result.Role
         };
 
-        return responseRegisterDTO;
+        return responseAuthDTO;
     }
 
-}
+    }
 }
