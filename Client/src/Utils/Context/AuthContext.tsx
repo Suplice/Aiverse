@@ -1,18 +1,33 @@
-import { createContext, useState, ReactNode, useContext } from "react";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 import { SignInFormData, SignUpFormData, User } from "../Models/User";
+import { useNavigate } from "react-router-dom";
+import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
 
 interface AuthContextType {
   user: User | null;
   loginWithEmailAndPassword: (data: SignInFormData) => Promise<void>;
   registerWithEmailAndPassword: (data: SignUpFormData) => Promise<void>;
+  isAuthenticated: boolean;
+  Logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const navigate = useNavigate();
 
   const loginWithEmailAndPassword = async (data: SignInFormData) => {
+    setIsLoading(true);
     try {
       console.log(data);
 
@@ -29,17 +44,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (response.ok) {
-        const user = await response.json();
-        console.log(user);
+        const result = await response.json();
+
+        setIsAuthenticated(true);
+        setUser({
+          Id: result.data.Id,
+          Email: result.data.Email,
+          Provider: "EMAIL",
+          Role: result.data.Role,
+          Name: result.data.Name,
+        });
+
+        navigate("/");
       } else {
         console.error("Failed to login");
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const registerWithEmailAndPassword = async (data: SignUpFormData) => {
+    setIsLoading(true);
     try {
       // Set provider to EMAIL
       data.Provider = "EMAIL";
@@ -51,13 +79,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          credentials: "include",
         }
       );
 
       if (response.ok) {
-        const user = await response.json();
-        console.log(user);
+        const result = await response.json();
+
+        setIsAuthenticated(true);
+        setUser({
+          Id: result.data.Id,
+          Email: result.data.Email,
+          Provider: "EMAIL",
+          Role: result.data.Role,
+          Name: result.data.Name,
+        });
+
+        navigate("/");
       } else {
         const result = await response.json();
         console.log(result);
@@ -65,8 +104,76 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const Logout = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        setIsAuthenticated(false);
+        setUser(null);
+        navigate("/auth/SignIn");
+      } else {
+        console.error("Failed to logout");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkCredentials = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/auth/credentials`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+
+          console.log(result);
+
+          setIsAuthenticated(true);
+          setUser({
+            Id: result.data.Id,
+            Email: result.data.Email,
+            Provider: result.data.Provider,
+            Role: result.data.Role,
+            Name: result.data.Name,
+          });
+        } else {
+          setIsAuthenticated(false);
+          setUser(null);
+          navigate("/auth/SignIn");
+        }
+      } catch (error) {
+        console.error(error);
+        navigate("/auth/SignIn");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkCredentials();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -74,9 +181,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         loginWithEmailAndPassword,
         registerWithEmailAndPassword,
+        isAuthenticated,
+        Logout,
       }}
     >
-      {children}s
+      {isLoading ? <LoadingPage /> : children}
     </AuthContext.Provider>
   );
 };

@@ -4,7 +4,7 @@ export type User = {
   Provider: string;
   Name?: string;
   Picture?: string;
-  CreatedAt: string;
+  CreatedAt?: string;
   Role: "USER" | "ADMIN" | "MODERATOR";
 };
 
