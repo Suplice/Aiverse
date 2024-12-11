@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 
 const images = [
@@ -15,9 +16,17 @@ const AppPreview = () => {
 
   return (
     <div className="flex flex-col w-full h-full items-center gap-10 justify-center ">
-      <div className="">
-        <img src={images[imgIndex]} className="shadow-2xl"></img>
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.2 } }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          key={imgIndex}
+          className="transition-all duration-200"
+        >
+          <img src={images[imgIndex]} className="shadow-2xl"></img>
+        </motion.div>
+      </AnimatePresence>
       <div className="flex flex-row items-center gap-10 ">
         <button
           onClick={() => setIndex(0)}
