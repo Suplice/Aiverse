@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
 import { SignInFormData } from "../../Utils/Models/User";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import AppPreview from "../../Components/AppPreview/AppPreview";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -34,8 +35,8 @@ const SignIn = () => {
 
   return (
     <div className="h-screen w-screen flex flex-row items-center justify-center">
-      <div className="md:w-1/2 hidden md:flex">
-        App preview component /To be done/
+      <div className="md:w-1/2 hidden md:flex h-full w-full bg-slate-400 items-center justify-center">
+        <AppPreview />
       </div>
       <div className="md:w-1/2 flex flex-col  xl:py-16 lg:py-12 py-8 h-full w-full items-center xl:px-24 lg:px-18 md:px-12 px-6  bg-slate-50/30">
         <div className="flex items-start w-full h-24">
