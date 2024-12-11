@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { SignUpFormData } from "../../Utils/Models/User";
+import AppPreview from "../../Components/AppPreview/AppPreview";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -153,8 +154,8 @@ const SignUp = () => {
           </form>
         </motion.div>
       </div>
-      <div className="md:w-1/2 hidden md:flex">
-        App preview component /To be done/
+      <div className="md:w-1/2 hidden md:flex h-full w-full bg-slate-400 items-center justify-center">
+        <AppPreview />
       </div>
     </div>
   );
