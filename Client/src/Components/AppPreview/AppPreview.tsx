@@ -29,12 +29,12 @@ const AppPreview = () => {
 
   return (
     <div className="flex flex-col w-full h-full items-center gap-10 justify-center relative">
-      <div className="relative w-[400px]  h-[400px] flex items-center justify-center">
+      <div className="relative w-[380px]  h-[380px] flex items-center justify-center">
         {images.map((image, index) => (
           <motion.img
             key={index}
             src={image}
-            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[270px] transition-all duration-500 ${getImagePosition(
+            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[250px] transition-all duration-500 ${getImagePosition(
               index
             )}`}
             initial={{ opacity: 0 }}
