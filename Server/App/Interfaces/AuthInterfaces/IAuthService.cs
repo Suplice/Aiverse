@@ -6,5 +6,6 @@ public interface IAuthService{
     Task<ResponseAuthDTO> Login(RequestLoginDTO LoginData);
     Task<ResponseAuthDTO> Register(RequestRegisterDTO RegisterData);
     Task<ResponseAuthDTO> GetUserById(String UserId);
+    Task<ResponseAuthDTO> GoogleLogin(RequestGoogleDTO GoogleData);
 
 }

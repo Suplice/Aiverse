@@ -1,6 +1,4 @@
 import React from "react";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -9,6 +7,7 @@ import { motion } from "motion/react";
 import { SignInFormData } from "../../Utils/Models/User";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import AppPreview from "../../Components/AppPreview/AppPreview";
+import OAuthComponent from "../../Components/OAuth/Oauth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -59,16 +58,7 @@ const SignIn = () => {
           className="flex flex-col md:w-[350px] lg:w-[500px] gap-2   w-full justify-center h-full  "
         >
           <h2 className="font-bold text-3xl text-center font-serif">Sign In</h2>
-          <div className="flex md:flex-row justify-around w-full my-12 text-center text-2xl font-medium tracking-tight flex-col gap-6 ">
-            <div className="flex-grow border-2  py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200">
-              <FcGoogle />
-              <p>Google</p>
-            </div>
-            <div className="flex-grow border-2 px-6 py-3 rounded-lg flex  flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200">
-              <FaFacebook color="blue" />
-              <p>Facebook</p>
-            </div>
-          </div>
+          <OAuthComponent />
           <div className="flex items-center w-full mb-4 ">
             <div className="flex-grow border-t border-gray-400"></div>
             <p className="px-3 mb-[4px] ">Or continue with email</p>

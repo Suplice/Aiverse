@@ -8,6 +8,7 @@ import {
 import { SignInFormData, SignUpFormData, User } from "../Models/User";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
+import { GoogleSignInData } from "../Models/ProviderLogin";
 
 interface AuthContextType {
   user: User | null;
@@ -15,6 +16,7 @@ interface AuthContextType {
   registerWithEmailAndPassword: (data: SignUpFormData) => Promise<void>;
   isAuthenticated: boolean;
   Logout: () => Promise<void>;
+  LoginWithGoogle: (data: GoogleSignInData) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -69,7 +71,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const registerWithEmailAndPassword = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {
-      // Set provider to EMAIL
       data.Provider = "EMAIL";
 
       const response = await fetch(
@@ -101,6 +102,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const result = await response.json();
         console.log(result);
         console.error("Failed to register");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const LoginWithGoogle = async (data: GoogleSignInData) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+
+        setIsAuthenticated(true);
+        setUser({
+          Id: result.data.Id,
+          Email: result.data.Email,
+          Provider: "GOOGLE",
+          Role: result.data.Role,
+          Name: result.data.Name,
+        });
+
+        navigate("/");
+      } else {
+        console.error("Failed to login with Google");
       }
     } catch (error) {
       console.error(error);
@@ -183,6 +222,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         registerWithEmailAndPassword,
         isAuthenticated,
         Logout,
+        LoginWithGoogle,
       }}
     >
       {isLoading ? <LoadingPage /> : children}
