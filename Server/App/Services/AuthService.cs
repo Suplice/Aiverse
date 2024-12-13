@@ -13,6 +13,46 @@ public class AuthService : IAuthService {
         return await _authRepository.FindUserAsync(Email);
     }
 
+    public async Task<ResponseAuthDTO> GoogleLogin(RequestGoogleDTO GoogleData){
+        User? user = await FindUserAsync(GoogleData.Email);
+
+        if(user == null){
+            User newUser = new User {
+                Email = GoogleData.Email,
+                Name = GoogleData.Given_name,
+                Provider = "GOOGLE",
+                CreatedAt = DateTime.Now,
+                Role = "USER"
+            };
+
+            var result = await _authRepository.Register(newUser);
+
+            if(result == null){
+                return null;
+            }
+
+            ResponseAuthDTO firstResponseAuthDTO = new ResponseAuthDTO {
+                Id = result.Id,
+                Email = result.Email,
+                Name = result.Name,
+                Role = result.Role,
+                Provider = user.Provider
+            };
+
+            return firstResponseAuthDTO;
+        }
+
+        ResponseAuthDTO responseAuthDTO = new ResponseAuthDTO {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role,
+            Provider = user.Provider
+        };
+
+        return responseAuthDTO;
+    }
+
     public async Task<ResponseAuthDTO> Login(RequestLoginDTO LoginData){
 
         User? user = await FindUserAsync(LoginData.Email);

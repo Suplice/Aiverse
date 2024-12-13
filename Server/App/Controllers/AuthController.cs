@@ -36,6 +36,39 @@ public class AuthController: ControllerBase{
         return Ok(new ApiResponse<bool>(true, "Logout successful", true));
     }
 
+    [HttpPost("google")]
+    public async Task<IActionResult> GoogleLogin(RequestGoogleDTO GoogleData){
+        if(!ModelState.IsValid){
+            var errors = GetModelStateErrors(ModelState);
+            var response = new ApiResponse<RequestGoogleDTO>(false, "ModelState is invalid", GoogleData, errors);
+            return BadRequest(response);
+        }
+
+        var GoogleResult = await _authService.GoogleLogin(GoogleData);
+
+        if(GoogleResult == null){
+            return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
+        }
+
+
+        var token = GenerateJwtToken(GoogleResult.Id.ToString());
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true, 
+            Secure = true,  
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(1) 
+        };
+
+        Response.Cookies.Append("authToken", token, cookieOptions);
+
+        var correctResponse = new ApiResponse<ResponseAuthDTO>(true, "Login successful", GoogleResult);
+        return Ok(correctResponse);
+
+
+    }
+
     [HttpGet("credentials")]
     public async Task<IActionResult> CheckCredentials(){
         var token = Request.Cookies["authToken"];
