@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
 import { useAuth } from "../../Utils/Context/AuthContext";
-import { SignUpFormData } from "../../Utils/Models/User";
+import { SignUpFormData } from "../../Utils/Models/Forms";
 import AppPreview from "../../Components/AppPreview/AppPreview";
 import OAuthComponent from "../../Components/OAuth/Oauth";
 
