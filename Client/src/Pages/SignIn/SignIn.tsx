@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion } from "motion/react";
-import { SignInFormData } from "../../Utils/Models/User";
+import { SignInFormData } from "../../Utils/Models/Forms";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import AppPreview from "../../Components/AppPreview/AppPreview";
 import OAuthComponent from "../../Components/OAuth/Oauth";

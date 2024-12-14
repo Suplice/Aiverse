@@ -5,7 +5,8 @@ import {
   useContext,
   useEffect,
 } from "react";
-import { SignInFormData, SignUpFormData, User } from "../Models/User";
+import { User } from "../Models/User";
+import { SignInFormData, SignUpFormData } from "../Models/Forms";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
 import { GoogleSignInData } from "../Models/ProviderLogin";
