@@ -51,7 +51,7 @@ Powinny zainstalować nam się wszystkie paczki, a syntax podświetlić na popra
 
 ## Commitowanie
 
-Aby commitować do repozytorium należy przed stworzyć własną gałąź:
+Aby commitować do głównej gałęzi repozytorium należy przed stworzyć własną gałąź:
  - git checkout -b (nazwa gałęzi)
 
 Następnie należy dodać wprowadzone zmiany
@@ -64,6 +64,16 @@ Kolejnym krokiem jest push do swojej gałęzi:
  - git push origin (nazwa utworzonej gałęzi)
 
 Na samym końcu należy udać się na stronę githuba i utworzyć pull request, który zostanie sprawdzony i kod zmergowany do głównej gałęzi main
+po stworzeniu pull request, należy poczekać, aż zostanie on sprawdzony
+jeśli pull request zostanie zatwierdzony i zmergowany do main, to należy pobrać dane z głównej gałęzi main w kodzie:
+
+- git checkout main
+- git pull
+
+## Jeśli chcemy pracować w 2 osoby na jednej gałęzi to należy:
+
+- git checkout -b "nazwa nowej gałęzi" (stworzenie nowej gałęzi)
+- git push origin "nazwa nowej gałęzi" (dodanie wprowadzenie gałęzi na githuba)
 
 # Nie commitujemy do gałęzi main!
 
