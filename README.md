@@ -75,6 +75,21 @@ jeśli pull request zostanie zatwierdzony i zmergowany do main, to należy pobra
 - git checkout -b "nazwa nowej gałęzi" (stworzenie nowej gałęzi)
 - git push origin "nazwa nowej gałęzi" (dodanie wprowadzenie gałęzi na githuba)
 
+## Następnie druga osoba wykonuje następujące komendy:
+- git checkout "nazwa nowej gałęzi" (przeniesienie się na nową gałąź)
+- git pull origin "nazwa gałęzi" (pobranie danych o commitach z gałęzi)
+
+## Aby wymieniać się pracą należy za każdym możliwym razem wykonywać komendę:
+- git status (sprawdzamy czy nasza gałąź jest aktualna, czy może druga osoba zrobiła jakieś commity)
+
+## Aby wprowadzać zmiany na nowej gałęzi korzystamy z komend:
+- git add .
+- git commit -a -m "opis commitu"
+- git push origin "nazwa nowej gałęzi"
+  
+## jeżeli jesteśmy do tyłu na gałęzi (druga osoba zrobiła jakieś commity) to należy wpisać komendę:
+- git pull origin "nazwa nowej gałęzi"
+  
 # Nie commitujemy do gałęzi main!
 
 # W razie jakichkolwiek pytań piszcie na discordzie lub na messengerze
