@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import { FaFacebook } from "react-icons/fa";
+import { FacebookProvider, LoginButton } from "react-facebook";
 
 declare global {
   interface Window {
@@ -12,7 +14,6 @@ declare global {
             client_id: string;
             callback: (response: { credential: string }) => void;
           }) => void;
-          prompt: () => void;
           renderButton: (
             container: HTMLElement,
             options: {
@@ -93,6 +94,18 @@ const OAuthComponent = () => {
     ).click();
   };
 
+  const handleFacebookSuccess = (response: unknown) => {
+    console.log(response);
+  };
+
+  const handleFacebookError = (error: Error) => {
+    console.error(error);
+  };
+
+  const handleFacebookClick = () => {
+    document.getElementById("facebook-login-btn")?.click();
+  };
+
   return (
     <div className="flex md:flex-row justify-around w-full my-12 text-center text-2xl font-medium tracking-tight flex-col gap-6 ">
       <div
@@ -102,6 +115,29 @@ const OAuthComponent = () => {
         <FcGoogle />
         <p>Google</p>
       </div>
+      <FacebookProvider appId={import.meta.env.VITE_FACEBOOK_APP_ID as string}>
+        <div
+          onClick={() => {
+            handleFacebookClick();
+          }}
+          className="flex-grow border-2 py-3 rounded-lg flex flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200"
+        >
+          <FaFacebook color="blue" />
+          <p>Facebook</p>
+        </div>
+        <div className="hidden">
+          <LoginButton
+            scope="email"
+            onError={handleFacebookError}
+            onSuccess={handleFacebookSuccess}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            id="facebook-login-btn"
+          >
+            Login via Facebook
+          </LoginButton>
+        </div>
+      </FacebookProvider>
 
       <div id="google-login-btn" className="hidden"></div>
     </div>
