@@ -2,6 +2,6 @@ using Server.App.Models;
 
 public interface IAIServiceService{
 
-    Task<List<AiService>?> FindServices();
+    Task<List<AiService>?> FindAllServices();
     
 }
