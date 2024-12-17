@@ -2,17 +2,17 @@ using Microsoft.AspNetCore.JsonPatch.Internal;
 using Server.App.Models;
 using Supabase;
 
-public class SearchRepository: IAIServiceRepository {
+public class AIServiceRepository: IAIServiceRepository {
 
     private readonly Client _supabaseClient;
 
     public async Task<List<AiService>?> FindAllServices(){
 
         try{
-            var responsServices = await _supabaseClient
+            var responseServices = await _supabaseClient
                                             .From<AiService>()
                                             .Get();
-            var servicesList = responsServices.Models;
+            var servicesList = responseServices.Models;
             return servicesList;
         }catch(Exception e)
         {

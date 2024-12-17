@@ -7,11 +7,11 @@ using TaskManagementApp.Core.ApiResponse;
 [Route("aiservice")]
 public class AIServiceController: ControllerBase {
 
-    private readonly IAIServiceService _searchSerivce;
+    private readonly IAIServiceService _AIServiceSerivce;
 
     [HttpGet("findall")]
     public async Task<IActionResult> FindAllServices(){
-        var ServicesResult = await _searchSerivce.FindAllServices();
+        var ServicesResult = await _AIServiceSerivce.FindAllServices();
 
         if(ServicesResult == null){
             var response = new ApiResponse<bool>(false, "Error occured", false);
