@@ -3,19 +3,20 @@ import { useAuth } from "../../Utils/Context/AuthContext";
 
 const SettingsButton = () => {
   const { user } = useAuth();  
-  const [editingName, setEditingName] = useState(false);
-  const [newName, setNewName] = useState(user?.Name || "");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [userName, setUserName] = useState<string>(user?.Name || "")
 
-  const handleNameChange = () => {
-    setEditingName(true);
-  };
+  const handleChangeName = () => {
+    if (userName.trim() === "") {
+      alert("Name cannot be empty!");
+      return;
+    }
 
-  // Funkcja do zapisania nowego imienia
-  const saveName = () => {
+    setUserName(userName);
     // Tutaj dodam logikę zapisywania nowego imienia
-    setEditingName(false);
+    setIsEditingName(false);
     // Zaktualizowanie imienia może się odbywać tutaj
-    console.log('New name:', newName);
+    console.log('New name:', userName);
   };
 
   return (
@@ -24,22 +25,22 @@ const SettingsButton = () => {
         <div className="font-bold text-xl mb-2">User Data:</div>
         <div className="flex flex-row items-center gap-4">
           <strong>Name:</strong> 
-          {editingName ? (
+          {isEditingName ? (
             <div className="flex items-center gap-2">
               <input 
                 type="text" 
-                value={newName} 
-                onChange={(e) => setNewName(e.target.value)} 
+                value={userName} 
+                onChange={(e) => setUserName(e.target.value)} 
                 className="px-2 py-1 border rounded"
               />
-              <button onClick={saveName} className="px-2 py-1 bg-blue-500 text-white rounded">
+              <button onClick={handleChangeName} className="px-2 py-1 bg-blue-500 text-white rounded">
                 Save
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               {user?.Name} 
-              <button onClick={handleNameChange} className="px-2 py-1 bg-black text-white rounded">
+              <button onClick={() => {setIsEditingName(true)}} className="px-2 py-1 bg-black text-white rounded">
                 Change
               </button>
             </div>
