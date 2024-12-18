@@ -5,9 +5,9 @@ public class AIServiceSerivce: IAIServiceService {
 
     private readonly IAIServiceRepository _AIServiceRepository;
 
-    public async Task<List<AiService>?> FindAllServices(){
+    public async Task<List<AiService>?> GetAllServices(){
         
-        var result = await _AIServiceRepository.FindAllServices();
+        var result = await _AIServiceRepository.GetAllServices();
 
         return result;
 

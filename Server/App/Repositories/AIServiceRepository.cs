@@ -6,7 +6,7 @@ public class AIServiceRepository: IAIServiceRepository {
 
     private readonly Client _supabaseClient;
 
-    public async Task<List<AiService>?> FindAllServices(){
+    public async Task<List<AiService>?> GetAllServices(){
 
         try{
             var responseServices = await _supabaseClient

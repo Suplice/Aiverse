@@ -9,18 +9,19 @@ public class AIServiceController: ControllerBase {
 
     private readonly IAIServiceService _AIServiceSerivce;
 
-    [HttpGet("findall")]
-    public async Task<IActionResult> FindAllServices(){
-        var ServicesResult = await _AIServiceSerivce.FindAllServices();
+    [HttpGet("getall")]
+    public async Task<IActionResult> GetAllServices(){
+        var ServicesResult = await _AIServiceSerivce.GetAllServices();
 
         if(ServicesResult == null){
             var response = new ApiResponse<bool>(false, "Error occured", false);
             return BadRequest(response);
         }
 
-        var correctResponse = new ApiResponse<List<AiService>>(false, "Services found", ServicesResult);
+        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServicesResult);
 
         return Ok(correctResponse);
     }
+
 
 }
