@@ -29,7 +29,7 @@ public class AIServiceRepository: IAIServiceRepository {
         try{
             var responseService = await _supabaseClient
                                             .From<AiService>()
-                                            .Where(u => u.Id == serviceId)
+                                            .Where(s => s.Id == serviceId)
                                             .Get();
             return responseService.Model;
         }catch(Exception e){

@@ -1,7 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
-using Supabase.Gotrue;
 using TaskManagementApp.Core.ApiResponse;
 
 [ApiController]
@@ -32,7 +31,7 @@ public class AIServiceController: ControllerBase {
     public async Task<IActionResult> GetServiceById(long serviceId){
 
         if(serviceId <= 0){
-            var response = new ApiResponse<bool>(false, "Error: Provided ID was below 0", false);
+            var response = new ApiResponse<bool>(false, "Provided id does not exist", false);
             return BadRequest(response);
         }
 
