@@ -6,6 +6,10 @@ public class AIServiceRepository: IAIServiceRepository {
 
     private readonly Client _supabaseClient;
 
+    public AIServiceRepository(Client supabaseClient){
+        _supabaseClient = supabaseClient;
+    } 
+
     public async Task<List<AiService>?> GetAllServices(){
 
         try{
@@ -16,6 +20,19 @@ public class AIServiceRepository: IAIServiceRepository {
             return servicesList;
         }catch(Exception e)
         {
+            Console.WriteLine($"{e.Message}");
+            return null;
+        }
+    }
+
+    public async Task<AiService?> GetServiceById(long serviceId){
+        try{
+            var responseService = await _supabaseClient
+                                            .From<AiService>()
+                                            .Where(u => u.Id == serviceId)
+                                            .Get();
+            return responseService.Model;
+        }catch(Exception e){
             Console.WriteLine($"{e.Message}");
             return null;
         }
