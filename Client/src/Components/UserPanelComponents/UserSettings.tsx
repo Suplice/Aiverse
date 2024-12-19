@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
-const SettingsButton = () => {
+const UserSettings = () => {
   const { user } = useAuth();  
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState<string>(user?.Name || "")
@@ -61,4 +61,4 @@ const SettingsButton = () => {
   );
 };
 
-export default SettingsButton;
+export default UserSettings;

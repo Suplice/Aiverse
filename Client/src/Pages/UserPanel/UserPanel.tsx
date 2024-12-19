@@ -1,6 +1,6 @@
 
 import ProfilePicture from "../../Components/UserPanelComponents/ProfilePicture";
-import SettingsButton from "../../Components/UserPanelComponents/SettingsButton";
+import SettingsButton from "../../Components/UserPanelComponents/UserSettings";
 import { useState } from "react";
 
 
