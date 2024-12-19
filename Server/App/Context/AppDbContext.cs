@@ -30,4 +30,7 @@ public class AppDbContext : DbContext
     public DbSet<WeatherForecast> WeatherForecasts { get; set; }
     public DbSet<User> Users { get; set; }
 
+    public DbSet<AiService> AiServices { get; set; }
+
+    public DbSet<Function> Functions { get; set; }
 }
