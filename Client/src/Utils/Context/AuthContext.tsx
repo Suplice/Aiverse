@@ -202,11 +202,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           setIsAuthenticated(false);
           setUser(null);
-          navigate("/auth/SignIn");
         }
       } catch (error) {
         console.error(error);
-        navigate("/auth/SignIn");
       } finally {
         setIsLoading(false);
       }
