@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
 
-const defaultImage = "../public/samochód.png";
+const defaultImage = "../public/car.png";
 
 const UserPanel = () => {
   const { user } = useAuth(); 

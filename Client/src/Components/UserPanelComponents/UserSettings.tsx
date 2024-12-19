@@ -21,25 +21,25 @@ const UserSettings = () => {
 
     setUserName(userName);
     setIsEditingName(false);
-    console.log('New name:', userName);
+    console.log("New name:", userName);
   };
 
   const handleChangePassword = () => {
     if (newPassword !== confirmNewPassword) {
-      setPasswordError("Nowe hasło i potwierdzenie hasła nie są zgodne.");
+      setPasswordError("New password and confirmation do not match.");
       return;
     }
 
     if (newPassword.length < 6) {
-      setPasswordError("Hasło musi mieć co najmniej 6 znaków.");
+      setPasswordError("Password must be at least 6 characters long.");
       return;
     }
 
     setPasswordError(null);
-    console.log("Stare hasło:", oldPassword);
-    console.log("Nowe hasło:", newPassword);
+    console.log("Old password:", oldPassword);
+    console.log("New password:", newPassword);
 
-    setPasswordSuccess("Hasło zostało zmienione pomyślnie!");
+    setPasswordSuccess("Password changed successfully!");
     setOldPassword("");
     setNewPassword("");
     setConfirmNewPassword("");
@@ -101,15 +101,16 @@ const UserSettings = () => {
         </div>
 
         {user?.Provider === "EMAIL" && (
-        <div className="flex flex-row items-center gap-4">
-          <strong>Password:</strong>
+          <div className="flex flex-row items-center gap-4">
+            <strong>Password:</strong>
             <button
               onClick={handleToggleChangePassword}
               className="px-2 py-1 bg-white text-black border-2 border-black rounded-lg shadow-md hover:bg-black hover:text-white focus:outline-none transition duration-300"
             >
               Change Password
             </button>
-        </div>)}
+          </div>
+        )}
 
         {isChangingPassword && (
           <div className="flex flex-col gap-4 mt-4">
