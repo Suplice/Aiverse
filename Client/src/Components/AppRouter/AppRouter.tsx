@@ -15,7 +15,9 @@ const AppRouter = () => {
             <Route path="SignUp" element={<SignUp />}></Route>
             <Route path="SignIn" element={<SignIn />}></Route>
           </Route>
-          <Route path="/user/panel" element={<UserPanel />} />
+          <Route path="user">
+            <Route path="panel" element={<UserPanel />}></Route>
+          </Route>
           <Route path="*" element={<FirstComponent />}></Route>
         </Routes>
       </AuthProvider>
