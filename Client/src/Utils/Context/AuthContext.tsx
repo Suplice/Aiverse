@@ -206,7 +206,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch (error) {
         console.error(error);
-        navigate("/auth/SignIn");
       } finally {
         setIsLoading(false);
       }
