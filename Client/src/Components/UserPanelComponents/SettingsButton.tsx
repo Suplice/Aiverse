@@ -40,7 +40,7 @@ const SettingsButton = () => {
           ) : (
             <div className="flex items-center gap-2">
               {user?.Name} 
-              <button onClick={() => {setIsEditingName(true)}} className="px-2 py-1 bg-black text-white rounded">
+              <button onClick={() => {setIsEditingName(true)}} className="px-2 py-1 bg-black text-white rounded hover:bg-gray-700">
                 Change
               </button>
             </div>
@@ -50,7 +50,7 @@ const SettingsButton = () => {
         <div className="flex flex-row items-center gap-4">
           <strong>Email:</strong>
           {user?.Email}
-          {user?.Provider === "EMAIL" && <button className="px-2 py-1 bg-black text-white rounded">Change</button>}
+          {user?.Provider === "EMAIL" && <button className="px-2 py-1 bg-black text-white rounded hover:bg-gray-700">Change</button>}
         </div>
 
         <div className="flex flex-row items-center gap-4">
