@@ -89,6 +89,11 @@ jeśli pull request zostanie zatwierdzony i zmergowany do main, to należy pobra
   
 ## jeżeli jesteśmy do tyłu na gałęzi (druga osoba zrobiła jakieś commity) to należy wpisać komendę:
 - git pull origin "nazwa nowej gałęzi"
+
+## jeżeli jesteśmy do tyłu na gałęzi względem main (doszły jakieś zmiany do głównej gałęzi)
+- git fetch origin (pobieramy najnowsze zmiany z main)
+- git merge origin/main (mergujemy zmiany do naszego brancha, jeśli nie ma konfliktów zmiany nastąpią automatycznie, w przeciwnym wypadku należy wybrać zmiany z main)
+- teraz możemy już dodać pliki, zrobić commit i utworzyć PR
   
 # Nie commitujemy do gałęzi main!
 
