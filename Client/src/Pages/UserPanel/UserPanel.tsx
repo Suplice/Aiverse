@@ -2,6 +2,7 @@ import UserSettings from "../../Components/UserPanelComponents/UserSettings";
 import { useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
+
 const defaultImage = "../public/samochód.png";
 
 const UserPanel = () => {
@@ -18,7 +19,7 @@ const UserPanel = () => {
 
   return (
     <div className="flex-col justify-center items-center h-screen bg-white">
-      <div className="flex items-center justify-center h-1/2 border-b-4 border-black pb-4 w-3/4 mx-auto">
+      <div className="flex items-center justify-center h-1/2 border-b-4 border-gray-200 py-4 w-5/6 mx-auto">
         <div className="w-48 h-48 rounded-full overflow-hidden flex justify-center items-center relative group border-4 border-black">
           <img
             src={userImage}
@@ -45,7 +46,7 @@ const UserPanel = () => {
         </div>
       </div>
 
-      <div className="flex justify-center gap-4 border-b-4 border-black py-4 w-3/4 mx-auto">
+      <div className="flex justify-center gap-4 border-b-4 border-gray-200 py-4 w-5/6 mx-auto">
         <button
           onClick={() => setSelectedSubPage("Settings")}
           className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
