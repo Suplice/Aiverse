@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const images = [
   "https://via.assets.so/game.png?id=1&q=95&w=360&h=360&fit=fill",
@@ -14,10 +14,6 @@ const AppPreview = () => {
     setImgIndex((prev) => (prev + 1) % images.length);
   };
 
-  const handlePrev = () => {
-    setImgIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
   const getImagePosition = (index: number) => {
     if (index === imgIndex) return "z-10 scale-100";
     if ((index + 1) % images.length === imgIndex)
@@ -26,6 +22,13 @@ const AppPreview = () => {
       return "translate-x-20 lg:translate-x-24 xl:translate-x-40 z-0 scale-75 opacity-70";
     return "hidden";
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  });
 
   return (
     <div className="flex flex-col w-full h-full items-center gap-10 justify-center relative">
@@ -44,12 +47,6 @@ const AppPreview = () => {
         ))}
       </div>
       <div className="flex gap-5 items-center">
-        <button
-          onClick={handlePrev}
-          className="px-2 py-1 rounded-full bg-slate-200 hover:bg-slate-300 transition-all"
-        >
-          &#8592;
-        </button>
         <div className="flex flex-row items-center gap-2">
           {images.map((_, index) => (
             <button
@@ -61,12 +58,6 @@ const AppPreview = () => {
             ></button>
           ))}
         </div>
-        <button
-          onClick={handleNext}
-          className="px-2 py-1 rounded-full bg-slate-200 hover:bg-slate-300 transition-all"
-        >
-          &#8594;
-        </button>
       </div>
     </div>
   );
