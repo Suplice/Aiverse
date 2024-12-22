@@ -35,9 +35,10 @@ const AppPreview = () => {
       <div className="relative w-[380px]  h-[380px] flex items-center justify-center">
         {images.map((image, index) => (
           <motion.img
+            draggable={false}
             key={index}
             src={image}
-            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[250px] transition-all duration-500 ${getImagePosition(
+            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[250px] transition-all duration-500 select-none ${getImagePosition(
               index
             )}`}
             initial={{ opacity: 0 }}
