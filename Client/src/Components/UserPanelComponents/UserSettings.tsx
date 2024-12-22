@@ -13,6 +13,8 @@ const UserSettings = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
 
+  const [selectedSubPage, setSelectedSubPage] = useState<string>("");
+
   const handleChangeName = () => {
     if (userName.trim() === "") {
       alert("Name cannot be empty!");
@@ -50,114 +52,127 @@ const UserSettings = () => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
+    <div className="p-4 bg-white rounded-lg">
       <div className="flex flex-col items-start justify-center gap-6 mt-4">
-        <div className="font-bold text-xl mb-2">User Data:</div>
-
-        <div className="flex flex-row items-center gap-4">
-          <strong>Name:</strong>
+        
+        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto">
+          <strong className="text-lg lg:pl-16">Name:</strong>
+          <span className="text-lg flex-grow">{user?.Name}</span>
           {isEditingName ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               <input
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                className="px-2 py-1 border rounded"
+                className="px-4 py-2 border rounded w-full"
               />
               <button
                 onClick={handleChangeName}
-                className="px-2 py-1 bg-white text-green-500 border-2 border-green-500 rounded-lg shadow-md hover:bg-green-500 hover:text-white focus:outline-none transition duration-300"
+                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
               >
                 Save
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              {user?.Name}
+            <div className="flex justify-end lg:pr-16">
+                <button
+                  onClick={() => setIsEditingName(true)}
+                  className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
+                    selectedSubPage === "Name"
+                      ? "bg-black text-white"
+                      : "bg-white text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  Change
+                </button>
+              </div>
+          )}
+        </div>
+        
+
+        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto min-h-[110px]">
+          <strong className="text-lg lg:pl-16">Email:</strong>
+          <span className="text-lg flex-grow">{user?.Email}</span>
+          <div className="flex justify-end lg:pr-16">
+            {user?.Provider === "EMAIL" && (
               <button
-                onClick={() => setIsEditingName(true)}
-                className="px-2 py-1 bg-white text-black border-2 border-black rounded-lg shadow-md hover:bg-black hover:text-white focus:outline-none transition duration-300"
+                onClick={() => setSelectedSubPage("Email")}
+                className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
+                  selectedSubPage === "Email"
+                    ? "bg-black text-white"
+                    : "bg-white text-black hover:bg-black hover:text-white"
+                }`}
               >
                 Change
               </button>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-row items-center gap-4">
-          <strong>Email:</strong>
-          <div className="flex items-center gap-2">
-            {user?.Email}
-            {user?.Provider === "EMAIL" && (
-              <button className="px-2 py-1 bg-white text-black border-2 border-black rounded-lg shadow-md hover:bg-black hover:text-white focus:outline-none transition duration-300">
-                Change
-              </button>
             )}
           </div>
-        </div>
-
-        <div className="flex flex-row items-center gap-4">
-          <strong>Provider:</strong> {user?.Provider}
         </div>
 
         {user?.Provider === "EMAIL" && (
-          <div className="flex flex-row items-center gap-4">
-            <strong>Password:</strong>
-            <button
-              onClick={handleToggleChangePassword}
-              className="px-2 py-1 bg-white text-black border-2 border-black rounded-lg shadow-md hover:bg-black hover:text-white focus:outline-none transition duration-300"
-            >
-              Change Password
-            </button>
-          </div>
-        )}
-
-        {isChangingPassword && (
-          <div className="flex flex-col gap-4 mt-4">
-            <div>
-              <label className="block text-sm font-medium">Old Password</label>
-              <input
-                type="password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                className="px-2 py-1 border rounded w-full"
-              />
+          <div className="flex flex-col items-center gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto bg-gray-100">
+            <div className="flex items-center gap-2 w-full justify-between">
+              <button
+                onClick={handleToggleChangePassword}
+                className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 w-full ml-auto sm:ml-16 mr-auto sm:mr-16 ${
+                  selectedSubPage === "Password"
+                    ? "bg-black text-white"
+                    : "bg-white text-black hover:bg-black hover:text-white"
+                }`}
+              >
+                Change password
+              </button>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium">New Password</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="px-2 py-1 border rounded w-full"
-              />
-            </div>
+            {isChangingPassword && (
+              <div className="flex flex-col gap-4 mt-4 w-full p-6 h-auto bg-gray-100 rounded-lg">
+                <div className="flex flex-col gap-2">
+                  <label className="block text-sm font-medium">Old Password</label>
+                  <input
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded w-full"
+                  />
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium">Confirm New Password</label>
-              <input
-                type="password"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                className="px-2 py-1 border rounded w-full"
-              />
-            </div>
 
-            {passwordError && (
-              <div className="text-red-500 text-sm mt-2">{passwordError}</div>
+                <div className="flex flex-col gap-2">
+                  <label className="block text-sm font-medium">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="block text-sm font-medium">Confirm New Password</label>
+                  <input
+                    type="password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded w-full"
+                  />
+                </div>
+
+                {passwordError && (
+                  <div className="text-red-500 text-sm mt-2">{passwordError}</div>
+                )}
+
+                {passwordSuccess && (
+                  <div className="text-green-500 text-sm mt-2">{passwordSuccess}</div>
+                )}
+
+                <button
+                  onClick={handleChangePassword}
+                  className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
+                >
+                  Save
+                </button>
+              </div>
             )}
-
-            {passwordSuccess && (
-              <div className="text-green-500 text-sm mt-2">{passwordSuccess}</div>
-            )}
-
-            <button
-              onClick={handleChangePassword}
-              className="px-2 py-1 bg-white text-green-500 border-2 border-green-500 rounded-lg shadow-md hover:bg-green-500 hover:text-white focus:outline-none transition duration-300"
-            >
-              Save
-            </button>
           </div>
         )}
       </div>
