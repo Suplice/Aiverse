@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
 
-const defaultImage = "../public/samochód.png";
+const defaultImage = "../public/car.png";
 
 const UserPanel = () => {
   const { user } = useAuth(); 
@@ -18,9 +18,10 @@ const UserPanel = () => {
   };
 
   return (
-    <div className="flex-col justify-center items-center h-screen bg-white">
-      <div className="flex items-center justify-center h-1/2 border-b-4 border-gray-200 py-4 w-5/6 mx-auto">
-        <div className="w-48 h-48 rounded-full overflow-hidden flex justify-center items-center relative group border-4 border-black">
+    <div className="flex-row justify-center items-center h-screen bg-white">
+      <div>
+      <div className="bg-gray-100 mt-10 flex items-center justify-center h-1/2 border-4 rounded-lg py-4 w-3/5 mx-auto">
+        <div className="w-48 h-48 mt-16 mb-16 rounded-full overflow-hidden flex justify-center items-center relative group border-4 border-black">
           <img
             src={userImage}
             alt="User"
@@ -45,8 +46,11 @@ const UserPanel = () => {
           <p className="text-gray-600">Welcome back!</p>
         </div>
       </div>
+        <div className="border-b-2 border-black py-4 w-5/6 mx-auto">
+        </div>
+      </div>
 
-      <div className="flex justify-center gap-4 border-b-4 border-gray-200 py-4 w-5/6 mx-auto">
+      <div className="flex justify-center gap-20 border-b-2 border-black py-4 w-5/6 mx-auto pt-6 pb-6">
         <button
           onClick={() => setSelectedSubPage("Settings")}
           className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
@@ -80,9 +84,11 @@ const UserPanel = () => {
       </div>
 
       <div className="flex justify-center mt-6">
-        {selectedSubPage === "Settings" && <UserSettings />}
-        {selectedSubPage === "Liked" && <div>Liked Content</div>}
-        {selectedSubPage === "Rated" && <div>Rated Content</div>}
+        <div className="w-3/5">
+          {selectedSubPage === "Settings" && <UserSettings />}
+          {selectedSubPage === "Liked" && <div>Liked Content</div>}
+          {selectedSubPage === "Rated" && <div>Rated Content</div>}
+        </div>
       </div>
     </div>
   );
