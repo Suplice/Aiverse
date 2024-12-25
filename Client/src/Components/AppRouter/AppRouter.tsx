@@ -4,6 +4,7 @@ import SignIn from "../../Pages/SignIn/SignIn";
 import { AuthProvider } from "../../Utils/Context/AuthContext";
 import UserPanel from "../../Pages/UserPanel/UserPanel";
 import FirstComponent from "../FirstComponent";
+import ManagerPanel from "../../Pages/ManagerPanel/ManagerPanel";
 
 const AppRouter = () => {
   return (
@@ -16,6 +17,9 @@ const AppRouter = () => {
           </Route>
           <Route path="user">
             <Route path="panel" element={<UserPanel />}></Route>
+          </Route>
+          <Route path="manager">
+            <Route path="panel" element={<ManagerPanel />}></Route>
           </Route>
           <Route path="*" element={<FirstComponent />}></Route>
         </Routes>
