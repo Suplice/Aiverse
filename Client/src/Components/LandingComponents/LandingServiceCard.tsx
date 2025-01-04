@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip } from "@mantine/core";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import { useNavigate } from "react-router";
 
 interface LandingServiceCardProps {
   id: number;
@@ -33,6 +34,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
     useState<boolean>(false);
 
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -99,7 +101,12 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
               <p className="text-3xl font-semibold text-black">
                 You need to sign in to view this service.
               </p>
-              <button className="px-4 py-2 bg-black text-white rounded-lg mt-4">
+              <button
+                onClick={() => {
+                  navigate("/auth/SignIn");
+                }}
+                className="px-4 py-2 bg-black text-white rounded-lg mt-4"
+              >
                 Sign in
               </button>
             </div>
