@@ -4,6 +4,7 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip } from "@mantine/core";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 interface LandingServiceCardProps {
   id: number;
@@ -14,6 +15,7 @@ interface LandingServiceCardProps {
   stars: number;
   reviews: number | string;
   Categories: string[];
+  index: number;
 }
 
 const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
@@ -25,9 +27,12 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
   stars,
   reviews,
   Categories,
+  index,
 }) => {
   const [isDescriptionVisible, setIsDescriptionVisible] =
     useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth();
 
   return (
     <div
@@ -36,7 +41,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
         id === 1 ? "border-t-0" : "border-t-2"
       }`}
     >
-      <div className="bg-gray-300/50 w-full rounded-lg p-10 flex md:flex-row flex-col gap-4 items-center">
+      <div className="bg-gray-300/50 w-full rounded-lg p-10 flex md:flex-row flex-col gap-4 items-center relative">
         <div>{id}</div>
         <div className="flex flex-col justify-between w-full text-center">
           <div className="flex flex-col md:flex-row justify-between items-center  gap-4">
@@ -88,6 +93,18 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
             </div>
           </div>
         </div>
+        {index > 1 && !isAuthenticated ? (
+          <div className="absolute w-full h-full inset-0 rounded-lg bg-black/20 backdrop-blur-md">
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-3xl font-semibold text-black">
+                You need to sign in to view this service.
+              </p>
+              <button className="px-4 py-2 bg-black text-white rounded-lg mt-4">
+                Sign in
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
       <AnimatePresence>
         {isDescriptionVisible && (
