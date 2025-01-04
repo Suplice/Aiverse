@@ -1,7 +1,8 @@
+import FormsToCheck from "../../Components/ManagerPanelComponents/FormsToCheck";
 import { useState } from "react";
 
 const ManagerPanel = () => {
- const [selectedSubPage, setSelectedSubPage] = useState<"To check" | "Reviews" | "Services">();
+ const [selectedSubPage, setSelectedSubPage] = useState<"To check" | "Reviews" | "Services">("To check");
 
   return (
     <div className="flex">
@@ -36,7 +37,7 @@ const ManagerPanel = () => {
       </div>
   
       <div className="flex justify-center mt-6 flex-grow">
-        {selectedSubPage === "To check" && <div>TO CHECK!!!</div>}
+        {selectedSubPage === "To check" && <FormsToCheck />}
         {selectedSubPage === "Reviews" && <div>REVIEWS!!!</div>}
         {selectedSubPage === "Services" && <div>SERVICES!!!</div>}
       </div>
