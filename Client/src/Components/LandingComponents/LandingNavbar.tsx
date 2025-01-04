@@ -7,7 +7,7 @@ import { Avatar } from "@mantine/core";
 const LandingNavbar = () => {
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, Logout } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
@@ -26,6 +26,11 @@ const LandingNavbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   });
+
+  const handleLogout = async () => {
+    await Logout();
+    navigate("/");
+  };
 
   return (
     <div className="flex justify-between items-center py-4 md:px-8 sm:px-4 px-2 bg-white relative  shadow-sm mx-2 ">
@@ -69,6 +74,12 @@ const LandingNavbar = () => {
                 </div>
                 <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
                   Settings
+                </div>
+                <div
+                  onClick={handleLogout}
+                  className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200 text-red/50"
+                >
+                  Logout
                 </div>
               </motion.div>
             )}
@@ -116,24 +127,30 @@ const LandingNavbar = () => {
               Recently Added
             </div>
           </div>
-          <div className="flex flex-col space-y-2 items-center">
-            <div
-              onClick={() => {
-                navigate("/auth/SignIn");
-              }}
-              className="md:text-xl text-md px-4 py-2 font-semibold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
-            >
-              Login
+          {isAuthenticated ? (
+            <div onClick={handleLogout} className="text-center text-red/50">
+              Logout
             </div>
-            <div
-              onClick={() => {
-                navigate("/auth/SignUp");
-              }}
-              className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
-            >
-              Sign Up
+          ) : (
+            <div className="flex flex-col space-y-2 items-center">
+              <div
+                onClick={() => {
+                  navigate("/auth/SignIn");
+                }}
+                className="md:text-xl text-md px-4 py-2 font-semibold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+              >
+                Login
+              </div>
+              <div
+                onClick={() => {
+                  navigate("/auth/SignUp");
+                }}
+                className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+              >
+                Sign Up
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
       )}
     </div>
