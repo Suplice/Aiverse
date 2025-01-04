@@ -25,7 +25,7 @@ const LandingNavbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  });
+  }, []);
 
   const handleLogout = async () => {
     await Logout();
