@@ -9,7 +9,6 @@ import SearchServices from "../../Pages/SearchServices/SearchServices";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 
-
 const AppRouter = () => {
   return (
     <Router>
@@ -24,9 +23,9 @@ const AppRouter = () => {
               <Route path="panel" element={<UserPanel />}></Route>
             </Route>
             <Route path="manager">
-            <Route path="panel" element={<ManagerPanel />}></Route>
-          </Route>
-            <Route path="services/:data" element={<SearchServices />}></Route>
+              <Route path="panel" element={<ManagerPanel />}></Route>
+            </Route>
+            <Route path="services" element={<SearchServices />}></Route>
             <Route path="*" element={<LandingPage />}></Route>
           </Routes>
         </MantineProvider>

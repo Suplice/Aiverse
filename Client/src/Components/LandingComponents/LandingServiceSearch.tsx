@@ -9,7 +9,11 @@ const LandingServiceSearch = () => {
 
     if (!inputValue.trim()) return;
 
-    navigate(`/services/${inputValue}`);
+    const searchParams = new URLSearchParams({
+      searchText: inputValue,
+    });
+
+    navigate(`/services?${searchParams.toString()}`);
   };
 
   return (
