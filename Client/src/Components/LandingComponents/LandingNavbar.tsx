@@ -1,11 +1,36 @@
-import { motion } from "motion/react";
-import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Utils/Context/AuthContext";
+import { Avatar } from "@mantine/core";
 
 const LandingNavbar = () => {
   const navigate = useNavigate();
 
+  const { isAuthenticated, Logout } = useAuth();
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".user-menu-container")) {
+        setIsUserMenuVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await Logout();
+    navigate("/");
+  };
 
   return (
     <div className="flex justify-between items-center py-4 md:px-8 sm:px-4 px-2 bg-white relative  shadow-sm mx-2 ">
@@ -25,24 +50,62 @@ const LandingNavbar = () => {
           </div>
         </div>
       </div>
-      <div className=" space-x-4 items-center hidden md:flex">
+      {isAuthenticated ? (
         <div
           onClick={() => {
-            navigate("/auth/SignIn");
+            setIsUserMenuVisible(!isUserMenuVisible);
           }}
-          className="md:text-xl text-md px-6 py-2 font-bold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+          className="hidden md:flex hover:cursor-pointer relative user-menu-container"
         >
-          Login
+          <Avatar radius="xl" size="lg" />
+          <AnimatePresence>
+            {isUserMenuVisible && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="absolute  top-[105%] right-0  text-lg font-semibold py-2 px-4  z-40 bg-gray-300 text-black shadow-md  flex flex-col space-y-2 rounded-md"
+              >
+                <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
+                  Profile
+                </div>
+                <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
+                  Settings
+                </div>
+                <div
+                  onClick={handleLogout}
+                  className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200 text-red/50"
+                >
+                  Logout
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        <div
-          onClick={() => {
-            navigate("/auth/SignUp");
-          }}
-          className="md:text-xl text-md font-semibold px-6 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
-        >
-          Sign Up
+      ) : (
+        <div className=" space-x-4 items-center hidden md:flex">
+          <div
+            onClick={() => {
+              navigate("/auth/SignIn");
+            }}
+            className="md:text-xl text-md px-6 py-2 font-bold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+          >
+            Login
+          </div>
+          <div
+            onClick={() => {
+              navigate("/auth/SignUp");
+            }}
+            className="md:text-xl text-md font-semibold px-6 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+          >
+            Sign Up
+          </div>
         </div>
-      </div>
+      )}
+
       <div
         onClick={() => {
           setIsMenuOpen(!isMenuOpen);
@@ -64,24 +127,30 @@ const LandingNavbar = () => {
               Recently Added
             </div>
           </div>
-          <div className="flex flex-col space-y-2 items-center">
-            <div
-              onClick={() => {
-                navigate("/auth/SignIn");
-              }}
-              className="md:text-xl text-md px-4 py-2 font-semibold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
-            >
-              Login
+          {isAuthenticated ? (
+            <div onClick={handleLogout} className="text-center text-red/50">
+              Logout
             </div>
-            <div
-              onClick={() => {
-                navigate("/auth/SignUp");
-              }}
-              className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
-            >
-              Sign Up
+          ) : (
+            <div className="flex flex-col space-y-2 items-center">
+              <div
+                onClick={() => {
+                  navigate("/auth/SignIn");
+                }}
+                className="md:text-xl text-md px-4 py-2 font-semibold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+              >
+                Login
+              </div>
+              <div
+                onClick={() => {
+                  navigate("/auth/SignUp");
+                }}
+                className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+              >
+                Sign Up
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
       )}
     </div>
