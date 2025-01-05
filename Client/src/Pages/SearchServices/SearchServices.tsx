@@ -23,7 +23,7 @@ const SearchServices = () => {
     <div className="flex flex-col p-6 w-full">
       <LandingNavbar />
       <div className="flex flex-row gap-4 p-10  ">
-        <SearchPageServices />
+        <SearchPageServices searchText={searchText} />
         <SearchPagePopularServices />
       </div>
     </div>
