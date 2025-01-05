@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip } from "@mantine/core";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { useNavigate } from "react-router";
+import { FaHeart } from "react-icons/fa";
 
 interface LandingServiceCardProps {
   id: number;
@@ -92,7 +93,18 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
                   />
                 </button>
               </Tooltip>
-            </div>
+              {isAuthenticated && (
+              <Tooltip label="Add to liked services" position="top" withArrow>
+                <button className="rounded-full hover:bg-green-700   px-4 py-4 border-black bg-white  transition-all duration-200 ">
+                  <FaHeart size={24} />
+                  
+                {/*TODO: 
+                 - Check whether service is already liked, if yes then swap FaHeart to slashed heart and background to red
+                 - Implement logic of adding and erasing from liked services*/}
+                </button>
+              </Tooltip>
+            ) }
+              </div>
           </div>
         </div>
         {index > 1 && !isAuthenticated ? (
