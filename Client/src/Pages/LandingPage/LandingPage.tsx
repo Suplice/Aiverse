@@ -4,7 +4,7 @@ import LandingServiceSearch from "../../Components/LandingComponents/LandingServ
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col p-6 ">
+    <div className="flex flex-col p-6 bg-[#121212] ">
       <LandingNavbar />
       <LandingServiceSearch />
       <LandingPopularServices />
