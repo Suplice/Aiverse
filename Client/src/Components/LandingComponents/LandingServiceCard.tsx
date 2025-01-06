@@ -40,37 +40,37 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
   return (
     <div
       key={id}
-      className={`flex flex-col    p-4 ${
+      className={`flex flex-col border-[#3B3B3D]    p-4 ${
         id === 1 ? "border-t-0" : "border-t-2"
       }`}
     >
-      <div className="bg-gray-300/50 w-full rounded-lg p-10 flex md:flex-row flex-col gap-4 items-center relative">
-        <div>{id}</div>
+      <div className="bg-[#252729] w-full rounded-lg lg:p-10 md:p-6 p-4 flex md:flex-row flex-col gap-4 items-center relative">
+        <div className="text-white">{id}</div>
         <div className="flex flex-col justify-between w-full text-center">
-          <div className="flex flex-col md:flex-row justify-between items-center  gap-4">
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-1/4 items-center">
-              <img src={image} alt={title} className="w-14" />
+          <div className="flex flex-col md:flex-row justify-between items-center   flex-wrap">
+            <div className="flex flex-col md:flex-row gap-2 w-full md:w-1/4 items-center px-2 flex-wrap">
+              <img src={image} alt={title} className="w-14 " />
               <div className="flex flex-col items-center md:items-start">
-                <p className="text-2xl font-semibold">{title}</p>
+                <p className="text-2xl font-semibold text-white">{title}</p>
                 <div className="flex flex-row gap-2">
-                  <p className="flex flex-row gap-1 items-center">
+                  <p className="flex flex-row gap-1 items-center text-white">
                     <TiStarFullOutline className="text-yellow-300" />
                     {stars}
                   </p>
-                  <p className="underline">{reviews} Reviews</p>
+                  <p className="underline text-white">{reviews} Reviews</p>
                 </div>
               </div>
             </div>
 
-            <p className="w-full md:w-1/4 text-xl font-mono text-center md:text-left">
+            <p className="w-full md:w-1/4 text-xl font-mono text-center md:text-left text-white">
               {price}
             </p>
-            <p className="w-full md:w-1/4 font-semibold text-md text-center md:text-left">
+            <p className="w-full md:w-1/4 font-semibold text-md text-center md:text-left text-white">
               {Categories.join(", ")}
             </p>
-            <div className="w-full md:w-1/4 flex justify-around">
+            <div className="w-full md:w-1/4 flex justify-around flex-wrap gap-2 ">
               <Tooltip label="Visit page" position="top" withArrow>
-                <button className="rounded-full   px-4 py-4 border-black bg-white hover:bg-slate-100 transition-colors duration-200">
+                <button className="rounded-full   px-4 py-4 border-black bg-black text-white hover:bg-slate-100 transition-colors duration-200">
                   <LuExternalLink size={24} />
                 </button>
               </Tooltip>
@@ -83,7 +83,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
               >
                 <button
                   onClick={() => setIsDescriptionVisible(!isDescriptionVisible)}
-                  className="rounded-full px-4 py-4 border-black bg-white hover:bg-slate-100 transition-colors duration-200"
+                  className="rounded-full px-4 py-4 border-black bg-black text-white hover:bg-slate-100 transition-colors duration-200"
                 >
                   <IoIosArrowDropdown
                     size={24}
@@ -94,17 +94,17 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
                 </button>
               </Tooltip>
               {isAuthenticated && (
-              <Tooltip label="Add to liked services" position="top" withArrow>
-                <button className="rounded-full hover:bg-green-700   px-4 py-4 border-black bg-white  transition-all duration-200 ">
-                  <FaHeart size={24} />
-                  
-                {/*TODO: 
+                <Tooltip label="Add to liked services" position="top" withArrow>
+                  <button className="rounded-full hover:bg-green-700   px-4 py-4 border-black bg-black text-white  transition-all duration-200 ">
+                    <FaHeart size={24} />
+
+                    {/*TODO: 
                  - Check whether service is already liked, if yes then swap FaHeart to slashed heart and background to red
                  - Implement logic of adding and erasing from liked services*/}
-                </button>
-              </Tooltip>
-            ) }
-              </div>
+                  </button>
+                </Tooltip>
+              )}
+            </div>
           </div>
         </div>
         {index > 1 && !isAuthenticated ? (
@@ -134,7 +134,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
             transition={{ duration: 0.3 }}
           >
             <div className="w-full p-2">
-              <p>{description}</p>
+              <p className="text-white">{description}</p>
             </div>
           </motion.div>
         )}

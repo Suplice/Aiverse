@@ -45,9 +45,9 @@ const MockServices = [
 
 const LandingPopularServices = () => {
   return (
-    <div className="w-full mt-5">
-      <div className="text-3xl font-bold my-4">Popular services</div>
-      <div className="bg-white border-2 rounded-lg">
+    <div className="w-full mt-5 ">
+      <div className="text-3xl font-bold my-4 text-white">Popular services</div>
+      <div className=" border-2 border-[#3B3B3D] rounded-lg bg-[#121212] ">
         {MockServices.map((service, index) => (
           <LandingServiceCard {...service} index={index} />
         ))}

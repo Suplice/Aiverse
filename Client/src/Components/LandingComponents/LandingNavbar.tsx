@@ -33,21 +33,24 @@ const LandingNavbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center py-4 md:px-8 sm:px-4 px-2 bg-white relative  shadow-sm mx-2 ">
+    <div className="flex justify-between items-center py-4 md:px-8 sm:px-4 px-2 bg-[#121212] relative  shadow-sm mx-2 ">
       <div className="flex items-center flex-row md:gap-20  gap-4  ">
         <div
-        onClick={() => {navigate("/")}}
-         className="font-bold  xl:text-4xl md:text-3xl sm:text-2xl text-xl tracking-tighter text-black hover:cursor-pointer">
+          onClick={() => {
+            navigate("/");
+          }}
+          className="font-bold  xl:text-4xl md:text-3xl sm:text-2xl text-xl tracking-tighter text-white hover:cursor-pointer"
+        >
           AIVERSE.
         </div>
         <div className="hidden md:flex space-x-8 md:text-lg font-medium text-sm ">
-          <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
             Hot Services
           </div>
-          <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
             Search via AI
           </div>
-          <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
             Recently Added
           </div>
         </div>
@@ -93,7 +96,7 @@ const LandingNavbar = () => {
             onClick={() => {
               navigate("/auth/SignIn");
             }}
-            className="md:text-xl text-md px-6 py-2 font-bold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+            className="md:text-xl text-md px-6 py-2 font-bold text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer"
           >
             Log In
           </div>
@@ -112,20 +115,20 @@ const LandingNavbar = () => {
         onClick={() => {
           setIsMenuOpen(!isMenuOpen);
         }}
-        className="flex md:hidden flex-row select-none items-center gap-4 border-2 px-2 py-1 rounded-lg text-black font-semibold hover:text-gray-600 hover:bg-gray-300 transition-colors duration-200 cursor-pointer"
+        className="flex md:hidden flex-row select-none items-center gap-4 border shadow shadow-gray-600 px-2 py-1 rounded-lg text-white font-semibold border-gray-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
       >
         Menu
       </div>
       {isMenuOpen && (
-        <motion.div className="absolute w-fit h-fit bg-white shadow-md rounded-lg p-4 md:hidden top-14 z-20 flex flex-col space-y-4 right-4">
+        <motion.div className="absolute w-fit h-fit bg-gray-500 shadow-md rounded-lg p-4 md:hidden top-14 z-20 flex flex-col space-y-4 right-4">
           <div className="md:text-lg font-medium text-sm flex flex-col space-y-2 items-center ">
-            <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer ">
+            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer ">
               Hot Services
             </div>
-            <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer">
               Search via AI
             </div>
-            <div className="text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer">
               Recently Added
             </div>
           </div>
@@ -139,7 +142,7 @@ const LandingNavbar = () => {
                 onClick={() => {
                   navigate("/auth/SignIn");
                 }}
-                className="md:text-xl text-md px-4 py-2 font-semibold text-black hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+                className="md:text-xl text-md px-4 py-2 font-semibold text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer"
               >
                 Log In
               </div>
@@ -147,7 +150,7 @@ const LandingNavbar = () => {
                 onClick={() => {
                   navigate("/auth/SignUp");
                 }}
-                className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+                className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-600 transition-all duration-200 cursor-pointer"
               >
                 Sign Up
               </div>
