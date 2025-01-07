@@ -168,6 +168,7 @@ const UserSettings = () => {
             </div>
           ) : (
             <div className="flex justify-end lg:pr-16">
+              {user?.Provider === "EMAIL" && (
                 <button
                   onClick={() => setIsEditingName(true)}
                   className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
@@ -178,6 +179,7 @@ const UserSettings = () => {
                 >
                   Change
                 </button>
+              )}
               </div>
           )}
         </div>
