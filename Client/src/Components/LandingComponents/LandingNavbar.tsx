@@ -74,7 +74,9 @@ const LandingNavbar = () => {
                 }}
                 className="absolute  top-[105%] right-0  text-lg font-semibold py-2 px-4  z-40 bg-gray-300 text-black shadow-md  flex flex-col space-y-2 rounded-md"
               >
-                <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
+                <div
+                onClick={() => {navigate("/user/panel")}}
+                 className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
                   Profile
                 </div>
                 <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
