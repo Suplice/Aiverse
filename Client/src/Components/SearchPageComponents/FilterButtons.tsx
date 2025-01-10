@@ -1,16 +1,61 @@
 import { Tooltip } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcClearFilters } from "react-icons/fc";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { Range } from "react-range";
+import { useLocation, useNavigate } from "react-router";
+import { SearchParams } from "../../Utils/Models/SearchParams";
 
 const Categories = ["Video", "Music", "Art", "LLM"];
 
-const FilterButtons = () => {
+interface FilterButtonsProps {
+  handleFilter: (searchParams: SearchParams) => void;
+  isFiltering: boolean;
+}
+
+const FilterButtons: React.FC<FilterButtonsProps> = ({
+  handleFilter,
+  isFiltering,
+}) => {
   const [isCategoryMenuVisible, setIsCategoryMenuVisible] =
     useState<boolean>(false);
   const [isPriceMenuVisible, setIsPriceMenuVisible] = useState<boolean>(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const initialSearchParams: SearchParams = {
+    searchText: query.get("searchText") || "",
+    categories: query.get("categories")?.split(",") || [],
+    priceRange: query.get("priceRange")
+      ? (query.get("priceRange")!.split(",").map(Number) as [number, number])
+      : [0, 1000],
+  };
+
+  if (
+    initialSearchParams.priceRange[0] < 0 ||
+    initialSearchParams.priceRange[1] > 1000 ||
+    initialSearchParams.priceRange[0] > initialSearchParams.priceRange[1]
+  ) {
+    initialSearchParams.priceRange = [0, 1000];
+  }
+
+  const [searchParams, setSearchParams] =
+    useState<SearchParams>(initialSearchParams);
+
+  useEffect(() => {
+    setSearchParams(initialSearchParams);
+  }, [location.search]);
+
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+    params.set("categories", searchParams.categories.join(","));
+    params.set("priceRange", searchParams.priceRange.join(","));
+    navigate(`?${params.toString()}`);
+    console.log(searchParams);
+    handleFilter(searchParams);
+  };
 
   return (
     <>
@@ -28,23 +73,33 @@ const FilterButtons = () => {
           />
         </div>
         {isCategoryMenuVisible && (
-          <div className="absolute mt-2 w-full rounded border   shadow-lg z-30 border-[#3B3B3D] ">
+          <div className="absolute mt-2 w-full rounded border shadow-lg z-30 border-[#3B3B3D]">
             {Categories.map((value, index) => (
               <div
                 key={index}
-                className="flex items-center px-4 py-2 hover:bg-[#232325] bg-[#121212] cursor-pointer  "
+                className="flex items-center px-4 py-2 hover:bg-[#232325] bg-[#121212] cursor-pointer"
                 onClick={() => {
                   const checkbox = document.getElementById(
                     `category-checkbox-${index}`
                   ) as HTMLInputElement;
                   checkbox.checked = !checkbox.checked;
+                  setSearchParams((prev) => ({
+                    ...prev,
+                    categories: checkbox.checked
+                      ? [...prev.categories, value]
+                      : prev.categories.filter(
+                          (category) => category !== value
+                        ),
+                  }));
                 }}
               >
                 <input
                   onClick={(e) => e.stopPropagation()}
                   id={`category-checkbox-${index}`}
                   type="checkbox"
-                  className="mr-2 "
+                  className="mr-2"
+                  value={value}
+                  checked={searchParams.categories.includes(value)}
                 ></input>
                 <p className="select-none text-white">{value}</p>
               </div>
@@ -73,8 +128,13 @@ const FilterButtons = () => {
                 step={1}
                 min={0}
                 max={1000}
-                values={priceRange}
-                onChange={(values) => setPriceRange(values as [number, number])}
+                values={searchParams.priceRange}
+                onChange={(values) =>
+                  setSearchParams((prev) => ({
+                    ...prev,
+                    priceRange: values as [number, number],
+                  }))
+                }
                 renderTrack={({ props, children }) => (
                   <div
                     {...props}
@@ -117,17 +177,23 @@ const FilterButtons = () => {
               <div className="flex mt-4 gap-2 flex-wrap">
                 <input
                   type="number"
-                  value={priceRange[0]}
+                  value={searchParams.priceRange[0]}
                   onChange={(e) =>
-                    setPriceRange([+e.target.value, priceRange[1]])
+                    setSearchParams((prev) => ({
+                      ...prev,
+                      priceRange: [+e.target.value, searchParams.priceRange[1]],
+                    }))
                   }
                   className="border p-1 rounded select-none bg-zinc-600 text-white border-[#3B3B3D] outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <input
                   type="number"
-                  value={priceRange[1]}
+                  value={searchParams.priceRange[1]}
                   onChange={(e) =>
-                    setPriceRange([priceRange[0], +e.target.value])
+                    setSearchParams((prev) => ({
+                      ...prev,
+                      priceRange: [searchParams.priceRange[0], +e.target.value],
+                    }))
                   }
                   className="border p-1 rounded select-none bg-zinc-600 text-white border-[#3B3B3D] outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
@@ -142,8 +208,19 @@ const FilterButtons = () => {
             <FcClearFilters size={24} className="hover:cursor-pointer" />
           </div>
         </Tooltip>
-        <button className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors duration-200 ">
-          Apply Filters
+        <button
+          id="apply-filters"
+          onClick={applyFilters}
+          className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors duration-200 "
+          disabled={isFiltering}
+        >
+          {isFiltering ? (
+            <div className=" w-full h-full px-2 py-2 flex items-center justify-center gap-2">
+              <div className=" w-4 h-4 border-4 border-black border-dotted rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            "Apply Filters"
+          )}
         </button>
       </div>
     </>
