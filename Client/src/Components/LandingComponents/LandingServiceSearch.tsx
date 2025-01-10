@@ -12,15 +12,16 @@ const LandingServiceSearch = () => {
 
     const searchParams = new URLSearchParams({
       searchText: inputValue,
+      categories: [].join(","),
+      priceRange: [0, 1000].join(","),
     });
 
     navigate(`/services?${searchParams.toString()}`);
   };
 
   useEffect(() => {
-
     const listener = (e: KeyboardEvent) => {
-      if(e.key === "Enter"){
+      if (e.key === "Enter") {
         handleSearch();
       }
     };
@@ -30,8 +31,7 @@ const LandingServiceSearch = () => {
     return () => {
       document.removeEventListener("keydown", listener);
     };
-
-  })
+  });
 
   return (
     <div
@@ -42,7 +42,7 @@ const LandingServiceSearch = () => {
         <h1 className="text-white text-3xl font-bold mb-6">
           Find the best AI services with us
         </h1>
-        <div className="flex w-full  rounded-xl bg-[#252729] bg-opacity-90 p-2 gap-1 items-center">
+        <div className="flex w-full  rounded-xl bg-[#252729] bg-opacity-90 p-2 gap-1 items-center text-white">
           <IoSearchSharp size={32} />
 
           <input
