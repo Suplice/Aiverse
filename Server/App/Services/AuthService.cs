@@ -36,7 +36,7 @@ public class AuthService : IAuthService {
                 Email = result.Email,
                 Name = result.Name,
                 Role = result.Role,
-                Provider = user.Provider
+                Provider = result.Provider
             };
 
             return firstResponseAuthDTO;
