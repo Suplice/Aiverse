@@ -22,15 +22,16 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Ignore<Supabase.Postgrest.ClientOptions>();
-        modelBuilder.Entity<WeatherForecast>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<User>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<AiService>().Ignore(e => e.BaseUrl);
-        modelBuilder.Entity<Function>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<Functions>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<LikedServices>().Ignore(e => e.BaseUrl);
     }
-    public DbSet<WeatherForecast> WeatherForecasts { get; set; }
     public DbSet<User> Users { get; set; }
 
     public DbSet<AiService> AiServices { get; set; }
 
-    public DbSet<Function> Functions { get; set; }
+    public DbSet<Functions> Functions { get; set; }
+
+    public DbSet<LikedServices> LikedServices { get; set; }
 }

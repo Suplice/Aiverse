@@ -90,11 +90,7 @@ const mockSearchPageServices = [
   },
 ];
 
-interface SearchPageServicesProps {
-  searchText: string;
-}
-
-const SearchPageServices: React.FC<SearchPageServicesProps> = () => {
+const SearchPageServices = () => {
   const [searchText, setSearchText] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
@@ -156,6 +152,7 @@ const SearchPageServices: React.FC<SearchPageServicesProps> = () => {
 
         return isCategoryMatch && isPriceMatch && isSearchTextMatch;
       });
+
       setServices(newServices);
       setIsLoading(false);
       setIsFiltering(false);
@@ -195,9 +192,13 @@ const SearchPageServices: React.FC<SearchPageServicesProps> = () => {
         </div>
       ) : (
         <div className="bg-[#121212] border-2 border-[#3B3B3D] rounded-lg">
-          {services.map((service, index) => (
-            <LandingServiceCard {...service} index={index} />
-          ))}
+          {services.length > 0 ? (
+            services.map((service, index: number) => (
+              <LandingServiceCard key={service.id} {...service} index={index} />
+            ))
+          ) : (
+            <div className="text-white text-center p-5">No services found</div>
+          )}
         </div>
       )}
     </div>

@@ -45,7 +45,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
       }`}
     >
       <div className="bg-[#252729] w-full rounded-lg lg:p-10 md:p-6 p-4 flex md:flex-row flex-col gap-4 items-center relative">
-        <div className="text-white">{id}</div>
+        <div className="text-white">{index + 1}</div>
         <div className="flex flex-col justify-between w-full text-center">
           <div className="flex flex-col md:flex-row justify-between items-center   flex-wrap">
             <div className="flex flex-col md:flex-row gap-2 w-full md:w-1/4 items-center px-2 flex-wrap">

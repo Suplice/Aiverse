@@ -6,12 +6,10 @@ using TaskManagementApp.Core.ApiResponse;
 [Route("user")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
 
-    public UserController(IUserRepository userRepository, IUserService userService)
+    public UserController(IUserService userService)
     {
-        _userRepository = userRepository;
         _userService = userService;
     }
 
@@ -24,7 +22,7 @@ public class UserController : ControllerBase
             return BadRequest("Invalid ID.");
         }
 
-        var user = await _userRepository.GetUserById(id);
+        var user = await _userService.GetUserById(id);
 
         if (user == null)
         {
@@ -69,4 +67,6 @@ public class UserController : ControllerBase
         // Zwracamy 204 No Content, jeśli operacja zakończyła się sukcesem
         return NoContent();
     }
+
+
 }

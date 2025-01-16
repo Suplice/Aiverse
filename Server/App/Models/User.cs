@@ -30,5 +30,6 @@ public class User: BaseModel {
     public DateTime CreatedAt { get; set; }
     [Column("Role")]
     public string Role { get; set; }
+
 }
 }
