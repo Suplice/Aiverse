@@ -50,7 +50,7 @@ const UserSettings = () => {
 
       if (response.ok) {
         console.log("User name updated successfully");
-        setUserName(newName); // Lokalna aktualizacja nazwy
+        setUserName(newName); 
       } else {
         console.error("Failed to update user name");
       }

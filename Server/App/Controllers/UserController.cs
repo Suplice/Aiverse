@@ -31,7 +31,7 @@ public class UserController : ControllerBase
             return NotFound($"User with ID {id} not found.");
         }
 
-        return Ok(user);  // Zwróć dane użytkownika
+        return Ok(user); 
     }
 
     // PATCH: /user/{id}
@@ -62,11 +62,13 @@ public class UserController : ControllerBase
         {
             user.Email = updatedUser.Email;
         }
+        if (!string.IsNullOrEmpty(updatedUser.Picture))
+        {
+            user.Picture = updatedUser.Picture;
+        }
         
-        // Aktualizujemy dane użytkownika w bazie
         await _userService.UpdateUser(user);
 
-        // Zwracamy 204 No Content, jeśli operacja zakończyła się sukcesem
         return NoContent();
     }
 }
