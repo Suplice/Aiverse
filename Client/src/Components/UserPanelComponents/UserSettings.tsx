@@ -6,6 +6,9 @@ const UserSettings = () => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState<string>(user?.Name || "");
 
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>(user?.Email || "");
+
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -13,17 +16,107 @@ const UserSettings = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
 
-  const [selectedSubPage, setSelectedSubPage] = useState<string>("");
+  const [selectedSubPage] = useState<string>("");
 
-  const handleChangeName = () => {
-    if (userName.trim() === "") {
+
+  const updateUserName = async (newName: string) => {
+    if (!user) {
+      console.error("User data is not available");
+      return;
+    }
+
+    if (newName.trim() === "") {
       alert("Name cannot be empty!");
       return;
     }
 
-    setUserName(userName);
-    setIsEditingName(false);
-    console.log("New name:", userName);
+    try {
+      const updatedUserData = {
+        ...user,
+        Name: newName, // Zmieniamy tylko pole Name
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserData),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("User name updated successfully");
+        setUserName(newName); 
+      } else {
+        console.error("Failed to update user name");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChangeName = async () => {
+    try {
+      await updateUserName(userName);
+      setIsEditingName(false);
+      console.log("New name:", userName);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateUserEmail = async (newEmail: string) => {
+    if (!user) {
+      console.error("User data is not available");
+      return;
+    }
+
+    if (newEmail.trim() === "") {
+      alert("Name cannot be empty!");
+      return;
+    }
+
+    try {
+      const updatedUserData = {
+        ...user,
+        Email: newEmail, 
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserData),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("User name updated successfully");
+        setUserEmail(newEmail); 
+      } else {
+        console.error("Failed to update user name");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    try {
+      await updateUserEmail(userEmail);
+      setIsEditingEmail(false);
+      console.log("New email:", userEmail);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChangePassword = () => {
@@ -75,6 +168,7 @@ const UserSettings = () => {
             </div>
           ) : (
             <div className="flex justify-end lg:pr-16">
+              {user?.Provider === "EMAIL" && (
                 <button
                   onClick={() => setIsEditingName(true)}
                   className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
@@ -85,18 +179,34 @@ const UserSettings = () => {
                 >
                   Change
                 </button>
+              )}
               </div>
           )}
         </div>
         
-
-        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto min-h-[110px]">
+        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto">
           <strong className="text-lg lg:pl-16">Email:</strong>
           <span className="text-lg flex-grow">{user?.Email}</span>
-          <div className="flex justify-end lg:pr-16">
-            {user?.Provider === "EMAIL" && (
+          {isEditingEmail ? (
+            <div className="flex items-center gap-2 w-full">
+              <input
+                type="text"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+                className="px-4 py-2 border rounded w-full"
+              />
               <button
-                onClick={() => setSelectedSubPage("Email")}
+                onClick={handleChangeEmail}
+                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
+              >
+                Save
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-end lg:pr-16">
+                {user?.Provider === "EMAIL" && (
+              <button
+                onClick={() => setIsEditingEmail(true)}
                 className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
                   selectedSubPage === "Email"
                     ? "bg-black text-white"
@@ -106,8 +216,10 @@ const UserSettings = () => {
                 Change
               </button>
             )}
-          </div>
+              </div>
+          )}
         </div>
+
 
         {user?.Provider === "EMAIL" && (
           <div className="flex flex-col items-center gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto bg-gray-100">

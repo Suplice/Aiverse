@@ -1,7 +1,17 @@
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Server.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var webRootPath = builder.Environment.WebRootPath;
+
+if (webRootPath == null)
+{
+    Console.WriteLine("WebRootPath is null, setting a default value...");
+    builder.Environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+}
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -16,14 +26,22 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10 MB limit na pliki
+});
+
 
 
 builder.Services.AddDbContext<AppDbContext>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAIServiceService, AIServiceService>();
 builder.Services.AddScoped<IAIServiceRepository, AIServiceRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<FileService>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -57,12 +75,15 @@ new Supabase.Client(
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseCors();
 
