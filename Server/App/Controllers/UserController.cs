@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
-using TaskManagementApp.Core.ApiResponse;
 
 [ApiController]
 [Route("user")]
@@ -8,11 +7,16 @@ public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
+    private readonly FileService _fileService; // Dodanie zależności do FileService
+    private readonly IWebHostEnvironment _env;  // Dodanie IWebHostEnvironment
 
-    public UserController(IUserRepository userRepository, IUserService userService)
+    // Konstruktor kontrolera
+    public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
     {
         _userRepository = userRepository;
         _userService = userService;
+        _fileService = fileService;  
+        _env = env; // Inicjalizacja _env
     }
 
     // GET: /user/{id}
@@ -70,5 +74,48 @@ public class UserController : ControllerBase
         await _userService.UpdateUser(user);
 
         return NoContent();
+    }
+
+    // PATCH: /user/{userId}/profile-picture
+    [HttpPatch("{userId}/profile-picture")]
+    public async Task<IActionResult> UploadProfilePicture(long userId, IFormFile file)
+    {
+        if (file == null)
+        {
+            return BadRequest("No file uploaded.");
+        }
+
+        try
+        {
+            // Pobierz użytkownika z bazy danych, by uzyskać ścieżkę do starego zdjęcia
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Jeśli użytkownik ma stare zdjęcie, usuń je
+            if (!string.IsNullOrEmpty(user.Picture))
+            {
+                var oldFilePath = Path.Combine(_env.WebRootPath, user.Picture.TrimStart('/'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath); // Usuń stare zdjęcie
+                }
+            }
+
+            // Zapisz nowe zdjęcie użytkownika
+            var filePath = await _fileService.SaveFileAsync(file, "uploads/user-images");
+
+            // Zaktualizuj ścieżkę zdjęcia użytkownika w bazie danych
+            user.Picture = filePath;
+            await _userService.UpdateUser(user);
+
+            return Ok(new { message = "Profile picture updated successfully.", filePath });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 }

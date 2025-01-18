@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import UserSettings from "../../Components/UserPanelComponents/UserSettings";
 
+const defaultImage = "/car.png"; // Default image path
 
-const defaultImage = "/car.png"; // Poprawiona ścieżka domyślnego obrazu
 
 const UserPanel = () => {
   const { user } = useAuth();
   const [selectedSubPage, setSelectedSubPage] = useState<"Settings" | "Liked" | "Rated">("Liked");
   const [userImage, setUserImage] = useState<string>(defaultImage);
 
-  // Fetch user data by ID
+  // Funkcja do pobrania danych użytkownika
   const fetchUserById = async (id: number) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${id}`, {
@@ -31,41 +31,44 @@ const UserPanel = () => {
     }
   };
 
-  // Update user image when the user object changes
+  // Uaktualnianie obrazu użytkownika
   useEffect(() => {
     const updateUserImage = async () => {
       if (user?.Id) {
         const fetchedUser = await fetchUserById(user.Id);
         if (fetchedUser?.Picture) {
-          setUserImage(fetchedUser.Picture);
+          // Zaktualizowanie obrazka z backendu, zakładając, że ścieżka jest względna
+          setUserImage(`${import.meta.env.VITE_API_URL}${fetchedUser.Picture}`);
         } else {
-          setUserImage(defaultImage);
+          setUserImage(defaultImage); // Ustawienie domyślnego obrazu
         }
       }
     };
-  
+
     updateUserImage();
   }, [user]);
 
-  // Save updated image to the database
-  const saveImageToDatabase = async (image: string) => {
+  // Zapisanie obrazu na serwerze
+  const saveImageToDatabase = async (file: File) => {
     if (!user) {
       console.error("User data is not available");
       return;
     }
 
+    const formData = new FormData();
+    formData.append("file", file); // Dodajemy plik do FormData
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${user.Id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${user.Id}/profile-picture`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...user, Picture: image }),
+        body: formData, // Wysyłamy plik w formacie FormData
         credentials: "include",
       });
 
       if (response.ok) {
         alert("Profile picture updated successfully.");
+        const updatedUser = await response.json();
+        setUserImage(`${import.meta.env.VITE_API_URL}${updatedUser.Picture}`); // Zaktualizowany URL
       } else {
         console.error("Failed to update profile picture");
         alert("Failed to update profile picture.");
@@ -76,22 +79,15 @@ const UserPanel = () => {
     }
   };
 
-  // Handle image change
+  // Obsługa zmiany obrazu
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result) {
-          const base64Image = reader.result as string;
-          setUserImage(base64Image);
-          saveImageToDatabase(base64Image); // Save image to database
-        }
-      };
-      reader.readAsDataURL(file);
+      setUserImage(URL.createObjectURL(file)); // Podgląd obrazu
+      saveImageToDatabase(file); // Zapisujemy obraz na serwerze
     }
   };
-  
+
   return (
     <div className="flex-row justify-center items-center h-screen bg-white">
       <div>
@@ -124,10 +120,11 @@ const UserPanel = () => {
         <div className="border-black py-4 w-5/6 mx-auto"></div>
       </div>
 
-      <div  className="flex justify-center gap-20 shadow-lg shadow-[rgba(0,0,0,0.7)] rounded-lg border-black py-4 w-5/6 mx-auto pt-6 pb-6"
+      <div
+        className="flex justify-center gap-20 shadow-lg shadow-[rgba(0,0,0,0.7)] rounded-lg border-black py-4 w-5/6 mx-auto pt-6 pb-6"
         style={{
           backgroundImage: "url('/Black_blinking_stars.gif')",
-          height: '175px', 
+          height: "175px",
         }}
       >
         <div className="flex justify-center items-center gap-20">
@@ -163,7 +160,6 @@ const UserPanel = () => {
           </button>
         </div>
       </div>
-
 
       <div className="flex justify-center mt-6">
         <div className="w-3/5">
