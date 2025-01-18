@@ -5,7 +5,6 @@ using Server.App.Models;
 [Route("user")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
     private readonly FileService _fileService; // Dodanie zależności do FileService
     private readonly IWebHostEnvironment _env;  // Dodanie IWebHostEnvironment
@@ -13,7 +12,6 @@ public class UserController : ControllerBase
     // Konstruktor kontrolera
     public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
     {
-        _userRepository = userRepository;
         _userService = userService;
         _fileService = fileService;  
         _env = env; // Inicjalizacja _env
@@ -28,7 +26,7 @@ public class UserController : ControllerBase
             return BadRequest("Invalid ID.");
         }
 
-        var user = await _userRepository.GetUserById(id);
+        var user = await _userService.GetUserById(id);
 
         if (user == null)
         {

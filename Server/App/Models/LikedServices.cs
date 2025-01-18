@@ -8,17 +8,20 @@ using ColumnAttribute = System.ComponentModel.DataAnnotations.Schema.ColumnAttri
 using TableAttribute = Supabase.Postgrest.Attributes.TableAttribute;
 
 namespace Server.App.Models {
-[Table("Functions")]
-public class Functions: BaseModel {
+[Table("LikedServices")]
+public class LikedServices: BaseModel {
 
-    public Functions(){}
+    public LikedServices(){}
     [PrimaryKey("Id",false)]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonIgnore]
-    public long Id { get; set; } 
+    public long Id { get; set; }
 
-    [Column("FunctionName")]
-    public string FunctionName { get; set; }
+    [Column("AiServiceId")]
+    public long AiServiceId { get; set; } 
+
+    [Column("UserId")]
+    public long UserId { get; set; } 
 
 }
 }

@@ -26,8 +26,6 @@ public class AiService: BaseModel {
     public string FullDescription { get; set; }
     [Column("PricingModel")]
     public string PricingModel { get; set; }
-    [Reference(typeof(Function))]
-    public List<Function> Functions {get; set;}
     [Column("VerificationStatus")]
     public string VerificationStatus {get; set;} 
     [Column("CreatedAt")]
