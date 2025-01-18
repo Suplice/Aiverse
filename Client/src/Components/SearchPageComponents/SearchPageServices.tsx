@@ -1,13 +1,16 @@
 import { IoSearchSharp } from "react-icons/io5";
 import LandingServiceCard from "../LandingComponents/LandingServiceCard";
-// import React, { useState } from "react";
 import FilterButtons from "./FilterButtons";
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
 import { SearchParams } from "../../Utils/Models/SearchParams";
 import LoadingServicesSkeleton from "./LoadingServicesSkeleton";
+import useSearchParams from "./hooks/useSearchParams";
+import useSearchInput from "./hooks/useSearchInput";
+import useFilteredServices from "./hooks/useFilteredServices";
+import { AiService } from "../../Utils/Models/AiService";
+import { useEffect } from "react";
 
-const mockSearchPageServices = [
+const mockSearchPageServices: AiService[] = [
   {
     id: 1,
     title: "ChatGPT",
@@ -91,109 +94,90 @@ const mockSearchPageServices = [
 ];
 
 const SearchPageServices = () => {
-  const [searchText, setSearchText] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFiltering, setIsFiltering] = useState<boolean>(false);
-  const [services, setServices] = useState(mockSearchPageServices);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { getParams, updateParams } = useSearchParams();
+  const { inputRef, resetInput, lastInput } = useSearchInput("");
+  const { filteredServices, filterServices, isLoading } = useFilteredServices(
+    mockSearchPageServices
+  );
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const searchParam = params.get("searchText");
-    setSearchText(searchParam);
-    showNewServices(params);
-  }, [location]);
+    const params = getParams;
+    const searchText = params.get("searchText");
+    if (searchText && inputRef.current) {
+      inputRef.current.value = searchText;
+    }
+    filterServices(params);
+  }, []);
 
   const handleSearch = () => {
-    const params = new URLSearchParams(location.search);
-    params.set("searchText", inputRef.current?.value ?? "");
-    inputRef.current!.value = "";
-    navigate(`?${params.toString()}`);
-    showNewServices(params);
+    const searchText = inputRef.current?.value || "";
+    const currentParams = getParams;
+
+    const updatedParams = new URLSearchParams(currentParams);
+    updatedParams.set("searchText", searchText);
+
+    updateParams(Object.fromEntries(updatedParams.entries()));
+    filterServices(updatedParams);
+    resetInput();
   };
 
   const handleSearchWithFilters = (tempSearchParams: SearchParams) => {
-    setIsFiltering(true);
-    const params = new URLSearchParams(location.search);
-    params.set("categories", tempSearchParams.categories.join(","));
-    params.set("priceRange", tempSearchParams.priceRange.join(","));
-    navigate(`?${params.toString()}`);
-  };
+    const { categories, priceRange } = tempSearchParams;
+    const currentParams = getParams;
 
-  const showNewServices = (params: URLSearchParams) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newServices = mockSearchPageServices.filter((service) => {
-        const categories = params.get("categories")?.split(",") || [];
-        const priceRange =
-          params.get("priceRange")?.split(",").map(Number) || [];
-        const searchText = params.get("searchText")?.toLowerCase() || "";
+    const updatedParams = new URLSearchParams(currentParams);
 
-        const isCategoryMatch =
-          (categories[0] === "" && categories.length === 1) ||
-          service.Categories.some((category) => categories.includes(category));
-        const isPriceMatch =
-          priceRange.length === 0 ||
-          (service.price === "Free" && priceRange[0] === 0) ||
-          service.price.split(" - ").some((price) => {
-            const numericPrice = parseFloat(price.replace(/[^0-9.]/g, ""));
-            return (
-              numericPrice >= priceRange[0] && numericPrice <= priceRange[1]
-            );
-          });
-        const isSearchTextMatch =
-          searchText === "" ||
-          service.title.toLowerCase().includes(searchText) ||
-          service.description.toLowerCase().includes(searchText);
+    if (categories && categories.length > 0) {
+      updatedParams.set("categories", categories.join(","));
+    } else {
+      updatedParams.delete("categories");
+    }
 
-        return isCategoryMatch && isPriceMatch && isSearchTextMatch;
-      });
+    if (priceRange && priceRange.length > 0) {
+      updatedParams.set("priceRange", priceRange.join(","));
+    } else {
+      updatedParams.delete("priceRange");
+    }
 
-      setServices(newServices);
-      setIsLoading(false);
-      setIsFiltering(false);
-    }, 2000);
+    const searchText = updatedParams.get("searchText");
+    if (searchText) {
+      updatedParams.set("searchText", searchText);
+    }
+
+    updateParams(Object.fromEntries(updatedParams.entries()));
+    filterServices(updatedParams);
   };
 
   return (
-    <div className="w-full lg:w-3/4  lg:px-10 md:px-6 sm:px-2  flex flex-col gap-10 ">
+    <div className="w-full lg:w-3/4 lg:px-10 md:px-6 sm:px-2 flex flex-col gap-10">
       <div className="flex items-center w-full justify-center gap-5 flex-wrap">
-        <div className=" border-2 mx-5 rounded-sm border-[#3B3B3D] focus-within:border-blue-500/50 transition-all duration-200 ">
-          <div className="flex   rounded-xl text-white  p-3 gap-1 items-center">
+        <div className="border-2 mx-5 rounded-sm border-[#3B3B3D] focus-within:border-blue-500/50 transition-all duration-200">
+          <div className="flex rounded-xl text-white p-3 gap-1 items-center">
             <IoSearchSharp size={32} />
-
             <input
               ref={inputRef}
               className="bg-transparent outline-none w-full"
-              placeholder={searchText ? searchText : "Search for services"}
+              placeholder={lastInput ?? "Search for services"}
             ></input>
             <button
               onClick={handleSearch}
-              className="px-2 py-1 bg-blue-600 text-white rounded-md  hover:bg-blue-700 transition-all duration-150"
+              className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-150"
             >
               Search
             </button>
           </div>
         </div>
-        <div className=" flex flex-row justify-around gap-6 px-12 items-center flex-wrap ">
-          <FilterButtons
-            handleFilter={handleSearchWithFilters}
-            isFiltering={isFiltering}
-          />
-        </div>
+        <FilterButtons
+          isFiltering={isLoading}
+          handleFilter={handleSearchWithFilters}
+        />
       </div>
       {isLoading ? (
-        <div className="bg-[#121212] border-2 border-[#3B3B3D] rounded-lg">
-          <LoadingServicesSkeleton />
-        </div>
+        <LoadingServicesSkeleton />
       ) : (
         <div className="bg-[#121212] border-2 border-[#3B3B3D] rounded-lg">
-          {services.length > 0 ? (
-            services.map((service, index: number) => (
+          {filteredServices.length > 0 ? (
+            filteredServices.map((service, index: number) => (
               <LandingServiceCard key={service.id} {...service} index={index} />
             ))
           ) : (
