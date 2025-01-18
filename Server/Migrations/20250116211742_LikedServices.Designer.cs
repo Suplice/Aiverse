@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250116211742_LikedServices")]
+    partial class LikedServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,12 +79,17 @@ namespace Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AiServiceId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("FunctionName")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("FunctionName");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AiServiceId");
 
                     b.ToTable("Functions");
                 });
@@ -103,6 +111,10 @@ namespace Server.Migrations
                         .HasColumnName("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AiServiceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("LikedServices");
                 });
@@ -149,6 +161,40 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Server.App.Models.Functions", b =>
+                {
+                    b.HasOne("Server.App.Models.AiService", null)
+                        .WithMany("Functions")
+                        .HasForeignKey("AiServiceId");
+                });
+
+            modelBuilder.Entity("Server.App.Models.LikedServices", b =>
+                {
+                    b.HasOne("Server.App.Models.AiService", null)
+                        .WithMany("LikedUsers")
+                        .HasForeignKey("AiServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.App.Models.User", null)
+                        .WithMany("LikedServices")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Server.App.Models.AiService", b =>
+                {
+                    b.Navigation("Functions");
+
+                    b.Navigation("LikedUsers");
+                });
+
+            modelBuilder.Entity("Server.App.Models.User", b =>
+                {
+                    b.Navigation("LikedServices");
                 });
 #pragma warning restore 612, 618
         }
