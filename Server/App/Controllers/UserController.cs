@@ -1,16 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
-using TaskManagementApp.Core.ApiResponse;
 
 [ApiController]
 [Route("user")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly FileService _fileService; // Dodanie zależności do FileService
+    private readonly IWebHostEnvironment _env;  // Dodanie IWebHostEnvironment
 
-    public UserController(IUserService userService)
+    // Konstruktor kontrolera
+    public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
     {
         _userService = userService;
+        _fileService = fileService;  
+        _env = env; // Inicjalizacja _env
     }
 
     // GET: /user/{id}
@@ -29,7 +33,7 @@ public class UserController : ControllerBase
             return NotFound($"User with ID {id} not found.");
         }
 
-        return Ok(user);  // Zwróć dane użytkownika
+        return Ok(user); 
     }
 
     // PATCH: /user/{id}
@@ -60,13 +64,56 @@ public class UserController : ControllerBase
         {
             user.Email = updatedUser.Email;
         }
+        if (!string.IsNullOrEmpty(updatedUser.Picture))
+        {
+            user.Picture = updatedUser.Picture;
+        }
         
-        // Aktualizujemy dane użytkownika w bazie
         await _userService.UpdateUser(user);
 
-        // Zwracamy 204 No Content, jeśli operacja zakończyła się sukcesem
         return NoContent();
     }
 
+    // PATCH: /user/{userId}/profile-picture
+    [HttpPatch("{userId}/profile-picture")]
+    public async Task<IActionResult> UploadProfilePicture(long userId, IFormFile file)
+    {
+        if (file == null)
+        {
+            return BadRequest("No file uploaded.");
+        }
 
+        try
+        {
+            // Pobierz użytkownika z bazy danych, by uzyskać ścieżkę do starego zdjęcia
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Jeśli użytkownik ma stare zdjęcie, usuń je
+            if (!string.IsNullOrEmpty(user.Picture))
+            {
+                var oldFilePath = Path.Combine(_env.WebRootPath, user.Picture.TrimStart('/'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath); // Usuń stare zdjęcie
+                }
+            }
+
+            // Zapisz nowe zdjęcie użytkownika
+            var filePath = await _fileService.SaveFileAsync(file, "uploads/user-images");
+
+            // Zaktualizuj ścieżkę zdjęcia użytkownika w bazie danych
+            user.Picture = filePath;
+            await _userService.UpdateUser(user);
+
+            return Ok(new { message = "Profile picture updated successfully.", filePath });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }
