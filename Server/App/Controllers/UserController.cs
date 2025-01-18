@@ -116,5 +116,4 @@ public class UserController : ControllerBase
             return StatusCode(500, new { message = ex.Message });
         }
     }
-
 }
