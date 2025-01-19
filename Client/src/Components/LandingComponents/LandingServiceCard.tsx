@@ -9,25 +9,25 @@ import { useNavigate } from "react-router";
 import { FaHeart } from "react-icons/fa";
 
 interface LandingServiceCardProps {
-  id: number;
-  title: string;
-  description: string;
-  price: string;
-  image: string;
-  stars: number;
-  reviews: number | string;
+  Id: number;
+  Title: string;
+  Description: string;
+  Price: string;
   Categories: string[];
+  Image: string;
+  Stars: number;
+  Reviews: number;
   index: number;
 }
 
 const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
-  id,
-  title,
-  description,
-  price,
-  image,
-  stars,
-  reviews,
+  Id,
+  Title,
+  Description,
+  Price,
+  Image,
+  Stars,
+  Reviews,
   Categories,
   index,
 }) => {
@@ -39,9 +39,9 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
 
   return (
     <div
-      key={id}
+      key={Id}
       className={`flex flex-col border-[#3B3B3D]    p-4 ${
-        id === 1 ? "border-t-0" : "border-t-2"
+        Id === 1 ? "border-t-0" : "border-t-2"
       }`}
     >
       <div className="bg-[#252729] w-full rounded-lg lg:p-10 md:p-6 p-4 flex md:flex-row flex-col gap-4 items-center relative">
@@ -49,21 +49,21 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
         <div className="flex flex-col justify-between w-full text-center">
           <div className="flex flex-col md:flex-row justify-between items-center   flex-wrap">
             <div className="flex flex-col md:flex-row gap-2 w-full md:w-1/4 items-center px-2 flex-wrap">
-              <img src={image} alt={title} className="w-14 " />
+              <img src={Image} alt={Title} className="w-14 " />
               <div className="flex flex-col items-center md:items-start">
-                <p className="text-2xl font-semibold text-white">{title}</p>
+                <p className="text-2xl font-semibold text-white">{Title}</p>
                 <div className="flex flex-row gap-2">
                   <p className="flex flex-row gap-1 items-center text-white">
                     <TiStarFullOutline className="text-yellow-300" />
-                    {stars}
+                    {Stars}
                   </p>
-                  <p className="underline text-white">{reviews} Reviews</p>
+                  <p className="underline text-white">{Reviews} Reviews</p>
                 </div>
               </div>
             </div>
 
             <p className="w-full md:w-1/4 text-xl font-mono text-center md:text-left text-white">
-              {price}
+              {Price}
             </p>
             <p className="w-full md:w-1/4 font-semibold text-md text-center md:text-left text-white">
               {Categories.join(", ")}
@@ -134,7 +134,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
             transition={{ duration: 0.3 }}
           >
             <div className="w-full p-2">
-              <p className="text-white">{description}</p>
+              <p className="text-white">{Description}</p>
             </div>
           </motion.div>
         )}

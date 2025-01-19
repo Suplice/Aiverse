@@ -1,10 +1,13 @@
 export type AiService = {
-  id: number;
-  title: string;
-  description: string;
-  price: string;
+  Id: number;
+  Title: string;
+  Description: string;
+  FullDescription?: string;
+  Price: string;
   Categories: string[];
-  image: string;
-  stars: number;
-  reviews: string | number;
+  Image: string;
+  Stars: number;
+  Reviews: number;
+  Status: "Verified" | "Declined" | "Pending";
+  CreatedAt: Date;
 };

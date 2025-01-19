@@ -8,27 +8,30 @@ import LandingPage from "../../Pages/LandingPage/LandingPage";
 import SearchServices from "../../Pages/SearchServices/SearchServices";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { AiServiceProvider } from "../../Utils/Context/AiServiceContext";
 
 const AppRouter = () => {
   return (
     <Router>
       <AuthProvider>
-        <MantineProvider>
-          <Routes>
-            <Route path="auth">
-              <Route path="SignUp" element={<SignUp />}></Route>
-              <Route path="SignIn" element={<SignIn />}></Route>
-            </Route>
-            <Route path="user">
-              <Route path="panel" element={<UserPanel />}></Route>
-            </Route>
-            <Route path="manager">
-              <Route path="panel" element={<ManagerPanel />}></Route>
-            </Route>
-            <Route path="services" element={<SearchServices />}></Route>
-            <Route path="*" element={<LandingPage />}></Route>
-          </Routes>
-        </MantineProvider>
+        <AiServiceProvider>
+          <MantineProvider>
+            <Routes>
+              <Route path="auth">
+                <Route path="SignUp" element={<SignUp />}></Route>
+                <Route path="SignIn" element={<SignIn />}></Route>
+              </Route>
+              <Route path="user">
+                <Route path="panel" element={<UserPanel />}></Route>
+              </Route>
+              <Route path="manager">
+                <Route path="panel" element={<ManagerPanel />}></Route>
+              </Route>
+              <Route path="services" element={<SearchServices />}></Route>
+              <Route path="*" element={<LandingPage />}></Route>
+            </Routes>
+          </MantineProvider>
+        </AiServiceProvider>
       </AuthProvider>
     </Router>
   );
