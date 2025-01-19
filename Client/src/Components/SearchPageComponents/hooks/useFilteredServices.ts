@@ -19,8 +19,8 @@ const useFilteredServices = (services: AiService[]) => {
           service.Categories.some((category) => categories.includes(category));
         const isPriceMatch =
           priceRange.length === 0 ||
-          (service.price === "Free" && priceRange[0] === 0) ||
-          service.price.split(" - ").some((price) => {
+          (service.Price === "Free" && priceRange[0] === 0) ||
+          service.Price.split(" - ").some((price) => {
             const numericPrice = parseFloat(price.replace(/[^0-9.]/g, ""));
             return (
               numericPrice >= priceRange[0] && numericPrice <= priceRange[1]
@@ -28,8 +28,8 @@ const useFilteredServices = (services: AiService[]) => {
           });
         const isSearchTextMatch =
           searchText === "" ||
-          service.title.toLowerCase().includes(searchText) ||
-          service.description.toLowerCase().includes(searchText);
+          service.Title.toLowerCase().includes(searchText) ||
+          service.Description.toLowerCase().includes(searchText);
 
         return isCategoryMatch && isPriceMatch && isSearchTextMatch;
       });
