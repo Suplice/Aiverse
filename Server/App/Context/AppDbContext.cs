@@ -24,14 +24,17 @@ public class AppDbContext : DbContext
         modelBuilder.Ignore<Supabase.Postgrest.ClientOptions>();
         modelBuilder.Entity<User>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<AiService>().Ignore(e => e.BaseUrl);
-        modelBuilder.Entity<Functions>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<Category>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<LikedServices>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<AiServicesCategories>().Ignore(e => e.BaseUrl);
     }
     public DbSet<User> Users { get; set; }
 
     public DbSet<AiService> AiServices { get; set; }
 
-    public DbSet<Functions> Functions { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     public DbSet<LikedServices> LikedServices { get; set; }
+
+    public DbSet<AiServicesCategories> AiServicesCategories { get; set; }
 }
