@@ -170,6 +170,15 @@ const UserSettings = () => {
       return;
     }
 
+    setPasswordError(null);
+    console.log("Old password:", oldPassword);
+    console.log("New password:", newPassword);
+
+    setPasswordSuccess("Password changed successfully!");
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+
     try {
       await updateUserPassword(newPassword);
       setIsChangingPassword(false);
