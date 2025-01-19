@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import UserSettings from "../../Components/UserPanelComponents/UserSettings";
+import { Avatar } from "@mantine/core";
+import LandingNavbar from "../../Components/LandingComponents/LandingNavbar";
 
-const defaultImage = "/car.png"; // Default image path
 
 
 const UserPanel = () => {
   const { user } = useAuth();
   const [selectedSubPage, setSelectedSubPage] = useState<"Settings" | "Liked" | "Rated">("Liked");
-  const [userImage, setUserImage] = useState<string>(defaultImage);
+  const [isUserImage, setIsUserImage] = useState(true);
+  const [userImage, setUserImage] = useState("");
 
   // Funkcja do pobrania danych użytkownika
   const fetchUserById = async (id: number) => {
@@ -40,7 +42,7 @@ const UserPanel = () => {
           // Zaktualizowanie obrazka z backendu, zakładając, że ścieżka jest względna
           setUserImage(`${import.meta.env.VITE_API_URL}${fetchedUser.Picture}`);
         } else {
-          setUserImage(defaultImage); // Ustawienie domyślnego obrazu
+          setIsUserImage(false); // Ustawienie domyślnego obrazu
         }
       }
     };
@@ -83,6 +85,7 @@ const UserPanel = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      setIsUserImage(false);
       setUserImage(URL.createObjectURL(file)); // Podgląd obrazu
       saveImageToDatabase(file); // Zapisujemy obraz na serwerze
     }
@@ -90,14 +93,19 @@ const UserPanel = () => {
 
   return (
     <div className="flex-row justify-center items-center h-screen bg-white">
+      <LandingNavbar/>
       <div>
         <div className="bg-gray-100 mt-10 flex items-center shadow-md justify-center h-1/2 border-4 rounded-lg py-4 w-3/5 mx-auto">
           <div className="w-48 h-48 mt-16 mb-16 rounded-full overflow-hidden flex justify-center items-center relative group border-4 border-black">
-            <img
+            {isUserImage ? (
+              <img
               src={userImage}
               alt="User"
               className="w-full h-full object-cover transition duration-300 group-hover:brightness-100 group-hover:opacity-80"
             />
+            ) : (
+              <Avatar size={180} />
+            )}
             <label
               htmlFor="imageUpload"
               className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 group-hover:opacity-100 cursor-pointer transition duration-300"
