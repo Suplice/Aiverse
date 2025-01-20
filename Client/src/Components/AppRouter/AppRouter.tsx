@@ -9,6 +9,7 @@ import SearchServices from "../../Pages/SearchServices/SearchServices";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { AiServiceProvider } from "../../Utils/Context/AiServiceContext";
+import FormPage from "../../Pages/FormPage/FormPage";
 
 const AppRouter = () => {
   return (
@@ -27,6 +28,7 @@ const AppRouter = () => {
               <Route path="manager">
                 <Route path="panel" element={<ManagerPanel />}></Route>
               </Route>
+              <Route path = "forms" element={<FormPage />}></Route>
               <Route path="services" element={<SearchServices />}></Route>
               <Route path="*" element={<LandingPage />}></Route>
             </Routes>

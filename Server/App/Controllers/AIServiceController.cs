@@ -16,6 +16,11 @@ public class AIServiceController : ControllerBase
         _AIServiceService = AIServiceService;
     }
 
+    public Boolean UploadServicePicture(long serviceId, IFormFile file)
+    {
+        return true;
+    }
+
     [HttpGet("getall")]
     public async Task<IActionResult> GetAllServices()
     {
