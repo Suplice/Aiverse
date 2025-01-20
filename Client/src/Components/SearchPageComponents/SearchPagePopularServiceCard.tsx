@@ -3,21 +3,21 @@ import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { Tooltip } from "@mantine/core";
 
 interface SearchPagePopularServiceCard {
-  title: string;
-  price: string;
-  image: string;
-  stars: number;
-  reviews: number | string;
+  Title: string;
+  Price: string;
+  Image: string;
+  Stars: number;
+  Reviews: number | string;
   Categories: string[];
   index: number;
 }
 
 const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
-  title,
-  price,
-  image,
-  stars,
-  reviews,
+  Title,
+  Price,
+  Image,
+  Stars,
+  Reviews,
   Categories,
   index,
 }) => {
@@ -28,18 +28,18 @@ const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
       }  `}
     >
       <img
-        src={image}
-        alt={title}
+        src={Image}
+        alt={Title}
         className=" h-24 object-cover rounded-lg mb-5 aspect-auto"
       />
-      <div className="text-2xl font-bold mb-2">{title}</div>
-      <div className="text-lg mb-2">{price}</div>
+      <div className="text-2xl font-bold mb-2">{Title}</div>
+      <div className="text-lg mb-2">{Price}</div>
       <div className="flex items-center gap-1 mb-2">
         <p className="flex flex-row gap-1 items-center">
           <TiStarFullOutline className="text-yellow-300" />
-          {stars}
+          {Stars}
         </p>
-        <div className="text-sm text-gray-300 underline">{reviews} reviews</div>
+        <div className="text-sm text-gray-300 underline">{Reviews} reviews</div>
       </div>
       <div className="flex flex-wrap gap-1">
         {Categories.map((category, index) => (

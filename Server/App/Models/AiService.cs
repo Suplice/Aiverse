@@ -16,18 +16,22 @@ public class AiService: BaseModel {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonIgnore] 
     public long Id { get; set; }
-    [Column("ModelName")]
-    public string ModelName { get; set; }
-    [Column("Producer")]
-    public string Producer { get; set; }
-    [Column("ShortDescription")]
-    public string ShortDescription { get; set; }
+    [Column("Title")]
+    public string Title { get; set; }
+    [Column("Description")]
+    public string Description { get; set; }
     [Column("FullDescription")]
     public string FullDescription { get; set; }
-    [Column("PricingModel")]
-    public string PricingModel { get; set; }
-    [Column("VerificationStatus")]
-    public string VerificationStatus {get; set;} 
+    [Column("Price")]
+    public string Price { get; set; }
+    [Column("Image")]
+    public string Image { get; set; }
+    [Column("Stars")]
+    public double Stars { get; set; }
+    [Column("Reviews")]
+    public int Reviews { get; set; }
+    [Column("Status")]
+    public string Status {get; set;} 
     [Column("CreatedAt")]
     public DateTime CreatedAt { get; set; }
 }
