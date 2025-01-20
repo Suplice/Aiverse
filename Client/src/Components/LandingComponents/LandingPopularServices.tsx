@@ -1,4 +1,6 @@
-import LandingServiceCard from "./LandingServiceCard";
+import BlockTextField from "../UI/BlockTextField";
+import TextField from "../UI/TextField";
+import LandingServiceCard from "./LandingServiceCard/LandingServiceCard";
 
 const MockServices = [
   {
@@ -46,7 +48,14 @@ const MockServices = [
 const LandingPopularServices = () => {
   return (
     <div className="w-full mt-5 ">
-      <div className="text-3xl font-bold my-4 text-white">Popular services</div>
+      <BlockTextField color="white" className="font-bold my-4 ">
+        <TextField
+          value="Popular Services"
+          className="text-3xl"
+          color="white"
+        />
+      </BlockTextField>
+
       <div className=" border-2 border-[#3B3B3D] rounded-lg bg-[#121212] ">
         {MockServices.map((service, index) => (
           <LandingServiceCard {...service} index={index} />

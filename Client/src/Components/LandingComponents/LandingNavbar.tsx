@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { Avatar } from "@mantine/core";
+import TextField from "../UI/TextField";
+import LandingNavbarOptions from "./LandingNavbarOptions";
+import LandingNavbarLogo from "./LandingNavbarLogo";
+import BlockTextField from "../UI/BlockTextField";
+import Block from "../UI/Block";
 
 const LandingNavbar = () => {
   const navigate = useNavigate();
@@ -33,28 +38,16 @@ const LandingNavbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center py-4 md:px-8 sm:px-4 px-2 bg-[#121212] relative  shadow-sm mx-2 ">
-      <div className="flex items-center flex-row md:gap-20  gap-4  ">
-        <div
-          onClick={() => {
-            navigate("/");
-          }}
-          className="font-bold  xl:text-4xl md:text-3xl sm:text-2xl text-xl tracking-tighter text-white hover:cursor-pointer"
-        >
-          AIVERSE.
-        </div>
-        <div className="hidden md:flex space-x-8 md:text-lg font-medium text-sm ">
-          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
-            Hot Services
-          </div>
-          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
-            Search via AI
-          </div>
-          <div className="text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer">
-            Recently Added
-          </div>
-        </div>
-      </div>
+    <Block
+      className="py-4 md:px-8 sm:px-4 px-2 bg-[#121212] relative  shadow-sm mx-2 "
+      direction="row"
+      align="center"
+      justify="between"
+    >
+      <Block className="md:gap-20" align="center" direction="row" gap={4}>
+        <LandingNavbarLogo />
+        <LandingNavbarOptions />
+      </Block>
       {isAuthenticated ? (
         <div
           onClick={() => {
@@ -72,95 +65,129 @@ const LandingNavbar = () => {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="absolute  top-[105%] right-0  text-lg font-semibold py-2 px-4  z-40 bg-gray-300 text-black shadow-md  flex flex-col space-y-2 rounded-md"
+                className="absolute  top-[105%] right-0  text-lg py-2 px-4  z-40 bg-gray-300 text-black shadow-md  flex flex-col space-y-2 rounded-md"
               >
-                <div
-                onClick={() => {navigate("/user/panel")}}
-                 className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
-                  Profile
-                </div>
-                <div className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200">
-                  Settings
-                </div>
-                <div
-                  onClick={handleLogout}
-                  className="hover:bg-black/10 px-4 py-2 rounded-lg text-center transition-all duration-200 text-red/50"
+                <BlockTextField
+                  color="white"
+                  className="hover:bg-black/10 px-4 py-2 rounded-lg transition-all duration-200"
+                  onClick={() => {
+                    navigate("/user/panel");
+                  }}
                 >
-                  Logout
-                </div>
+                  <TextField value="Profile" color="black" />
+                </BlockTextField>
+
+                <BlockTextField
+                  color="white"
+                  className="hover:bg-black/10 px-4 py-2 rounded-lg transition-all duration-200"
+                >
+                  <TextField value="Settings" color="black" />
+                </BlockTextField>
+
+                <BlockTextField
+                  color="white"
+                  className="hover:bg-black/10 px-4 py-2 rounded-lg  transition-all duration-200 "
+                  onClick={handleLogout}
+                >
+                  <TextField value="Logout" className="text-red/50" />
+                </BlockTextField>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       ) : (
         <div className=" space-x-4 items-center hidden md:flex">
-          <div
+          <BlockTextField
+            color="white"
+            className="md:text-xl px-6 py-2  hover:text-gray-600 transition-colors duration-200 cursor-pointer"
             onClick={() => {
               navigate("/auth/SignIn");
             }}
-            className="md:text-xl text-md px-6 py-2 font-bold text-white hover:text-gray-600 transition-colors duration-200 cursor-pointer"
           >
-            Log In
-          </div>
-          <div
+            <TextField value="Log In" color="white" />
+          </BlockTextField>
+
+          <BlockTextField
+            color="white"
+            className="md:text-xl px-6 py-2 rounded-lg bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
             onClick={() => {
               navigate("/auth/SignUp");
             }}
-            className="md:text-xl text-md font-semibold px-6 py-2 rounded-lg text-white bg-black hover:bg-gray-800 transition-all duration-200 cursor-pointer"
           >
-            Sign Up
-          </div>
+            <TextField value="Sign Up" color="white" />
+          </BlockTextField>
         </div>
       )}
 
-      <div
+      <Block
+        className="md:hidden select-none border shadow shadow-gray-600 px-2 py-1 rounded-lg  border-gray-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+        direction="row"
+        align="center"
+        gap={4}
         onClick={() => {
           setIsMenuOpen(!isMenuOpen);
         }}
-        className="flex md:hidden flex-row select-none items-center gap-4 border shadow shadow-gray-600 px-2 py-1 rounded-lg text-white font-semibold border-gray-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
       >
-        Menu
-      </div>
+        <TextField value="Menu" color="white" />
+      </Block>
       {isMenuOpen && (
-        <motion.div className="absolute w-fit h-fit bg-gray-500 shadow-md rounded-lg p-4 md:hidden top-14 z-20 flex flex-col space-y-4 right-4">
-          <div className="md:text-lg font-medium text-sm flex flex-col space-y-2 items-center ">
-            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer ">
-              Hot Services
-            </div>
-            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer">
-              Search via AI
-            </div>
-            <div className="text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer">
-              Recently Added
-            </div>
-          </div>
+        <motion.div className="absolute w-fit h-fit bg-gray-500 shadow-md rounded-lg p-4 md:hidden top-14 z-20 flex flex-col space-y-4 right-4 ">
+          <Block
+            className="md:text-lg font-medium text-sm space-y-2"
+            direction="column"
+            align="center"
+          >
+            <BlockTextField
+              value="Hot Services"
+              color="white"
+              className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+            ></BlockTextField>
+            <BlockTextField
+              value="Search via AI"
+              color="white"
+              className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+            ></BlockTextField>
+            <BlockTextField
+              value="Recently Added"
+              color="white"
+              className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+            ></BlockTextField>
+          </Block>
           {isAuthenticated ? (
-            <div onClick={handleLogout} className="text-center text-red/50">
-              Logout
-            </div>
+            <BlockTextField
+              className="text-red/50"
+              onClick={() => {
+                navigate("/auth/SignIn");
+              }}
+            >
+              <TextField value="Logout" className="text-red/50" />
+            </BlockTextField>
           ) : (
-            <div className="flex flex-col space-y-2 items-center">
-              <div
+            <Block className="space-y-2" align="center" direction="column">
+              <BlockTextField
+                color="white"
+                className="md:text-xl px-4 py-2  hover:text-gray-800 transition-colors duration-200 cursor-pointer "
                 onClick={() => {
                   navigate("/auth/SignIn");
                 }}
-                className="md:text-xl text-md px-4 py-2 font-semibold text-white hover:text-gray-800 transition-colors duration-200 cursor-pointer"
               >
-                Log In
-              </div>
-              <div
+                <TextField value="Log In" color="white" />
+              </BlockTextField>
+
+              <BlockTextField
+                color="white"
+                className="md:text-xl  px-4 py-2 rounded-lg bg-black hover:bg-gray-600 transition-all duration-200 cursor-pointer"
                 onClick={() => {
                   navigate("/auth/SignUp");
                 }}
-                className="md:text-xl text-md font-semibold px-4 py-2 rounded-lg text-white bg-black hover:bg-gray-600 transition-all duration-200 cursor-pointer"
               >
-                Sign Up
-              </div>
-            </div>
+                <TextField value="Sign Up" color="white" />
+              </BlockTextField>
+            </Block>
           )}
         </motion.div>
       )}
-    </div>
+    </Block>
   );
 };
 

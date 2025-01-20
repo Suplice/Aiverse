@@ -8,6 +8,9 @@ import { useAuth } from "../../Utils/Context/AuthContext";
 import { SignUpFormData } from "../../Utils/Models/Forms";
 import AppPreview from "../../Components/AppPreview/AppPreview";
 import OAuthComponent from "../../Components/OAuth/Oauth";
+import TextField from "../../Components/UI/TextField";
+import Button from "../../Components/UI/Button";
+import Block from "../../Components/UI/Block";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -37,9 +40,18 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-row items-center justify-center">
-      <div className="md:w-1/2 flex flex-col  xl:py-16 lg:py-12 py-8 h-full w-full items-center xl:px-24 lg:px-18 md:px-12 px-6  bg-slate-50/30">
-        <div className="flex items-start w-full h-24">
+    <Block
+      className="h-screen w-screen "
+      align="center"
+      justify="center"
+      direction="row"
+    >
+      <Block
+        className="md:w-1/2 xl:py-16 lg:py-12 py-8 h-full w-full xl:px-24 lg:px-18 md:px-12 px-6  bg-slate-50/30"
+        direction="column"
+        align="center"
+      >
+        <Block className="w-full h-24" align="start">
           <motion.h1
             initial={{ scale: 1, opacity: 0, y: -35 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -49,33 +61,42 @@ const SignUp = () => {
               navigate("/");
             }}
           >
-            AIVERSE.
+            <TextField
+              value="AIVERSE."
+              className="font-bold font-mono text-3xl tracking-tighter"
+            />
           </motion.h1>
-        </div>
+        </Block>
         <motion.div
           initial={{ scale: 1, opacity: 0, y: 35 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="flex flex-col md:w-[300px] lg:w-[500px] gap-2   w-full justify-center h-full  "
         >
-          <h2 className="font-bold text-3xl text-center font-serif">Sign Up</h2>
+          <TextField
+            value="Sign Up"
+            className="font-bold text-3xl font-serif"
+          />
           <OAuthComponent />
-          <div className="flex items-center w-full mb-4 ">
+          <Block className="mb-4 w-full" align="center" direction="row">
             <div className="flex-grow border-t border-gray-400"></div>
-            <p className="px-3 mb-[4px] ">Or continue with email</p>
+            <TextField
+              value="Or continue with email"
+              className="px-3 mb-[4px]"
+            />
             <div className="flex-grow border-t border-gray-400"></div>
-          </div>
+          </Block>
 
           <form
             onSubmit={handleSubmit(onSubmitHandler)}
             className="h-[400px]"
             autoComplete="off"
           >
-            <div className="flex flex-col gap-6 mt-6">
-              <div className="flex flex-col ">
+            <Block className="mt-6" gap={6} direction="column">
+              <Block direction="column">
                 <label className="font-semibold flex flex-row">
-                  <p>Email</p>
-                  <p className="text-red ml-[1px]">*</p>
+                  <TextField value="Email" className="" />
+                  <TextField value="*" className="text-red ml-[1px]" />
                 </label>
                 <input
                   type="email"
@@ -87,12 +108,14 @@ const SignUp = () => {
                   }`}
                   {...register("Email")}
                 />
-                <p className="text-red text-sm">{errors.Email?.message}</p>
-              </div>
-              <div className="flex flex-col">
+                <TextField className="text-red text-sm text-left">
+                  {errors.Email?.message}
+                </TextField>
+              </Block>
+              <Block direction="column">
                 <label className="font-semibold flex flex-row ">
-                  <p>Password</p>
-                  <p className="text-red ml-[1px]"> *</p>
+                  <TextField value="Password" className="" />
+                  <TextField value="*" className="text-red ml-[1px]" />
                 </label>
                 <input
                   type="password"
@@ -104,12 +127,14 @@ const SignUp = () => {
                   }`}
                   {...register("Password")}
                 />
-                <p className="text-red text-sm">{errors.Password?.message}</p>
-              </div>
-              <div className="flex flex-col">
+                <TextField className="text-red text-sm text-left">
+                  {errors.Password?.message}
+                </TextField>
+              </Block>
+              <Block direction="column">
                 <label className="font-semibold flex flex-row ">
-                  <p>Confirm Password</p>
-                  <p className="text-red ml-[1px]"> *</p>
+                  <TextField value="Confirm Password" className="" />
+                  <TextField value="*" className="text-red ml-[1px]" />
                 </label>
                 <input
                   type="password"
@@ -121,33 +146,43 @@ const SignUp = () => {
                   }`}
                   {...register("ConfirmPassword")}
                 />
-                <p className="text-red text-sm">
+                <TextField className="text-red text-sm text-left">
                   {errors.ConfirmPassword?.message}
-                </p>
-              </div>
+                </TextField>
+              </Block>
 
-              <button className="bg-black text-white rounded-lg px-4 py-2 font-semibold hover:bg-stone-900 transition-all duration-200">
-                Sign Up
-              </button>
-              <div className=" flex flex-row items-center justify-center gap-2 text-lg">
-                <p className="text-center">Already have an account? </p>
-                <p
-                  className="underline-offset-auto underline font-bold hover:cursor-pointer"
+              <Button
+                className="bg-black rounded-lg hover:bg-stone-900 px-4 py-2"
+                type="submit"
+                TextColor="white"
+              >
+                <TextField value="Sign Up" color="white" />
+              </Button>
+              <Block
+                className="text-lg"
+                align="center"
+                direction="row"
+                gap={2}
+                justify="center"
+              >
+                <TextField value="Not registered yet?" color="black" />
+                <TextField
+                  value="Sign Up"
+                  className="underline-offset-auto underline font-extrabold  hover:cursor-pointer"
+                  color="black"
                   onClick={() => {
                     navigate("/auth/signin");
                   }}
-                >
-                  Sign In
-                </p>
-              </div>
-            </div>
+                />
+              </Block>
+            </Block>
           </form>
         </motion.div>
-      </div>
+      </Block>
       <div className="md:w-1/2 hidden md:flex h-full w-full bg-slate-400 items-center justify-center">
         <AppPreview />
       </div>
-    </div>
+    </Block>
   );
 };
 
