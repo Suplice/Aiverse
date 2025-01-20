@@ -92,8 +92,10 @@ const UserPanel = () => {
   };
 
   return (
-    <div className="flex-row justify-center items-center h-screen bg-white">
+    <div className="flex-row h-screen bg-white">
+      <div className="bg-[#121212] py-6 px-6">
       <LandingNavbar/>
+      </div>
       <div>
         <div className="bg-gray-100 mt-10 flex items-center shadow-md justify-center h-1/2 border-4 rounded-lg py-4 w-3/5 mx-auto">
           <div className="w-48 h-48 mt-16 mb-16 rounded-full overflow-hidden flex justify-center items-center relative group border-4 border-black">
@@ -129,7 +131,7 @@ const UserPanel = () => {
       </div>
 
       <div
-        className="flex justify-center gap-20 shadow-lg shadow-[rgba(0,0,0,0.7)] rounded-lg border-black py-4 w-5/6 mx-auto pt-6 pb-6"
+        className="flex justify-center gap-20 shadow-lg shadow-[rgba(0,0,0,0.7)] rounded-3xl border-black py-4 w-5/6 mx-auto pt-6 pb-6"
         style={{
           backgroundImage: "url('/Black_blinking_stars.gif')",
           height: "175px",
