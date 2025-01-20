@@ -2,16 +2,17 @@
 import LandingNavbar from "../../Components/LandingComponents/LandingNavbar";
 import SearchPageServices from "../../Components/SearchPageComponents/SearchPageServices";
 import SearchPagePopularServices from "../../Components/SearchPageComponents/SearchPagePopularServices";
+import Block from "../../Components/UI/Block";
 
 const SearchServices = () => {
   return (
-    <div className="flex flex-col p-6 w-full bg-[#121212]">
+    <Block className="p-6 w-full bg-[#121212]" direction="column">
       <LandingNavbar />
-      <div className="flex flex-row gap-4 lg:p-10 md:p-6 sm:p-2  ">
+      <Block className="lg:p-10 md:p-6 sm:p-2" direction="row" gap={4}>
         <SearchPageServices />
         <SearchPagePopularServices />
-      </div>
-    </div>
+      </Block>
+    </Block>
   );
 };
 

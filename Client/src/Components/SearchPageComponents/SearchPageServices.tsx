@@ -1,5 +1,5 @@
 import { IoSearchSharp } from "react-icons/io5";
-import LandingServiceCard from "../LandingComponents/LandingServiceCard";
+import LandingServiceCard from "../LandingComponents/LandingServiceCard/LandingServiceCard";
 import FilterButtons from "./FilterButtons";
 
 import { SearchParams } from "../../Utils/Models/SearchParams";
@@ -9,6 +9,9 @@ import useSearchInput from "./hooks/useSearchInput";
 import useFilteredServices from "./hooks/useFilteredServices";
 import { AiService } from "../../Utils/Models/AiService";
 import { useEffect } from "react";
+import Button from "../UI/Button";
+import BlockTextField from "../UI/BlockTextField";
+import Block from "../UI/Block";
 
 const mockSearchPageServices: AiService[] = [
   {
@@ -165,29 +168,44 @@ const SearchPageServices = () => {
   };
 
   return (
-    <div className="w-full lg:w-3/4 lg:px-10 md:px-6 sm:px-2 flex flex-col gap-10">
-      <div className="flex items-center w-full justify-center gap-5 flex-wrap">
+    <Block
+      className="w-full lg:w-3/4 lg:px-10 md:px-6 sm:px-2 "
+      direction="column"
+      gap={10}
+    >
+      <Block
+        className=" w-full flex-wrap"
+        align="center"
+        justify="center"
+        gap={5}
+        direction="row"
+      >
         <div className="border-2 mx-5 rounded-sm border-[#3B3B3D] focus-within:border-blue-500/50 transition-all duration-200">
-          <div className="flex rounded-xl text-white p-3 gap-1 items-center">
+          <Block
+            className="text-white p-3 rounded-xl"
+            gap={1}
+            align="center"
+            direction="row"
+          >
             <IoSearchSharp size={32} />
             <input
               ref={inputRef}
               className="bg-transparent outline-none w-full"
               placeholder={lastInput ?? "Search for services"}
             ></input>
-            <button
+            <Button
               onClick={handleSearch}
-              className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-150"
-            >
-              Search
-            </button>
-          </div>
+              className=" bg-blue-600 rounded-md hover:bg-blue-700 px-2 py-1 "
+              value="Search"
+              TextColor="white"
+            ></Button>
+          </Block>
         </div>
         <FilterButtons
           isFiltering={isLoading}
           handleFilter={handleSearchWithFilters}
         />
-      </div>
+      </Block>
       {isLoading ? (
         <LoadingServicesSkeleton />
       ) : (
@@ -197,11 +215,16 @@ const SearchPageServices = () => {
               <LandingServiceCard key={service.Id} {...service} index={index} />
             ))
           ) : (
-            <div className="text-white text-center p-5">No services found</div>
+            <BlockTextField
+              color="white"
+              className="text-white text-center p-5"
+            >
+              No services found
+            </BlockTextField>
           )}
         </div>
       )}
-    </div>
+    </Block>
   );
 };
 export default SearchPageServices;

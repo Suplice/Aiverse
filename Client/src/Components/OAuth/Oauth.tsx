@@ -4,6 +4,9 @@ import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { FaFacebook } from "react-icons/fa";
 import { FacebookProvider, LoginButton } from "react-facebook";
+import TextField from "../UI/TextField";
+import BlockTextField from "../UI/BlockTextField";
+import Block from "../UI/Block";
 
 declare global {
   interface Window {
@@ -107,24 +110,32 @@ const OAuthComponent = () => {
   };
 
   return (
-    <div className="flex md:flex-row justify-around w-full my-12 text-center text-2xl font-medium tracking-tight flex-col gap-6 ">
-      <div
+    <Block
+      className="md:flex-row w-full my-12 text-center text-2xl font-medium tracking-tight "
+      justify="around"
+      gap={6}
+      direction="column"
+    >
+      <BlockTextField
+        color="white"
         onClick={handleGoogleClick}
         className="flex-grow border-2 py-3 rounded-lg flex flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200"
       >
         <FcGoogle />
-        <p>Google</p>
-      </div>
+        <TextField value="Google" color="black" />
+      </BlockTextField>
+
       <FacebookProvider appId={import.meta.env.VITE_FACEBOOK_APP_ID as string}>
-        <div
+        <BlockTextField
           onClick={() => {
             handleFacebookClick();
           }}
           className="flex-grow border-2 py-3 rounded-lg flex flex-row text-center items-center justify-center gap-3 hover:cursor-pointer hover:border-gray-500 transition-all duration-200"
         >
           <FaFacebook color="blue" />
-          <p>Facebook</p>
-        </div>
+          <TextField value="Facebook" color="black" />
+        </BlockTextField>
+
         <div className="hidden">
           <LoginButton
             scope="email"
@@ -134,13 +145,13 @@ const OAuthComponent = () => {
             // @ts-expect-error
             id="facebook-login-btn"
           >
-            Login via Facebook
+            <TextField value="Login via Facebook" color="black" />
           </LoginButton>
         </div>
       </FacebookProvider>
 
       <div id="google-login-btn" className="hidden"></div>
-    </div>
+    </Block>
   );
 };
 
