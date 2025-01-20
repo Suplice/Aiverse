@@ -119,7 +119,47 @@ const UserSettings = () => {
     }
   };
 
-  const handleChangePassword = () => {
+  const updateUserPassword = async (newUserPassword: string) => {
+    if (!user) {
+      console.error("User data is not available");
+      return;
+    }
+
+    if (newUserPassword.trim() === "") {
+      alert("Name cannot be empty!");
+      return;
+    }
+
+    try {
+      const updatedUserData = {
+        ...user,
+        Password: newUserPassword, 
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserData),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("User name updated successfully");
+        setNewPassword(newPassword); 
+      } else {
+        console.error("Failed to update user name");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChangePassword = async () => {
     if (newPassword !== confirmNewPassword) {
       setPasswordError("New password and confirmation do not match.");
       return;
@@ -138,6 +178,14 @@ const UserSettings = () => {
     setOldPassword("");
     setNewPassword("");
     setConfirmNewPassword("");
+
+    try {
+      await updateUserPassword(newPassword);
+      setIsChangingPassword(false);
+      console.log("New password:", newPassword);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleToggleChangePassword = () => {
