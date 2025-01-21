@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import TextField from "../UI/TextField";
+import Button from "../UI/Button";
+import Block from "../UI/Block";
 
 const LandingServiceSearch = () => {
   const navigate = useNavigate();
@@ -34,30 +37,41 @@ const LandingServiceSearch = () => {
   });
 
   return (
-    <div
-      className="w-full h-[400px] relative flex flex-col items-center justify-center mt-3 rounded-xl overflow-hidden  shadow-lg shadow-gray-700 px-4"
+    <Block
+      className="w-full h-[400px] relative mt-3 rounded-xl overflow-hidden  shadow-lg shadow-gray-700 px-4"
+      align="center"
+      justify="center"
       style={{ backgroundImage: "url('/public/Black_blinking_stars.gif')" }}
+      direction="row"
     >
-      <div className=" z-10 text-center flex flex-col items-center">
-        <h1 className="text-white text-3xl font-bold mb-6">
-          Find the best AI services with us
-        </h1>
-        <div className="flex w-full  rounded-xl bg-[#252729] bg-opacity-90 p-2 gap-1 items-center text-white">
+      <Block className="z-10 text-center " direction="column" align="center">
+        <TextField
+          value="Find the best AI services with us"
+          className="mb-6 text-3xl"
+          color="white"
+        />
+        <Block
+          className="w-full rounded-xl bg-[#252729] bg-opacity-90 p-2 text-white"
+          align="center"
+          direction="row"
+          gap={1}
+        >
           <IoSearchSharp size={32} />
 
           <input
             className="bg-transparent outline-none w-full"
             placeholder="Enter product, categories or service name"
           ></input>
-          <button
+
+          <Button
             onClick={handleSearch}
-            className="px-2 py-1 bg-blue-600 text-white rounded-md  hover:bg-blue-700 transition-all duration-150"
+            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md"
           >
-            Search
-          </button>
-        </div>
-      </div>
-    </div>
+            <TextField value="Search" color="white" />
+          </Button>
+        </Block>
+      </Block>
+    </Block>
   );
 };
 
