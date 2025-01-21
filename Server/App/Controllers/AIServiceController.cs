@@ -11,9 +11,13 @@ public class AIServiceController : ControllerBase
 
     private readonly IAIServiceService _AIServiceService;
 
-    public AIServiceController(IAIServiceService AIServiceService)
+    private readonly FileService _fileService;
+
+
+    public AIServiceController(IAIServiceService AIServiceService, FileService fileService)
     {
         _AIServiceService = AIServiceService;
+        _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
     }
 
     public Boolean UploadServicePicture(long serviceId, IFormFile file)
@@ -64,23 +68,29 @@ public class AIServiceController : ControllerBase
     public async Task<IActionResult> AddNewService(RequestAIServiceDTO service)
     {
 
-        if (service == null)
+        try
         {
-            var response = new ApiResponse<bool>(false, "Service object is null", false);
+
+            var filePath = await _fileService.SaveFileAsync(service.Image, "AIServiceImages");
+            var ServiceResult = await _AIServiceService.AddNewService(service, filePath);
+
+            if (ServiceResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<AiService>(true, "Service added", ServiceResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
             return BadRequest(response);
         }
 
-        var ServiceResult = await _AIServiceService.AddNewService(service);
-
-        if (ServiceResult == null)
-        {
-            var response = new ApiResponse<bool>(false, "Error occured", false);
-            return BadRequest(response);
-        }
-
-        var correctResponse = new ApiResponse<AiService>(true, "Service added", ServiceResult);
-
-        return Ok(correctResponse);
     }
 
 
