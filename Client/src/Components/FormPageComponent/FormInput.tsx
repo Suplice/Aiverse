@@ -1,15 +1,9 @@
 import React from "react";
-
-interface FormData {
-  Title: string;
-  Description: string;
-  FullDescription: string;
-  Price: string;
-}
+import { AIServiceFormData } from "../../Utils/Models/AIServiceFormData";
 
 interface FormInputProps {
-  formData: FormData; // Odnosi się do tego samego interfejsu FormData
-  onChange: (name: keyof FormData, value: string | File | null) => void;
+  formData: AIServiceFormData; // Odnosi się do tego samego interfejsu FormData
+  onChange: (name: keyof AIServiceFormData, value: string | File | null) => void;
 }
 
 

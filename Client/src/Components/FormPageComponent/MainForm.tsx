@@ -2,18 +2,11 @@ import React, { useState } from "react";
 import FormInput from "./FormInput";
 import FormButtons from "./FormButtons";
 import FileUpload from "./FileUpload";
-
-interface FormData {
-    Title: string;
-    Description: string;
-    FullDescription: string;
-    Price: string;
-    Image: File | null;
-  }
+import { AIServiceFormData } from "../../Utils/Models/AIServiceFormData";
 
 const MainForm = () => {
 
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<AIServiceFormData>({
         Title: "",
         Description: "",
         FullDescription: "",
@@ -21,7 +14,7 @@ const MainForm = () => {
         Image: null,
       });
 
-      const handleChange = (name: keyof FormData, value: string | File | null) => {
+      const handleChange = (name: keyof AIServiceFormData, value: string | File | null) => {
         setFormData((prevData) => ({
           ...prevData,
           [name]: value,
