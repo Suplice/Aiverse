@@ -130,7 +130,7 @@ const UserPanel = () => {
 
           <Block direction="column" className="ml-6 text-center">
             <BlockTextField
-              value={user?.Name || "Guest"}
+              value={user?.Name || "Your name"}
               className="text-2xl font-bold text-white"
             />
             <TextField value="Welcome back!" className="text-gray-400" />
@@ -143,7 +143,7 @@ const UserPanel = () => {
         direction="row"
         justify="center"
         align="center"
-        gap="6"
+        gap="4"
         className="shadow-lg shadow-[rgba(255,255,255,0.3)] rounded-3xl border-[#1F1F1F] py-3 w-5/6 mx-auto pt-6 pb-6 h-[175px]" 
         style={{
           backgroundImage: "url('/Black_blinking_stars.gif')",

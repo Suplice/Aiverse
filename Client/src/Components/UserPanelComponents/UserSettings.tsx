@@ -20,29 +20,130 @@ const UserSettings = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
 
+  const updateUserName = async (newName: string) => {
+    if (!user) {
+      console.error("User data is not available");
+      return;
+    }
+
+    if (newName.trim() === "") {
+      alert("Name cannot be empty!");
+      return;
+    }
+
+    try {
+      const updatedUserData = {
+        ...user,
+        Name: newName, // Zmieniamy tylko pole Name
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserData),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("User name updated successfully");
+        setUserName(newName); 
+      } else {
+        console.error("Failed to update user name");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChangeName = async () => {
-    setIsEditingName(false);
-    console.log("New name:", userName);
+    try {
+      await updateUserName(userName);
+      setIsEditingName(false);
+      console.log("New name:", userName);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateUserEmail = async (newEmail: string) => {
+    if (!user) {
+      console.error("User data is not available");
+      return;
+    }
+
+    if (newEmail.trim() === "") {
+      alert("Name cannot be empty!");
+      return;
+    }
+
+    try {
+      const updatedUserData = {
+        ...user,
+        Email: newEmail, 
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserData),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("User name updated successfully");
+        setUserEmail(newEmail); 
+      } else {
+        console.error("Failed to update user name");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChangeEmail = async () => {
-    setIsEditingEmail(false);
-    console.log("New email:", userEmail);
+    try {
+      await updateUserEmail(userEmail);
+      setIsEditingEmail(false);
+      console.log("New email:", userEmail);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleChangePassword = async () => {
+  const handleChangePassword = () => {
     if (newPassword !== confirmNewPassword) {
       setPasswordError("New password and confirmation do not match.");
       return;
     }
+
+    if (newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return;
+    }
+
     setPasswordError(null);
-    setPasswordSuccess("Password changed successfully!");
-    setIsChangingPassword(false);
+    console.log("Old password:", oldPassword);
     console.log("New password:", newPassword);
+
+    setPasswordSuccess("Password changed successfully!");
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
   };
 
+
   return (
-    <Block className="p-4 bg-[#121212] rounded-lg text-white" direction="column" gap={6}>
+    <Block className="p-4 bg-[#121212] rounded-lg text-white" direction="column" gap={5}>
       <Block className="bg-[#2E2E2E] p-6  rounded-lg shadow-md border-4 md:flex-row" justify="start" align="center" direction="column" gap={4}>
         <BlockTextField className="text-lg text-white" value="Name:" />
         {!isEditingName ? (
