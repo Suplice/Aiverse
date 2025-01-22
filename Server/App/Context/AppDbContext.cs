@@ -27,6 +27,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Category>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<LikedServices>().Ignore(e => e.BaseUrl);
         modelBuilder.Entity<AiServicesCategories>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<Review>().Ignore(e => e.BaseUrl);
+        modelBuilder.Entity<Comment>().Ignore(e => e.BaseUrl);
     }
     public DbSet<User> Users { get; set; }
 
@@ -37,4 +39,8 @@ public class AppDbContext : DbContext
     public DbSet<LikedServices> LikedServices { get; set; }
 
     public DbSet<AiServicesCategories> AiServicesCategories { get; set; }
+
+    public DbSet<Review> Reviews { get; set; }
+
+    public DbSet<Comment> Comments { get; set; }
 }

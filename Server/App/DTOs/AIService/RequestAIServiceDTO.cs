@@ -17,5 +17,5 @@ public class RequestAIServiceDTO
     public string Price { get; set; }
 
     [Required]
-    public string Image { get; set; }
+    public IFormFile Image { get; set; }
 }
