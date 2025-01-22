@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import Block from "../UI/Block";
+import BlockTextField from "../UI/BlockTextField";
+import TextField from "../UI/TextField";
+import Button from "../UI/Button";
 
 const UserSettings = () => {
   const { user } = useAuth();
@@ -16,7 +20,6 @@ const UserSettings = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
 
-  const [selectedSubPage] = useState<string>("");
 
 
   const updateUserName = async (newName: string) => {
@@ -188,155 +191,133 @@ const UserSettings = () => {
     }
   };
 
-  const handleToggleChangePassword = () => {
-    setIsChangingPassword(!isChangingPassword);
-  };
+
+  
 
   return (
-    <div className="p-4 bg-white rounded-lg">
-      <div className="flex flex-col items-start justify-center gap-6 mt-4">
-        
-        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto">
-          <strong className="text-lg lg:pl-16">Name:</strong>
-          <span className="text-lg flex-grow">{user?.Name}</span>
-          {isEditingName ? (
-            <div className="flex items-center gap-2 w-full">
-              <input
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="px-4 py-2 border rounded w-full"
+    <Block className="p-4 bg-white rounded-lg" direction="column" gap={6}>
+      <Block
+        className="bg-gray-100 p-6 rounded-lg shadow-md border-4 md:flex-row"
+        justify="start"
+        align="center"
+        direction="column"
+        gap={4}
+      >
+        <BlockTextField className="text-lg" value="Name:" />
+        {!isEditingName ? (
+          <Block className="w-full md:flex-row" align="center" justify="between" gap={4} direction="column" >
+            <TextField value={user?.Name} className="text-lg flex-grow" />
+            {user?.Provider === "EMAIL" && (
+              <Button
+                value="Change"
+                onClick={() => setIsEditingName(true)}
+                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-black hover:bg-black hover:text-white"
               />
-              <button
-                onClick={handleChangeName}
-                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
-              >
-                Save
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-end lg:pr-16">
-              {user?.Provider === "EMAIL" && (
-                <button
-                  onClick={() => setIsEditingName(true)}
-                  className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
-                    selectedSubPage === "Name"
-                      ? "bg-black text-white"
-                      : "bg-white text-black hover:bg-black hover:text-white"
-                  }`}
-                >
-                  Change
-                </button>
-              )}
-              </div>
-          )}
-        </div>
-        
-        <div className="flex flex-col lg:flex-row items-center bg-gray-100 gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto">
-          <strong className="text-lg lg:pl-16">Email:</strong>
-          <span className="text-lg flex-grow">{user?.Email}</span>
-          {isEditingEmail ? (
-            <div className="flex items-center gap-2 w-full">
-              <input
-                type="text"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-                className="px-4 py-2 border rounded w-full"
-              />
-              <button
-                onClick={handleChangeEmail}
-                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
-              >
-                Save
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-end lg:pr-16">
-                {user?.Provider === "EMAIL" && (
-              <button
-                onClick={() => setIsEditingEmail(true)}
-                className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 ${
-                  selectedSubPage === "Email"
-                    ? "bg-black text-white"
-                    : "bg-white text-black hover:bg-black hover:text-white"
-                }`}
-              >
-                Change
-              </button>
             )}
-              </div>
-          )}
-        </div>
-
-
-        {user?.Provider === "EMAIL" && (
-          <div className="flex flex-col items-center gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-4 p-6 h-auto bg-gray-100">
-            <div className="flex items-center gap-2 w-full justify-between">
-              <button
-                onClick={handleToggleChangePassword}
-                className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 w-full ml-auto sm:ml-16 mr-auto sm:mr-16 ${
-                  selectedSubPage === "Password"
-                    ? "bg-black text-white"
-                    : "bg-white text-black hover:bg-black hover:text-white"
-                }`}
-              >
-                Change password
-              </button>
-            </div>
-
-            {isChangingPassword && (
-              <div className="flex flex-col gap-4 mt-4 w-full p-6 h-auto bg-gray-100 rounded-lg">
-                <div className="flex flex-col gap-2">
-                  <label className="block text-sm font-medium">Old Password</label>
-                  <input
-                    type="password"
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded w-full"
-                  />
-                </div>
-
-
-                <div className="flex flex-col gap-2">
-                  <label className="block text-sm font-medium">New Password</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded w-full"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="block text-sm font-medium">Confirm New Password</label>
-                  <input
-                    type="password"
-                    value={confirmNewPassword}
-                    onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded w-full"
-                  />
-                </div>
-
-                {passwordError && (
-                  <div className="text-red-500 text-sm mt-2">{passwordError}</div>
-                )}
-
-                {passwordSuccess && (
-                  <div className="text-green-500 text-sm mt-2">{passwordSuccess}</div>
-                )}
-
-                <button
-                  onClick={handleChangePassword}
-                  className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
-                >
-                  Save
-                </button>
-              </div>
-            )}
-          </div>
+          </Block>
+        ) : (
+          <Block direction="row" gap={2}>
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              className="px-4 py-2 border rounded w-full"
+            />
+            <Button
+              value="Save"
+              onClick={handleChangeName}
+              className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
+            />
+          </Block>
         )}
-      </div>
-    </div>
+      </Block>
+
+      <Block
+        className="bg-gray-100 p-6 rounded-lg shadow-md border-4 md:flex-row"
+        justify="start"
+        align="center"
+        direction="column"
+        gap={4}
+      >
+        <BlockTextField className="text-lg" value="Email:" />
+        {!isEditingEmail ? (
+          <Block className="w-full md:flex-row" align="center" justify="between" gap={4} direction="column" >
+            <TextField value={user?.Email} className="text-lg flex-grow" />
+            {user?.Provider === "EMAIL" && (
+              <Button
+                value="Change"
+                onClick={() => setIsEditingEmail(true)}
+                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-black hover:bg-black hover:text-white"
+              />
+            )}
+          </Block>
+        ) : (
+          <Block direction="row" gap={2}>
+            <input
+              type="text"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              className="px-4 py-2 border rounded w-full"
+            />
+            <Button
+              value="Save"
+              onClick={handleChangeEmail}
+              className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
+            />
+          </Block>
+        )}
+      </Block>
+
+      {user?.Provider === "EMAIL" && (
+        <Block
+          className="bg-gray-100 p-6 rounded-lg shadow-md border-4"
+          direction="column"
+          gap={4}
+        >
+          <Button
+            value="Change Password"
+            onClick={() => setIsChangingPassword(!isChangingPassword)}
+            className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-black hover:bg-black hover:text-white"
+          />
+          {isChangingPassword && (
+            <Block direction="column" gap={4}>
+              <input
+                type="password"
+                placeholder="Old Password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                className="px-4 py-2 border rounded w-full"
+              />
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="px-4 py-2 border rounded w-full"
+              />
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                className="px-4 py-2 border rounded w-full"
+              />
+              {passwordError && (
+                <TextField value={passwordError} className="text-red-500" />
+              )}
+              {passwordSuccess && (
+                <TextField value={passwordSuccess} className="text-green-500" />
+              )}
+              <Button
+                value="Save"
+                onClick={handleChangePassword}
+                className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-white text-green-500 hover:bg-green-500 hover:text-white"
+              />
+            </Block>
+          )}
+        </Block>
+      )}
+    </Block>
   );
 };
 
