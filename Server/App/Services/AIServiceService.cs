@@ -28,7 +28,7 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
-    public async Task<AiService?> AddNewService(RequestAIServiceDTO service)
+    public async Task<AiService?> AddNewService(RequestAIServiceDTO service, string filePath)
     {
 
         var newService = new AiService
@@ -37,7 +37,7 @@ public class AIServiceService : IAIServiceService
             Description = service.Description,
             FullDescription = service.FullDescription,
             Price = service.Price,
-            Image = service.Image,
+            Image = filePath,
             Stars = 0,
             Reviews = 0,
             Status = "Pending",
