@@ -126,9 +126,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       );
 
-      if (response.ok) {
-        const result = await response.json();
+      const result = await response.json();
 
+      if (response.ok) {
         setIsAuthenticated(true);
         setUser({
           Id: result.data.Id,
@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         navigate("/");
       } else {
-        console.error("Failed to login with Google");
+        console.error(result);
       }
     } catch (error) {
       console.error(error);

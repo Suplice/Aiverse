@@ -79,7 +79,7 @@ const OAuthComponent = () => {
 
         LoginWithGoogle({
           Email: decoded.email,
-          Given_name: decoded.given_name,
+          GivenName: decoded.given_name,
         });
       } catch (error) {
         console.error("Failed to decode JWT:", error);
