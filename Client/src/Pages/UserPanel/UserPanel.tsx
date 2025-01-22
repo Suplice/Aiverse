@@ -102,13 +102,13 @@ const UserPanel = () => {
           justify="center"
         >
           <Block
-            className="w-48 h-48 mt-16 mb-16 rounded-full overflow-hidden relative border-4 border-[#FFFFFF]"
+            className="w-48 h-48 mt-16 mb-16 rounded-full overflow-hidden relative border-4 border-[#FFFFFF] group"
           >
             {isUserImage ? (
               <img
                 src={userImage}
                 alt="User"
-                className="w-full h-full object-cover transition duration-300 group-hover:brightness-100 group-hover:opacity-80"
+                className="w-full h-full object-cover transition duration-300 group-hover:brightness-50 group-hover:opacity-80"
               />
             ) : (
               <Avatar size={180} />
@@ -127,6 +127,7 @@ const UserPanel = () => {
               onChange={handleImageChange}
             />
           </Block>
+
           <Block direction="column" className="ml-6 text-center">
             <BlockTextField
               value={user?.Name || "Guest"}
