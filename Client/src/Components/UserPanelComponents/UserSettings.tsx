@@ -149,11 +149,12 @@ const UserSettings = () => {
         {!isEditingName ? (
           <Block className="w-full md:flex-row" align="center" justify="between" gap={4} direction="column">
             <TextField value={user?.Name} className="text-lg flex-grow text-white bg-transparent" />
+            {user?.Provider === "EMAIL" && (
             <Button
               value="Change"
               onClick={() => setIsEditingName(true)}
               className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-[#1E1E1E] text-white hover:bg-white hover:text-black"
-            />
+            />)}
           </Block>
         ) : (
           <Block direction="row" gap={2}>
@@ -177,11 +178,12 @@ const UserSettings = () => {
         {!isEditingEmail ? (
           <Block className="w-full md:flex-row" align="center" justify="between" gap={4} direction="column">
             <TextField value={user?.Email} className="text-lg flex-grow text-white bg-transparent" />
+            {user?.Provider === "EMAIL" && (
             <Button
               value="Change"
               onClick={() => setIsEditingEmail(true)}
               className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition duration-300 border-4 bg-[#1E1E1E] text-white hover:bg-white hover:text-black"
-            />
+            />)}
           </Block>
         ) : (
           <Block direction="row" gap={2}>
@@ -200,6 +202,7 @@ const UserSettings = () => {
         )}
       </Block>
 
+      {user?.Provider === "EMAIL" && (
       <Block className="bg-[#2E2E2E] p-6 rounded-lg shadow-md border-4" direction="column" gap={4}>
         <Button
           value="Change Password"
@@ -238,7 +241,7 @@ const UserSettings = () => {
             />
           </Block>
         )}
-      </Block>
+      </Block>)}
     </Block>
   );
 };
