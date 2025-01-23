@@ -7,4 +7,5 @@ export type Review = {
   HasComments: boolean;
   Likes: number;
   Dislikes: number;
+  CreatedAt: Date;
 };

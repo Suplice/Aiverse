@@ -15,6 +15,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 12,
@@ -25,6 +26,7 @@ const MockComments: Comment[] = [
     HasComments: false,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 13,
@@ -35,6 +37,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 14,
@@ -45,6 +48,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
 ];
 
