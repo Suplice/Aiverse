@@ -7,6 +7,7 @@ import { Comment } from "../../Utils/Models/Comment";
 import CommentComponent from "./CommentComponent";
 import AddCommentComponent from "./AddCommentComponent";
 import Controls from "./Controls";
+import { User } from "../../Utils/Models/User";
 
 const MockComments: Comment[] = [
   {
@@ -18,6 +19,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 2,
@@ -28,6 +30,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 3,
@@ -38,6 +41,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
   {
     Id: 4,
@@ -48,6 +52,7 @@ const MockComments: Comment[] = [
     HasComments: true,
     Likes: 0,
     Dislikes: 0,
+    CreatedAt: new Date(),
   },
 ];
 
@@ -60,6 +65,7 @@ interface ReviewComponentProps {
   hasComments: boolean;
   likes: number;
   dislikes: number;
+  createdAt: Date;
 }
 
 const ReviewComponent: React.FC<ReviewComponentProps> = ({
@@ -68,16 +74,46 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   id,
   likes,
   dislikes,
+  UserId,
+  createdAt,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>("");
   const [isSendingReply, setIsSendingReply] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
+  const [isShowingComments, setIsShowingComments] = useState<boolean>(false);
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/user/${UserId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error(result);
+        }
+        setUser(result);
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     // TO DO: get user data and image from the server
     // TO DO: get all comments for review
-    setComments(MockComments);
+
+    fetchUser();
   }, []);
 
   const handleReplyClick = () => {
@@ -93,6 +129,36 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     }, 2000);
   };
 
+  const formatDate = () => {
+    const now = new Date();
+    const diff = now.getTime() - new Date(createdAt).getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) {
+      return "a minute ago";
+    } else if (minutes < 60) {
+      if (minutes === 1) return `${minutes} minute ago`;
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      if (hours === 1) return `${hours} hour ago`;
+      return `${hours} hours ago`;
+    } else {
+      if (days === 1) return `${days} day ago`;
+      return `${days} days ago`;
+    }
+  };
+
+  const LoadComments = () => {
+    setIsLoadingComments(true);
+    setTimeout(() => {
+      setComments(MockComments);
+      setIsLoadingComments(false);
+      setIsShowingComments(true);
+    }, 2000);
+  };
+
   return (
     <div className="grid grid-cols-[40px_auto] grid-rows-[40px_auto]  ">
       <img
@@ -102,7 +168,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
       ></img>
       <Block direction="row" className="ml-3 " gap={3} align="center">
         <TextField color="white" className="text-lg">
-          User Name
+          {user?.Name ? user?.Name : "Anonymous"}
         </TextField>
         <Block className="text-sm" direction="row" align="center" gap={1}>
           <TiStarFullOutline className="text-yellow-300" />
@@ -110,7 +176,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
             {Stars}
           </TextField>
         </Block>
-        <TextField className="text-sm text-gray-500">1 day ago</TextField>
+        <TextField className="text-sm text-gray-500">{formatDate()}</TextField>
       </Block>
       <div className="border-l h-full mt-1 self-center place-self-center border-gray-600"></div>
 
@@ -139,22 +205,34 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
                 isSendingReply={isSendingReply}
               />
             )}
-
-            {comments.map(
-              (comment) =>
-                comment.ReviewId === id && (
-                  <CommentComponent
-                    key={comment.Id}
-                    CommentValue={comment.CommentValue}
-                    Id={comment.Id}
-                    ParentId={comment.ParentId}
-                    ReviewId={comment.ReviewId}
-                    UserId={comment.UserId}
-                    hasComments={comment.HasComments}
-                    likes={comment.Likes}
-                    dislikes={comment.Dislikes}
-                  ></CommentComponent>
-                )
+            {isShowingComments ? (
+              <>
+                {comments.map(
+                  (comment) =>
+                    comment.ReviewId === id && (
+                      <CommentComponent
+                        key={comment.Id}
+                        CommentValue={comment.CommentValue}
+                        Id={comment.Id}
+                        ParentId={comment.ParentId}
+                        ReviewId={comment.ReviewId}
+                        UserId={comment.UserId}
+                        hasComments={comment.HasComments}
+                        likes={comment.Likes}
+                        dislikes={comment.Dislikes}
+                      ></CommentComponent>
+                    )
+                )}
+              </>
+            ) : isLoadingComments ? (
+              <div className="w-8 h-8 border-4 border-white border-dotted rounded-full animate-spin ml-6"></div>
+            ) : (
+              <TextField
+                value="Show Replies"
+                color="white"
+                className="ml-3 hover:underline cursor-pointer"
+                onClick={LoadComments}
+              />
             )}
           </Block>
         </Block>

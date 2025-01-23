@@ -3,74 +3,94 @@ import Block from "../UI/Block";
 import { Review } from "../../Utils/Models/Review";
 import ReviewComponent from "./ReviewComponent";
 import AddReviewComponent from "./AddReviewComponent";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 interface CommentSectionProps {
   AiServiceId: number;
 }
 
-const MockReviews: Review[] = [
-  {
-    Id: 1,
-    AiServiceId: 1,
-    HasComments: false,
-    UserId: 1,
-    Likes: 0,
-    Dislikes: 0,
-    Stars: 5,
-    CommentValue:
-      "Great Service Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service ",
-  },
-  {
-    Id: 2,
-    AiServiceId: 1,
-    UserId: 2,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    Stars: 4,
-    CommentValue:
-      "Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service ",
-  },
-  {
-    Id: 3,
-    AiServiceId: 1,
-    UserId: 3,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    Stars: 3,
-    CommentValue:
-      "Ok Service Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service  Good Service Good Service Good Service Good Service Good Service Good Service Good Service ",
-  },
-];
-
 const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [isAlreadyReviewed, setIsAlreadyReviewed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const { user } = useAuth();
 
   useEffect(() => {
-    try {
-      setReviews(MockReviews);
-    } catch (error) {
-      console.log(error);
-    }
+    const fetchReviews = async () => {
+      console.log("fetching");
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/aiservice/GetReviews/${7}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error(result);
+        }
+
+        if (result.data.some((review: Review) => review.UserId === user?.Id)) {
+          setIsAlreadyReviewed(true);
+        }
+
+        console.log(result);
+
+        setReviews(result.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReviews();
   }, []);
+
+  const handleReviewed = (review: Review) => {
+    setIsAlreadyReviewed(true);
+    setReviews([...reviews, review]);
+  };
 
   return (
     <Block direction="column" className="bg-[#252729]   p-2 gap-8  pb-8">
-      <AddReviewComponent AiServiceId={AiServiceId} />
-      {reviews &&
-        reviews.map((review) => (
-          <ReviewComponent
-            key={review.Id}
-            Stars={review.Stars}
-            CommentValue={review.CommentValue}
-            id={review.Id}
-            UserId={review.UserId}
-            hasComments={true}
-            likes={review.Likes}
-            dislikes={review.Dislikes}
-          ></ReviewComponent>
-        ))}
+      {isLoading ? (
+        <Block>Loading...</Block>
+      ) : (
+        <>
+          <AddReviewComponent
+            AiServiceId={7}
+            alreadyReviewed={isAlreadyReviewed}
+            setReviewed={handleReviewed}
+            userReview={
+              isAlreadyReviewed
+                ? reviews.find((review) => review.UserId === user?.Id)
+                : undefined
+            }
+          />
+          {reviews &&
+            reviews.map((review) => (
+              <ReviewComponent
+                key={review.Id}
+                Stars={review.Stars}
+                CommentValue={review.CommentValue}
+                id={review.Id}
+                UserId={review.UserId}
+                hasComments={true}
+                likes={review.Likes}
+                dislikes={review.Dislikes}
+                createdAt={review.CreatedAt}
+              ></ReviewComponent>
+            ))}
+        </>
+      )}
     </Block>
   );
 };
