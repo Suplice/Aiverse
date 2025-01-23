@@ -29,6 +29,18 @@ public class Review: BaseModel {
 
     [Column("AiServiceId")]
     public long AiServiceId { get; set; }
+    
+    [Column("CreatedAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [Column("Likes")]
+    public int Likes { get; set; }
+
+    [Column("Dislikes")]
+    public int Dislikes { get; set; }
+
+    [Column("HasReplies")]
+    public bool HasReplies { get; set; }
 
 
 
