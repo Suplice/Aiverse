@@ -4,7 +4,7 @@ export type Review = {
   UserId: number;
   Stars: number;
   AiServiceId: number;
-  hasComments: boolean;
-  likes: number;
-  dislikes: number;
+  HasComments: boolean;
+  Likes: number;
+  Dislikes: number;
 };

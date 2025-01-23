@@ -4,7 +4,7 @@ export type Comment = {
   UserId: number;
   ReviewId: number;
   ParentId: number;
-  hasComments: boolean;
-  likes: number;
-  dislikes: number;
+  HasComments: boolean;
+  Likes: number;
+  Dislikes: number;
 };
