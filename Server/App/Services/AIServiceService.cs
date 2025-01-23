@@ -49,4 +49,29 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
+    public async Task<Review?> AddReview(RequestReviewDTO review)
+    {
+        var newReview = new Review
+        {
+            CommentValue = review.CommentValue,
+            UserId = review.UserId,
+            Stars = review.Stars,
+            AiServiceId = review.AiServiceId,
+            CreatedAt = DateTime.Now,
+            Likes = 0,
+            Dislikes = 0,
+            HasReplies = false
+        };
+
+        var result = await _AIServiceRepository.AddReview(newReview);
+
+        return result;
+    }
+
+    public async Task<List<Review>?> GetReviews(long serviceId){
+        var result = await _AIServiceRepository.GetReviews(serviceId);
+
+        return result;
+    }
+
 }

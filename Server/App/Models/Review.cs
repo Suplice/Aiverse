@@ -17,7 +17,7 @@ public class Review: BaseModel {
     [JsonIgnore]
     public long Id { get; set; } 
 
-    [Column("Comment")]
+    [Column("CommentValue")]
     public string CommentValue { get; set; }
 
     [Column("UserId")]
@@ -29,7 +29,7 @@ public class Review: BaseModel {
 
     [Column("AiServiceId")]
     public long AiServiceId { get; set; }
-    
+
     [Column("CreatedAt")]
     public DateTime CreatedAt { get; set; }
 
