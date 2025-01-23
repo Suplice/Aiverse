@@ -25,6 +25,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "Chatbot", "LLM"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 2,
@@ -37,6 +38,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "VIdeo", "Art"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 3,
@@ -49,6 +51,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "Search", "Music"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 4,
@@ -61,6 +64,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "VIdeo", "LLM"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 5,
@@ -73,6 +77,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "Search", "Art"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 6,
@@ -85,6 +90,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "VIdeo", "Music"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 7,
@@ -97,6 +103,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "Search", "VIdeo"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
   {
     Id: 8,
@@ -109,6 +116,7 @@ const mockSearchPageServices: AiService[] = [
     Categories: ["AI", "VIdeo"],
     Status: "Verified",
     CreatedAt: new Date(),
+    CreatorId: 1,
   },
 ];
 
