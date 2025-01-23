@@ -6,8 +6,9 @@ import TextField from "../UI/TextField";
 import Button from "../UI/Button";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
+import { AiService } from "../../Utils/Models/AiService";
 
-const mockSearchPageServices = [
+const mockSearchPageServices: AiService[] = [
   {
     Id: 1,
     Title: "ChatGPT",
@@ -15,8 +16,10 @@ const mockSearchPageServices = [
     Price: "Free",
     Image: "https://via.placeholder.com/150",
     Stars: 4.5,
-    Reviews: "1.2k",
+    Reviews: 1200,
     Categories: ["AI", "Chatbot"],
+    Status: "Verified",
+    CreatorId: 1,
   },
   {
     Id: 2,
@@ -27,6 +30,8 @@ const mockSearchPageServices = [
     Stars: 3.2,
     Reviews: 172,
     Categories: ["AI", "Video"],
+    Status: "Verified",
+    CreatorId: 1,
   },
   {
     Id: 3,
@@ -37,6 +42,8 @@ const mockSearchPageServices = [
     Stars: 4.1,
     Reviews: 32,
     Categories: ["AI", "Search"],
+    Status: "Verified",
+    CreatorId: 1,
   },
 ];
 
