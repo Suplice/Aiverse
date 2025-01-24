@@ -63,4 +63,37 @@ public class AIServiceRepository : IAIServiceRepository
         }
     }
 
+    public async Task<Review?> AddReview(Review review)
+    {
+        try
+        {
+            var response = await _supabaseClient
+                                    .From<Review>()
+                                    .Insert(review);
+            return response.Model;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"{e.Message}");
+            return null;
+        }
+    }
+
+    public async Task<List<Review>?> GetReviews(long serviceId)
+    {
+        try
+        {
+            var response = await _supabaseClient
+                                    .From<Review>()
+                                    .Where(r => r.AiServiceId == serviceId)
+                                    .Get();
+            return response.Models;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"{e.Message}");
+            return null;
+        }
+    }
+
 }

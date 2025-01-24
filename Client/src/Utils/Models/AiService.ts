@@ -9,5 +9,6 @@ export type AiService = {
   Stars: number;
   Reviews: number;
   Status: "Verified" | "Declined" | "Pending";
-  CreatedAt: Date;
+  CreatedAt?: Date;
+  CreatorId: number;
 };

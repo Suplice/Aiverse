@@ -37,8 +37,37 @@ public class UserController : ControllerBase
     }
 
     // PATCH: /user/{id}
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateUser(long id, [FromBody] User updatedUser)
+    [HttpPatch("{id}/Email")]
+    public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] User updatedUser)
+    {
+        // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
+        if (id != updatedUser.Id)
+        {
+            return BadRequest("ID in URL does not match ID in the body.");
+        }
+
+        // Pobieramy użytkownika z bazy danych
+        var user = await _userService.GetUserById(id);
+
+        // Jeśli użytkownik nie istnieje, zwracamy 404 Not Found
+        if (user == null)
+        {
+            return NotFound($"User with ID {id} not found.");
+        }
+
+        // Aktualizujemy tylko pola, które zostały dostarczone
+        if (!string.IsNullOrEmpty(updatedUser.Email))
+        {
+            user.Email = updatedUser.Email;
+        }
+   
+        await _userService.UpdateUser(user);
+
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/Name")]
+    public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
     {
         // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
         if (id != updatedUser.Id)
@@ -60,19 +89,6 @@ public class UserController : ControllerBase
         {
             user.Name = updatedUser.Name;
         }
-        if (!string.IsNullOrEmpty(updatedUser.Email))
-        {
-            user.Email = updatedUser.Email;
-        }
-        if (!string.IsNullOrEmpty(updatedUser.Picture))
-        {
-            user.Picture = updatedUser.Picture;
-        }
-        if (!string.IsNullOrEmpty(updatedUser.Password))
-        {
-            var CryptedPassword =  BCrypt.Net.BCrypt.EnhancedHashPassword(updatedUser.Password, 10);
-            user.Password = CryptedPassword;
-        }
 
         
         await _userService.UpdateUser(user);
@@ -80,10 +96,28 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    // PATCH: /user/{userId}/Password
+    [HttpPatch("{id}/Password")]
+    public async Task<IActionResult> UpdateUserPassword(long id, [FromBody] String newPassword)
+    {
+
+        var user = await _userService.GetUserById(id);
+        if (user == null)
+        {
+            return NotFound($"User with ID {id} not found.");
+        }
+
+        // Nie zajmujemy się logiką zmiany hasła w kontrolerze!
+        await _userService.UpdateUserPasswordAsync(id, newPassword);
+        
+        return NoContent();
+    }
+
     // PATCH: /user/{userId}/profile-picture
     [HttpPatch("{userId}/profile-picture")]
-    public async Task<IActionResult> UploadProfilePicture(long userId, IFormFile file)
+    public async Task<IActionResult> UpdateUserProfilePicture(long userId, IFormFile file)
     {
+
         if (file == null)
         {
             return BadRequest("No file uploaded.");
@@ -91,11 +125,12 @@ public class UserController : ControllerBase
 
         try
         {
-            // Pobierz użytkownika z bazy danych, by uzyskać ścieżkę do starego zdjęcia
             var user = await _userService.GetUserById(userId);
+
+            // Jeśli użytkownik nie istnieje, zwracamy 404 Not Found
             if (user == null)
             {
-                return NotFound("User not found.");
+                return NotFound($"User with ID {userId} not found.");
             }
 
             // Jeśli użytkownik ma stare zdjęcie, usuń je

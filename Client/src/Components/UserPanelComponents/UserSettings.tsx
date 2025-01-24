@@ -32,7 +32,7 @@ const UserSettings = () => {
         Name: newName, // Zmieniamy tylko pole Name
       };
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Name`,
         {
           method: "PATCH",
           headers: {
@@ -76,7 +76,7 @@ const UserSettings = () => {
         Email: newEmail,
       };
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Email`,
         {
           method: "PATCH",
           headers: {
@@ -105,65 +105,73 @@ const UserSettings = () => {
       console.error(error);
     }
   };
+
   const updateUserPassword = async (newUserPassword: string) => {
     if (!user) {
       console.error("User data is not available");
       return;
     }
-    if (newUserPassword.trim() === "") {
-      alert("Name cannot be empty!");
-      return;
-    }
+  
+    // Tworzymy obiekt JSON z nowym hasłem
+    const passwordData = newUserPassword; // Tylko hasło, bez klucza "haslo"
+
     try {
-      const updatedUserData = {
-        ...user,
-        Password: newUserPassword,
-      };
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}`,
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Password`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedUserData),
+          body: JSON.stringify(passwordData), // Wysyłamy same hasło
           credentials: "include",
         }
       );
+  
       if (response.ok) {
-        console.log("User name updated successfully");
-        setNewPassword(newPassword);
+        console.log("Password updated successfully");
+        setNewPassword(newUserPassword); // Update the state with the new password
       } else {
-        console.error("Failed to update user name");
+        // Check if the server returned a specific error message
+        if (response.status === 400) {
+          console.error("Bad request. Make sure the new password is valid.");
+        } else if (response.status === 404) {
+          console.error(`User with ID ${user.Id} not found.`);
+        } else if (response.status === 500) {
+          console.error("Server error. Please try again later.");
+        } else {
+          console.error("Failed to update password. Status: " + response.status);
+        }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error while updating password:", error);
     }
   };
+  
   const handleChangePassword = async () => {
     if (newPassword !== confirmNewPassword) {
       setPasswordError("New password and confirmation do not match.");
       return;
     }
-    if (newPassword.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
-      return;
-    }
+  
     setPasswordError(null);
-    console.log("Old password:", oldPassword);
-    console.log("New password:", newPassword);
     setPasswordSuccess("Password changed successfully!");
     setOldPassword("");
     setNewPassword("");
     setConfirmNewPassword("");
+  
     try {
+      // Zaktualizuj hasło użytkownika
       await updateUserPassword(newPassword);
-      setIsChangingPassword(false);
+      setIsChangingPassword(false); // Po zakończeniu zmiany hasła, możesz zakończyć proces
       console.log("New password:", newPassword);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  
+  
 
   const handleToggleChangePassword = () => {
     setIsChangingPassword(!isChangingPassword);

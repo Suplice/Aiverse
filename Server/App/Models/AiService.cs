@@ -34,5 +34,8 @@ public class AiService: BaseModel {
     public string Status {get; set;} 
     [Column("CreatedAt")]
     public DateTime CreatedAt { get; set; }
+    
+    [Column("CreatorId")]
+    public long CreatorId { get; set; }
 }
 }
