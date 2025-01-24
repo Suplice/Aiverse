@@ -94,8 +94,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("AddReview")]
-    public async Task<IActionResult> AddReview(RequestReviewDTO review){
-        
+    public async Task<IActionResult> AddReview(RequestReviewDTO review)
+    {
+
         try
         {
             var ReviewResult = await _AIServiceService.AddReview(review);
@@ -121,7 +122,8 @@ public class AIServiceController : ControllerBase
     [HttpGet("getreviews/{serviceId}")]
     public async Task<IActionResult> GetReviews(long serviceId)
     {
-        try {
+        try
+        {
             var ReviewsResult = await _AIServiceService.GetReviews(serviceId);
 
             if (ReviewsResult == null)
