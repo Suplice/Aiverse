@@ -1,22 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { AiService } from '../../Utils/Models/AiService';
 
+const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
+  useEffect(() => {
+     console.log(service);
+  }, []);
 
-interface Service {
-  Image: string;
-  Title: string;
-  Stars: number;
-  Reviews: number;
-  Description: string;
-  Price: string;
-}
-
-const ServiceDetail: React.FC<{ service: Service }> = ({ service }) => {
   return (
-    <div className="bg-[#121212] text-white min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-1/3">
-            <img src={service.Image} alt={service.Title} className="rounded-lg shadow-lg" />
+            <img src="https://picsum.photos/id/593/600/600" alt={service.Title} className="rounded-lg shadow-lg max-w-9/12" />
           </div>
           <div className="md:w-2/3">
             <h1 className="text-4xl font-bold mb-4">{service.Title}</h1>
@@ -32,8 +25,6 @@ const ServiceDetail: React.FC<{ service: Service }> = ({ service }) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 };
 

@@ -60,7 +60,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
   };
 
   return (
-    <Block direction="column" className="bg-[#252729]   p-2 gap-8  pb-8">
+    <Block direction="column" className="bg-[#252729] rounded-lg sm:w-2/3 p-2 gap-8 mx-auto pb-8 w-full ">
       {isLoading ? (
         <Block>Loading...</Block>
       ) : (

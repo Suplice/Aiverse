@@ -22,9 +22,9 @@ export const AiServiceProvider = ({
 
   const fetchServices = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/services`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/getall`);
       const data = await response.json();
-      setServices(data);
+      setServices(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -82,6 +82,7 @@ export const AiServiceProvider = ({
 
   useEffect(() => {
     fetchServices();
+    console.log("fetching services");
   }, []);
 
   return (
