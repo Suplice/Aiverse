@@ -10,7 +10,11 @@ import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { AiServiceProvider } from "../../Utils/Context/AiServiceContext";
 import FormPage from "../../Pages/FormPage/FormPage";
+<<<<<<< HEAD
 import AIViewPage from "../../Pages/AIViewPage/AIViewPage";
+=======
+import CommentSection from "../CommentSection/CommentSection";
+>>>>>>> origin/main
 
 const AppRouter = () => {
   return (
@@ -29,10 +33,18 @@ const AppRouter = () => {
               <Route path="manager">
                 <Route path="panel" element={<ManagerPanel />}></Route>
               </Route>
+<<<<<<< HEAD
               <Route path="aiservice/:id" element={<AIViewPage />}></Route>
               <Route path = "forms" element={<FormPage />}></Route>
+=======
+              <Route path="forms" element={<FormPage />}></Route>
+>>>>>>> origin/main
               <Route path="services" element={<SearchServices />}></Route>
               <Route path="*" element={<LandingPage />}></Route>
+              <Route
+                path="Comments"
+                element={<CommentSection AiServiceId={1} />}
+              ></Route>
             </Routes>
           </MantineProvider>
         </AiServiceProvider>

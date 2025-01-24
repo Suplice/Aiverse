@@ -68,6 +68,12 @@ public class UserController : ControllerBase
         {
             user.Picture = updatedUser.Picture;
         }
+        if (!string.IsNullOrEmpty(updatedUser.Password))
+        {
+            var CryptedPassword =  BCrypt.Net.BCrypt.EnhancedHashPassword(updatedUser.Password, 10);
+            user.Password = CryptedPassword;
+        }
+
         
         await _userService.UpdateUser(user);
 

@@ -1,8 +1,9 @@
+import { AiService } from "../../Utils/Models/AiService";
 import BlockTextField from "../UI/BlockTextField";
 import TextField from "../UI/TextField";
 import LandingServiceCard from "./LandingServiceCard/LandingServiceCard";
 
-const MockServices = [
+const MockServices: AiService[] = [
   {
     Id: 1,
     Title: "ChatGPT",
@@ -12,6 +13,8 @@ const MockServices = [
     Stars: 4.5,
     Reviews: 1200,
     Categories: ["AI", "Chatbot"],
+    Status: "Verified",
+    CreatorId: 1,
   },
   {
     Id: 2,
@@ -22,6 +25,8 @@ const MockServices = [
     Stars: 3.2,
     Reviews: 172,
     Categories: ["AI", "Video"],
+    Status: "Verified",
+    CreatorId: 1,
   },
   {
     Id: 3,
@@ -32,6 +37,8 @@ const MockServices = [
     Stars: 4.1,
     Reviews: 32,
     Categories: ["AI", "Search"],
+    Status: "Verified",
+    CreatorId: 1,
   },
   {
     Id: 4,
@@ -42,6 +49,8 @@ const MockServices = [
     Stars: 4.3,
     Reviews: 983,
     Categories: ["AI", "Video"],
+    Status: "Verified",
+    CreatorId: 1,
   },
 ];
 

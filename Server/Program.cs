@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Server.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
