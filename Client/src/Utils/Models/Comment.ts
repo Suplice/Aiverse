@@ -4,4 +4,8 @@ export type Comment = {
   UserId: number;
   ReviewId: number;
   ParentId: number;
+  HasComments: boolean;
+  Likes: number;
+  Dislikes: number;
+  CreatedAt: Date;
 };

@@ -1,6 +1,6 @@
 interface BlockProps {
   key?: string | number | undefined;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   direction?: "row" | "column";
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly";

@@ -93,5 +93,54 @@ public class AIServiceController : ControllerBase
 
     }
 
+    [HttpPost("AddReview")]
+    public async Task<IActionResult> AddReview(RequestReviewDTO review){
+        
+        try
+        {
+            var ReviewResult = await _AIServiceService.AddReview(review);
+
+            if (ReviewResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<Review>(true, "Review added", ReviewResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpGet("getreviews/{serviceId}")]
+    public async Task<IActionResult> GetReviews(long serviceId)
+    {
+        try {
+            var ReviewsResult = await _AIServiceService.GetReviews(serviceId);
+
+            if (ReviewsResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<Review>>(true, "Reviews found", ReviewsResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
 
 }

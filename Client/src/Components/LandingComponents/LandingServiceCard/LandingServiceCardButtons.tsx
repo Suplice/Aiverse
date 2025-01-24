@@ -17,9 +17,10 @@ const LandingServiceCardButtons: React.FC<LandingServiceCardButtonProps> = (
   return (
     <Block
       className="w-full md:w-1/4 flex-wrap"
-      justify="around"
+      justify="center"
       direction="row"
-      gap={2}
+      align="center"
+      gap={4}
     >
       <Tooltip label="Visit page" position="top" withArrow>
         <Button
