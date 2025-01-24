@@ -139,7 +139,7 @@ const UserPanel = () => {
       </Block>
   
       {/* Separator */}
-      <Block className="border-t-2 bg-red border-[#444444] my-12 w-11/12 mx-auto" children={undefined}></Block>
+      <Block className="border-t-2 border-[#444444] my-12 w-11/12 mx-auto" children={undefined}></Block>
   
       {/* Navigation Buttons */}
       <Block className="bg-[#121212]">
