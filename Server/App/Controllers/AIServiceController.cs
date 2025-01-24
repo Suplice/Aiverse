@@ -142,5 +142,54 @@ public class AIServiceController : ControllerBase
         }
     }
 
+    [HttpPost("addComment")]
+    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment){
+        
+        try
+        {
+            var CommentResult = await _AIServiceService.AddComment(comment);
+
+            if (CommentResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<Comment>(true, "Comment added", CommentResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpGet("getReviewComments/{reviewId}")]
+    public ActionResult GetReviewComments(long reviewId)
+    {
+        try {
+            var CommentsResult =  _AIServiceService.GetReviewComments(reviewId);
+
+            if (CommentsResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<Comment>>(true, "Comments found", CommentsResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
 
 }
