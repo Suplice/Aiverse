@@ -9,4 +9,6 @@ public interface IAIServiceService
     Task<AiService?> AddNewService(RequestAIServiceDTO service, string filePath);
     Task<Review?> AddReview(RequestReviewDTO review);
     Task<List<Review>?> GetReviews(long serviceId);
+    Task<Comment?> AddComment(RequestAddCommentDTO comment);
+    List<Comment>? GetReviewComments(long reviewId);
 }
