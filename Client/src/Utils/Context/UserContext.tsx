@@ -105,10 +105,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       console.error("User data is not available");
       return;
     }
-    if (newName.trim() === "") {
-      alert("Name cannot be empty!");
-      return;
-    }
     try {
       const updatedUserData = {
         ...user,
@@ -167,15 +163,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const updateUserPassword = async (newUserPassword: string) => {
     if (!user) {
       console.error("User data is not available");
-      return;
-    }
-
-    if (newUserPassword.trim() === "") {
-      alert("Password cannot be empty!");
-      return;
-    }
-    if (newUserPassword.length < 7) {
-      alert("Password is too short!");
       return;
     }
     try {

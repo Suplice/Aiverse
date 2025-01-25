@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch.Internal;
 using Server.App.Models;
@@ -60,35 +61,40 @@ public class UserService : IUserService
     }
 
     public async Task UpdateUserPasswordAsync(long id, string newPassword)
+{
+    var user = await _userRepository.GetUserById(id);
+    if (user == null)
     {
-        var user = await _userRepository.GetUserById(id);
-        if (user == null)
-        {
-            throw new ArgumentException($"User with ID {id} not found.");
-        }
-
-        if (string.IsNullOrEmpty(newPassword))
-        {
-            throw new ArgumentException("Password cannot be empty.");
-        }
-
-        if (newPassword.Length < 6)
-        {
-            throw new ArgumentException("Password must be at least 6 characters long.");
-        }
-
-        // Sprawdzamy, czy nowe hasło nie jest takie samo jak obecne
-        if (BCrypt.Net.BCrypt.EnhancedVerify(newPassword, user.Password))
-        {
-            throw new ArgumentException("The new password must be different from the current password.");
-        }
-
-        // Tworzymy nowe hasło po zakodowaniu
-        var CryptedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(newPassword, workFactor: 12); // Przykład z wartością 12
-        user.Password = CryptedPassword;
-
-        await _userRepository.UpdateUser(user);
+        throw new ArgumentException($"User with ID {id} not found.");
     }
+
+    if (string.IsNullOrEmpty(newPassword))
+    {
+        throw new ArgumentException("Password cannot be empty.");
+    }
+
+    if (newPassword.Length < 6)
+    {
+        throw new ArgumentException("Password must be at least 6 characters long.");
+    }
+
+    if (!Regex.IsMatch(newPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)"))
+    {
+        throw new ArgumentException("Password must contain at least one uppercase letter, one lowercase letter, and one number.");
+    }
+
+    if (BCrypt.Net.BCrypt.EnhancedVerify(newPassword, user.Password))
+    {
+        throw new ArgumentException("The new password must be different from the current password.");
+    }
+
+
+    var CryptedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(newPassword, workFactor: 12); 
+    user.Password = CryptedPassword;
+
+    await _userRepository.UpdateUser(user);
+}
+
 
     public async Task<bool> TryUpdateUserEmailAsync(long id, string newEmail)
     {

@@ -64,7 +64,7 @@ const UserPanel = () => {
 
           <Block direction="column" className="ml-8 text-center">
             <BlockTextField
-              value={user?.Name || "Your Name"}
+              value={user?.Name || "Guest"}
               className="text-4xl font-extrabold text-gray-100"
             />
             <TextField
