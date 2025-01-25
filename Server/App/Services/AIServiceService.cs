@@ -74,4 +74,30 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
+    public async Task<Comment?> AddComment(RequestAddCommentDTO comment)
+    {
+        var newComment = new Comment
+        {
+            CommentValue = comment.CommentValue,
+            UserId = comment.UserId,
+            ReviewId = comment.ReviewId,
+            ParentId = comment.ParentId == 0 ? null : comment.ParentId,
+            HasReplies = false,
+            CreatedAt = DateTime.Now,
+            Likes = 0,
+            Dislikes = 0
+        };
+
+        var result = await _AIServiceRepository.AddComment(newComment);
+
+        return result;
+    }
+
+    public List<Comment>? GetReviewComments(long reviewId)
+    {
+        var result =  _AIServiceRepository.GetReviewComments(reviewId);
+
+        return result;
+    }
+
 }

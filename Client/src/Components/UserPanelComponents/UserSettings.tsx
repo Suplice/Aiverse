@@ -1,150 +1,58 @@
 import { useState } from "react";
-import { useAuth } from "../../Utils/Context/AuthContext";
+import { useUser } from "../../Utils/Context/UserContext";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { User } from "../../Utils/Models/User";
+
+interface FormData {
+  email: string;
+}
 
 const UserSettings = () => {
-  const { user } = useAuth();
-
+  const { user, setUser, updateUserName, updateUserEmail, updateUserPassword } = useUser(); // Added setUser to update user data globally
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState<string>(user?.Name || "");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
-  const [userEmail, setUserEmail] = useState<string>(user?.Email || "");
+  const [userEmail] = useState<string>(user?.Email || "");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
-
   const [selectedSubPage] = useState<string>("");
 
-  const updateUserName = async (newName: string) => {
-    if (!user) {
-      console.error("User data is not available");
-      return;
-    }
-    if (newName.trim() === "") {
-      alert("Name cannot be empty!");
-      return;
-    }
-    try {
-      const updatedUserData = {
-        ...user,
-        Name: newName, // Zmieniamy tylko pole Name
-      };
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Name`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUserData),
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        console.log("User name updated successfully");
-        setUserName(newName);
-      } else {
-        console.error("Failed to update user name");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>();
+
   const handleChangeName = async () => {
     try {
+      if (userName.trim() === "") {
+        alert("Name cannot be empty!");
+        return;
+      }
       await updateUserName(userName);
+      setUser((prevUser) => ({
+        ...prevUser,
+        Name: userName,
+      } as User)); 
       setIsEditingName(false);
-      console.log("New name:", userName);
     } catch (error) {
       console.error(error);
     }
   };
-  const updateUserEmail = async (newEmail: string) => {
-    if (!user) {
-      console.error("User data is not available");
-      return;
-    }
-    if (newEmail.trim() === "") {
-      alert("Name cannot be empty!");
-      return;
-    }
-    try {
-      const updatedUserData = {
-        ...user,
-        Email: newEmail,
-      };
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Email`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUserData),
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        console.log("User name updated successfully");
-        setUserEmail(newEmail);
-      } else {
-        console.error("Failed to update user name");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleChangeEmail = async () => {
-    try {
-      await updateUserEmail(userEmail);
-      setIsEditingEmail(false);
-      console.log("New email:", userEmail);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const updateUserPassword = async (newUserPassword: string) => {
-    if (!user) {
-      console.error("User data is not available");
-      return;
-    }
   
-    // Tworzymy obiekt JSON z nowym hasłem
-    const passwordData = newUserPassword; // Tylko hasło, bez klucza "haslo"
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/${user.Id}/Password`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(passwordData), // Wysyłamy same hasło
-          credentials: "include",
-        }
-      );
-  
-      if (response.ok) {
-        console.log("Password updated successfully");
-        setNewPassword(newUserPassword); // Update the state with the new password
-      } else {
-        // Check if the server returned a specific error message
-        if (response.status === 400) {
-          console.error("Bad request. Make sure the new password is valid.");
-        } else if (response.status === 404) {
-          console.error(`User with ID ${user.Id} not found.`);
-        } else if (response.status === 500) {
-          console.error("Server error. Please try again later.");
-        } else {
-          console.error("Failed to update password. Status: " + response.status);
-        }
+  const handleChangeEmail: SubmitHandler<FormData> = async (data) => {
+    const { email } = data;
+    if (email) {
+      try {
+        await updateUserEmail(email);
+        setUser((prevUser) => ({
+          ...prevUser,
+          Email: email,
+        } as User)); // Rzutowanie na User
+        setIsEditingEmail(false);
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error("Error while updating password:", error);
     }
   };
   
@@ -154,33 +62,32 @@ const UserSettings = () => {
       return;
     }
   
-    setPasswordError(null);
-    setPasswordSuccess("Password changed successfully!");
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmNewPassword("");
-  
     try {
-      // Zaktualizuj hasło użytkownika
       await updateUserPassword(newPassword);
-      setIsChangingPassword(false); // Po zakończeniu zmiany hasła, możesz zakończyć proces
-      console.log("New password:", newPassword);
+      setPasswordError(null);
+      setPasswordSuccess("Password changed successfully!");
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setIsChangingPassword(false);
     } catch (error) {
       console.error(error);
+      setPasswordError("Failed to update password. Please try again.");
     }
   };
-  
-  
-  
 
   const handleToggleChangePassword = () => {
     setIsChangingPassword(!isChangingPassword);
   };
 
+  const handleEditEmail = () => {
+    setIsEditingEmail(true);
+    setValue("email", userEmail); // Pre-fill the form with the current email
+  };
   return (
     <div className="p-4 bg-[#121212]">
   <div className="flex flex-col items-start justify-center gap-6 mt-4">
-    <div className="flex flex-col lg:flex-row items-center bg-[#1E1E1E] gap-4 w-full rounded-2xl shadow-md focus:outline-none transition duration-300 border-2 border-[#1F1F1F] p-6 h-auto border border-[#333333]">
+    <div className="flex flex-col lg:flex-row items-center bg-[#1E1E1E] gap-4 w-full rounded-2xl shadow-md focus:outline-none transition duration-300 border-2 p-6 h-auto  border-[#333333]">
       <strong className="text-lg text-white lg:pl-16">Name:</strong>
       <span className="text-lg text-gray-400 flex-grow">{user?.Name}</span>
       {isEditingName ? (
@@ -204,7 +111,7 @@ const UserSettings = () => {
             <button
             onClick={() => setIsEditingName(true)}
             className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 ${
-              selectedSubPage === "Email"
+              selectedSubPage === "Name"
                 ? "bg-gradient-to-r from-[#6D6D6D] to-[#333333] text-white border-[#444444] scale-105"
                 : "bg-[#2C2C2C] text-[#E0E0E0] border-[#3A3A3A] hover:bg-[#444444] hover:border-[#222222] hover:text-white hover:scale-105"
             }`}
@@ -216,41 +123,55 @@ const UserSettings = () => {
       )}
     </div>
 
-    <div className="flex flex-col lg:flex-row items-center bg-[#1E1E1E] gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-2 border-[#1F1F1F] p-6 h-auto border border-[#333333]">
-      <strong className="text-lg text-white lg:pl-16">Email:</strong>
-      <span className="text-lg text-gray-400 flex-grow">{user?.Email}</span>
-      {isEditingEmail ? (
-        <div className="flex items-center gap-2 w-full">
-          <input
-            type="text"
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
-            className="px-4 py-2 border border-[#333333] rounded bg-[#1E1E1E] text-white w-full"
-          />
-          <button
-            onClick={handleChangeEmail}
-            className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 bg-[#1E1E1E] text-green-500 hover:bg-green-500 hover:text-black"
-          >
-            Save
-          </button>
-        </div>
-      ) : (
-        <div className="flex justify-end lg:pr-16">
-          {user?.Provider === "EMAIL" && (
-            <button
-              onClick={() => setIsEditingEmail(true)}
-              className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 ${
-                selectedSubPage === "Email"
-                  ? "bg-gradient-to-r from-[#6D6D6D] to-[#333333] text-white border-[#444444] scale-105"
-                  : "bg-[#2C2C2C] text-[#E0E0E0] border-[#3A3A3A] hover:bg-[#444444] hover:border-[#222222] hover:text-white hover:scale-105"
-              }`}
-            >
-              Change
-            </button>
+    <div className="flex flex-col lg:flex-row items-center bg-[#1E1E1E] gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-2  p-6 h-auto border-[#333333]">
+          <strong className="text-lg text-white lg:pl-16">Email:</strong>
+          <span className="text-lg text-gray-400 flex-grow">{user?.Email}</span>
+          
+          {isEditingEmail ? (
+            <div className="flex items-center gap-2 w-full">
+              <form onSubmit={handleSubmit(handleChangeEmail)} className="flex items-center gap-2 w-full">
+                <input
+                  type="text"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                      message: "Please enter a valid email address",
+                    },
+                  })}
+                  defaultValue={userEmail}
+                  className="px-4 py-2 border border-[#333333] rounded bg-[#1E1E1E] text-white w-full"
+                />
+                {errors.email && (
+                  <div className="text-red-500 text-sm mt-2">
+                    {errors.email.message}
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 bg-[#1E1E1E] text-green-500 hover:bg-green-500 hover:text-black"
+                >
+                  Save
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="flex justify-end lg:pr-16">
+              {user?.Provider === "EMAIL" && (
+                <button
+                  onClick={handleEditEmail}
+                  className={`px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 ${
+                    userEmail === "Email" 
+                      ? "bg-gradient-to-r from-[#6D6D6D] to-[#333333] text-white border-[#444444] scale-105"
+                      : "bg-[#2C2C2C] text-[#E0E0E0] border-[#3A3A3A] hover:bg-[#444444] hover:border-[#222222] hover:text-white hover:scale-105"
+                  }`}
+                >
+                  Change
+                </button>
+              )}
+            </div>
           )}
         </div>
-      )}
-    </div>
 
     {user?.Provider === "EMAIL" && (
       <div className="flex flex-col items-center gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-2 border-[#1F1F1F] p-6 h-auto bg-[#1E1E1E] border border-[#333333]">
