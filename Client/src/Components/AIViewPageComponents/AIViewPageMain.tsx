@@ -40,7 +40,7 @@ const AIViewPageMain = () => {
   }
 
   return (
-      <div className="bg-[#121212] p-6 max-w-[1500px] text-white flex flex-col w-full self-center gap-8 ">
+      <div className="bg-[#121212] p-6 max-w-[1500px] text-white flex flex-col w-full self-center gap-8">
         <ServiceDetail service={service} />
         <PageNavigation />
         <div id="full-description">
