@@ -20,6 +20,19 @@ public class UserService : IUserService
         var user = await _userRepository.GetUserById(id);
         return user;
     }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        // Sprawdzamy, czy email jest podany
+        if (string.IsNullOrEmpty(email))
+        {
+            throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+        }
+
+        // Pobieramy użytkownika z repozytorium
+        var user = await _userRepository.GetUserByEmailAsync(email);
+        return user;
+    }
   
     public async Task UpdateUser(User user)
     {
@@ -75,5 +88,27 @@ public class UserService : IUserService
         user.Password = CryptedPassword;
 
         await _userRepository.UpdateUser(user);
+    }
+
+    public async Task<bool> TryUpdateUserEmailAsync(long id, string newEmail)
+    {
+        // Sprawdzamy, czy email już istnieje
+        var existingUser = await _userRepository.GetUserByEmailAsync(newEmail);
+        if (existingUser != null)
+        {
+            return false; // Email jest już zajęty
+        }
+
+        // Pobieramy użytkownika
+        var user = await _userRepository.GetUserById(id);
+        if (user == null)
+        {
+            return false; // W kontrolerze już obsłużono ten przypadek
+        }
+
+        // Aktualizujemy email użytkownika
+        user.Email = newEmail;
+        await _userRepository.UpdateUser(user);
+        return true;
     }
 }

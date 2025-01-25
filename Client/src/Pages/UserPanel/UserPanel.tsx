@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../Utils/Context/AuthContext";
+import { useState } from "react";
+import { useUser } from "../../Utils/Context/UserContext";
 import UserSettings from "../../Components/UserPanelComponents/UserSettings";
 import { Avatar } from "@mantine/core";
 import LandingNavbar from "../../Components/LandingComponents/LandingNavbar";
@@ -8,93 +8,23 @@ import BlockTextField from "../../Components/UI/BlockTextField";
 import TextField from "../../Components/UI/TextField";
 import Button from "../../Components/UI/Button";
 
+
 const UserPanel = () => {
-  const { user } = useAuth();
-  const [selectedSubPage, setSelectedSubPage] = useState<"Settings" | "Liked" | "Rated">("Liked");
-  const [isUserImage, setIsUserImage] = useState(true);
-  const [userImage, setUserImage] = useState("");
+  const { user, userImage, isUserImage, saveImageToDatabase } = useUser();
+  const [selectedSubPage, setSelectedSubPage] = useState<'Settings' | 'Liked' | 'Rated'>('Liked');
   const pages: Array<"Settings" | "Liked" | "Rated"> = ["Settings", "Liked", "Rated"];
-
-  const fetchUserById = async (id: number) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${id}`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        return userData;
-      } else {
-        console.error("Failed to fetch user data");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const updateUserImage = async () => {
-      if (user?.Id) {
-        const fetchedUser = await fetchUserById(user.Id);
-        if (fetchedUser?.Picture) {
-          setUserImage(`${import.meta.env.VITE_API_URL}${fetchedUser.Picture}`);
-        } else {
-          setIsUserImage(false);
-        }
-      }
-    };
-
-    updateUserImage();
-  }, [user]);
-
-  const saveImageToDatabase = async (file: File) => {
-    if (!user) {
-      console.error("User data is not available");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${user.Id}/profile-picture`, {
-        method: "PATCH",
-        body: formData,
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        alert("Profile picture updated successfully.");
-        const updatedUser = await response.json();
-        setUserImage(`${import.meta.env.VITE_API_URL}${updatedUser.Picture}`);
-      } else {
-        console.error("Failed to update profile picture");
-        alert("Failed to update profile picture.");
-      }
-    } catch (error) {
-      console.error("Error updating profile picture:", error);
-      alert("Failed to update profile picture.");
-    }
-  };
-
+  
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setIsUserImage(false);
-      setUserImage(URL.createObjectURL(file));
       saveImageToDatabase(file);
     }
   };
-
   return (
     <Block className="flex flex-col h-screen bg-gradient-to-b bg-[#121212]">
     <Block className="py-6 px-6 bg-[#121212]">
       <LandingNavbar />
     </Block>
-  
     <Block direction="column" className="flex-1">
       {/* User Card */}
       <Block 
@@ -179,6 +109,7 @@ const UserPanel = () => {
       </Block>
     </Block>
   </Block>
+  
   );
 };
 
