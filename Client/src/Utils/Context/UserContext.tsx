@@ -1,9 +1,15 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { User } from "../Models/User";
+import { useAuth } from "./AuthContext";
 
 interface UserContextProps {
   user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   updateUserName: (newName: string) => Promise<void>;
   updateUserEmail: (newEmail: string) => Promise<void>;
   updateUserPassword: (newPassword: string) => Promise<void>;
@@ -17,57 +23,65 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [userImage, setUserImage] = useState<string>('');
+  const { user } = useAuth();
+  const [userImage, setUserImage] = useState<string>("");
   const [isUserImage, setIsUserImage] = useState<boolean>(true);
 
   const fetchUserById = async (id: number) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${id}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${id}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const userData = await response.json();
-        setUser(userData);
+        console.log(userData);
+        //setUser(userData);
         if (userData?.Picture) {
           setUserImage(`${import.meta.env.VITE_API_URL}${userData.Picture}`);
         } else {
           setIsUserImage(false);
         }
       } else {
-        console.error('Failed to fetch user data');
+        console.error("Failed to fetch user data");
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error("Error fetching user:", error);
     }
   };
 
   const saveImageToDatabase = async (file: File) => {
     if (!user) {
-      console.error('User data is not available');
+      console.error("User data is not available");
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/${user.Id}/profile-picture`, {
-        method: 'PATCH',
-        body: formData,
-        credentials: 'include',
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/${user.Id}/profile-picture`,
+        {
+          method: "PATCH",
+          body: formData,
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const updatedUser = await response.json();
-        setUserImage(`${import.meta.env.VITE_API_URL}${updatedUser.Picture}`);
+
+        setUserImage(`${import.meta.env.VITE_API_URL}${updatedUser.filePath}`);
       } else {
-        console.error('Failed to update profile picture');
+        console.error("Failed to update profile picture");
       }
     } catch (error) {
-      console.error('Error updating profile picture:', error);
+      console.error("Error updating profile picture:", error);
     }
   };
 
@@ -75,7 +89,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     // Update the preview image immediately
     const imageUrl = URL.createObjectURL(file);
     setUserImage(imageUrl);
-    
+
     // Save the image to the database
     saveImageToDatabase(file);
   };
@@ -84,40 +98,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     if (user?.Id) {
       fetchUserById(user.Id);
     }
-  }, [user]);
-
-  useEffect(() => {
-    const checkCredentials = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/credentials`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log("User credentials fetched successfully:", result);
-
-          setUser({
-            Id: result.data.Id,
-            Email: result.data.Email,
-            Provider: result.data.Provider,
-            Role: result.data.Role,
-            Name: result.data.Name,
-          });
-        } else {
-          console.warn("Failed to fetch user credentials, setting user to null");
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Error fetching user credentials:", error);
-      }
-    };
-
-    checkCredentials();
   }, []);
 
   const updateUserName = async (newName: string) => {
@@ -227,7 +207,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     <UserContext.Provider
       value={{
         user,
-        setUser,
         updateUserName,
         updateUserEmail,
         updateUserPassword,
