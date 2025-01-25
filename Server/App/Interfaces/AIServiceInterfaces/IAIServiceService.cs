@@ -11,4 +11,6 @@ public interface IAIServiceService
     Task<List<Review>?> GetReviews(long serviceId);
     Task<Comment?> AddComment(RequestAddCommentDTO comment);
     List<Comment>? GetReviewComments(long reviewId);
+
+    List<Comment>? GetCommentComments(long commentId);
 }

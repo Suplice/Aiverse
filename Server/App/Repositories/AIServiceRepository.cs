@@ -106,20 +106,30 @@ public class AIServiceRepository : IAIServiceRepository
                                     .From<Comment>()
                                     .Insert(comment);
 
-            var review = _context.Reviews.SingleOrDefault(r => r.Id == comment.ReviewId);     
+            if(comment.ParentId == null) {
+                var review = _context.Reviews.SingleOrDefault(r => r.Id == comment.ReviewId);    
 
-            Console.WriteLine(review);                 
+                if (review != null)
+                {
+                    review.HasReplies = true;
+                    _context.Reviews.Update(review);
+                    await _context.SaveChangesAsync();
+                }  else {
+                    throw new Exception("Review not found");
+                }
 
-            if (review != null)
-            {
-                review.HasReplies = true;
-                _context.Reviews.Update(review);
-                await _context.SaveChangesAsync();
-            }  else {
-                throw new Exception("Review not found");
+            } else {
+                var parentComment = _context.Comments.SingleOrDefault(c => c.Id == comment.ParentId);
+
+                if (parentComment != null)
+                {
+                    parentComment.HasReplies = true;
+                    _context.Comments.Update(parentComment);
+                    await _context.SaveChangesAsync();
+                } else {
+                    throw new Exception("Parent comment not found");
+                }
             }
-
-             
             
             return response.Model;
         }
@@ -136,6 +146,20 @@ public class AIServiceRepository : IAIServiceRepository
         {
             var comments = _context.Comments.Where(c => c.ReviewId == reviewId && c.ParentId.Equals(null)).ToList();                                    
             return comments;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"{e.Message}");
+            return null;
+        }
+    }
+
+    public List<Comment>? GetCommentReplies(long commentId)
+    {
+        try
+        {
+            var replies = _context.Comments.Where(c => c.ParentId == commentId).ToList();
+            return replies;
         }
         catch (Exception e)
         {
