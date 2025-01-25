@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+import { useAuth } from "../../Utils/Context/AuthContext";
 import Block from "../UI/Block";
 import Button from "../UI/Button";
 
@@ -16,12 +18,31 @@ const AddCommentComponent: React.FC<AddCommentComponentProps> = ({
   handleSendClick,
   isSendingReply,
 }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   return (
     <Block
       direction="column"
-      className="text-white bg-gray-800 p-4 rounded-lg shadow-lg sm:w-[400px] w-full  "
+      className="text-white bg-gray-800 p-4 rounded-lg shadow-lg sm:w-[400px] w-full relative  "
       gap={4}
     >
+      {!user && (
+        <div className="absolute inset-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center rounded-lg shadow-2xl backdrop-blur-sm">
+          <div className="text-center p-8 bg-gray-900 bg-opacity-90  rounded-xl shadow-lg mx-4">
+            <p className="text-gray-300 text-xl font-semibold mb-6">
+              You need to be logged in to comment.
+            </p>
+            <Button
+              value="Log In"
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium text-sm rounded-lg hover:from-blue-600 hover:to-teal-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              onClick={() => {
+                navigate("/auth/signin");
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       <h3 className="text-lg font-semibold ">Reply to comment</h3>
       <textarea
         value={replyValue}

@@ -19,6 +19,7 @@ interface ReviewComponentProps {
   likes: number;
   dislikes: number;
   createdAt: Date;
+  setHasComments: () => void;
 }
 
 const ReviewComponent: React.FC<ReviewComponentProps> = ({
@@ -29,6 +30,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   dislikes,
   UserId,
   createdAt,
+  hasComments,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isReplying, setIsReplying] = useState<boolean>(false);
@@ -74,12 +76,6 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   };
 
   const handleSendClick = async () => {
-    // TO DO: Send reply to the server
-    setTimeout(() => {
-      setIsSendingReply(false);
-      setIsReplying(false);
-    }, 2000);
-
     try {
       setIsSendingReply(true);
       const response = await fetch(
@@ -137,12 +133,6 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   };
 
   const LoadComments = async () => {
-    setIsLoadingComments(true);
-    setTimeout(() => {
-      setIsLoadingComments(false);
-      setIsShowingComments(true);
-    }, 2000);
-
     try {
       setIsLoadingComments(true);
 
@@ -230,26 +220,30 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
                         key={comment.Id}
                         CommentValue={comment.CommentValue}
                         Id={comment.Id}
-                        ParentId={comment.ParentId}
+                        ParentId={id}
                         ReviewId={comment.ReviewId}
                         UserId={comment.UserId}
-                        hasComments={comment.HasComments}
+                        hasComments={comment.HasReplies}
                         likes={comment.Likes}
                         dislikes={comment.Dislikes}
+                        setHasComments={() => {
+                          comments[comments.indexOf(comment)].HasReplies = true;
+                        }}
+                        createdAt={comment.CreatedAt}
                       ></CommentComponent>
                     )
                 )}
               </>
             ) : isLoadingComments ? (
               <div className="w-8 h-8 border-4 border-white border-dotted rounded-full animate-spin ml-6"></div>
-            ) : (
+            ) : hasComments ? (
               <TextField
                 value="Show Replies"
                 color="white"
                 className="ml-3 hover:underline cursor-pointer"
                 onClick={LoadComments}
               />
-            )}
+            ) : null}
           </Block>
         </Block>
       </Block>

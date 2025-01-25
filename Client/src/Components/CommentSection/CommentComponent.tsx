@@ -4,53 +4,7 @@ import { Comment } from "../../Utils/Models/Comment";
 import { useEffect, useState } from "react";
 import Controls from "./Controls";
 import AddCommentComponent from "./AddCommentComponent";
-
-const MockComments: Comment[] = [
-  {
-    Id: 10,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Under Comment to Review 2 and Parent 0",
-    ParentId: 1,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 12,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Under Comment to Review 2 and Parent 3",
-    ParentId: 2,
-    HasComments: false,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 13,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Under Comment to Review 2 and Parent 3",
-    ParentId: 12,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 14,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Under Comment to Review 2 and Parent 3 ",
-    ParentId: 13,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-];
+import { User } from "../../Utils/Models/User";
 
 interface CommentProps {
   Id: number;
@@ -62,6 +16,8 @@ interface CommentProps {
   hasComments: boolean;
   likes: number;
   dislikes: number;
+  setHasComments: () => void;
+  createdAt: Date;
 }
 
 const CommentComponent: React.FC<CommentProps> = ({
@@ -70,26 +26,145 @@ const CommentComponent: React.FC<CommentProps> = ({
   ReviewId,
   likes,
   dislikes,
+  hasComments,
+  ParentId,
+  UserId,
+  createdAt,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>("");
   const [isSendingReply, setIsSendingReply] = useState<boolean>(false);
+  const [isShowingComments, setIsShowingComments] = useState<boolean>(false);
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
+
+  const [user, setUser] = useState<User>();
+
   useEffect(() => {
-    setComments(MockComments);
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/user/${UserId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error(result);
+        }
+        setUser(result);
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // TO DO: get user data and image from the server
+    // TO DO: get all comments for review
+
+    fetchUser();
   }, []);
 
   const handleReplyClick = () => {
     setIsReplying(!isReplying);
   };
 
-  const handleSendClick = () => {
-    setIsSendingReply(true);
-    // TO DO: Send reply to the server
-    setTimeout(() => {
+  const handleSendClick = async () => {
+    try {
+      console.log(ParentId);
+
+      setIsSendingReply(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CommentValue: replyValue,
+            UserId: user?.Id,
+            ReviewId: ReviewId,
+            ParentId: Id,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error(result);
+      } else {
+        LoadComments();
+      }
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsSendingReply(false);
       setIsReplying(false);
-    }, 2000);
+    }
+  };
+
+  const LoadComments = async () => {
+    try {
+      setIsLoadingComments(true);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/GetCommentReplies/${Id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      console.log(Id);
+
+      if (!response.ok) {
+        console.error(result);
+      } else {
+        setComments(result.data);
+      }
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingComments(false);
+      setIsShowingComments(true);
+    }
+  };
+
+  const formatDate = () => {
+    const now = new Date();
+    const diff = now.getTime() - new Date(createdAt).getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) {
+      return "a minute ago";
+    } else if (minutes < 60) {
+      if (minutes === 1) return `${minutes} minute ago`;
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      if (hours === 1) return `${hours} hour ago`;
+      return `${hours} hours ago`;
+    } else {
+      if (days === 1) return `${days} day ago`;
+      return `${days} days ago`;
+    }
   };
 
   return (
@@ -99,8 +174,11 @@ const CommentComponent: React.FC<CommentProps> = ({
         alt="User"
         className="w-9/12 rounded-full self-center place-self-center"
       ></img>
-      <Block direction="row" align="center" gap={2}>
-        <TextField className="text-sm text-white">User Name</TextField>
+      <Block direction="row" className="ml-3 " gap={3} align="center">
+        <TextField color="white" className="text-lg">
+          {user?.Name ? user?.Name : "Anonymous"}
+        </TextField>
+        <TextField className="text-sm text-gray-500">{formatDate()}</TextField>
       </Block>
       <div className="border-l h-full mt-1 self-center place-self-center border-gray-600"></div>
       <Block
@@ -129,24 +207,40 @@ const CommentComponent: React.FC<CommentProps> = ({
             isSendingReply={isSendingReply}
           />
         )}
-
-        {comments.map((comment) => {
-          if (comment.ReviewId === ReviewId && comment.ParentId === Id) {
-            return (
-              <CommentComponent
-                key={comment.Id}
-                CommentValue={comment.CommentValue}
-                Id={comment.Id}
-                ParentId={comment.ParentId}
-                ReviewId={comment.ReviewId}
-                UserId={comment.UserId}
-                hasComments={comment.HasComments}
-                likes={comment.Likes}
-                dislikes={comment.Dislikes}
-              ></CommentComponent>
-            );
-          }
-        })}
+        {isShowingComments ? (
+          <>
+            {comments.map(
+              (comment) =>
+                comment.ReviewId === ReviewId &&
+                comment.ParentId === Id && (
+                  <CommentComponent
+                    key={comment.Id}
+                    CommentValue={comment.CommentValue}
+                    Id={comment.Id}
+                    ParentId={Id}
+                    ReviewId={comment.ReviewId}
+                    UserId={comment.UserId}
+                    hasComments={comment.HasReplies}
+                    likes={comment.Likes}
+                    dislikes={comment.Dislikes}
+                    setHasComments={() => {
+                      comments[comments.indexOf(comment)].HasReplies = true;
+                    }}
+                    createdAt={comment.CreatedAt}
+                  ></CommentComponent>
+                )
+            )}
+          </>
+        ) : isLoadingComments ? (
+          <div className="w-8 h-8 border-4 border-white border-dotted rounded-full animate-spin ml-6"></div>
+        ) : hasComments ? (
+          <TextField
+            value="Show Replies"
+            color="white"
+            className="ml-3 hover:underline cursor-pointer"
+            onClick={LoadComments}
+          />
+        ) : null}
       </Block>
     </div>
   );
