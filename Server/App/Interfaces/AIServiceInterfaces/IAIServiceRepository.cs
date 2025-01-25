@@ -10,4 +10,6 @@ public interface IAIServiceRepository
     Task<Comment?> AddComment(Comment comment);
     List<Comment>? GetReviewComments(long reviewId);
 
+    List<Comment>? GetCommentReplies(long commentId);
+
 }

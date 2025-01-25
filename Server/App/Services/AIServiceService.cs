@@ -100,4 +100,11 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
+    public List<Comment>? GetCommentComments(long commentId)
+    {
+        var result =  _AIServiceRepository.GetCommentReplies(commentId);
+
+        return result;
+    }
+
 }

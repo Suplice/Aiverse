@@ -60,7 +60,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
   };
 
   return (
-    <Block direction="column" className="bg-[#252729] rounded-lg sm:w-2/3 p-2 gap-8 mx-auto pb-8 w-full ">
+    <Block
+      direction="column"
+      className="bg-[#252729] rounded-lg sm:w-2/3 p-2 gap-8 mx-auto pb-8 w-full "
+    >
       {isLoading ? (
         <Block>Loading...</Block>
       ) : (
@@ -83,10 +86,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
                 CommentValue={review.CommentValue}
                 id={review.Id}
                 UserId={review.UserId}
-                hasComments={true}
+                hasComments={review.HasReplies}
                 likes={review.Likes}
                 dislikes={review.Dislikes}
                 createdAt={review.CreatedAt}
+                setHasComments={() => {
+                  reviews[reviews.indexOf(review)].HasReplies = true;
+                }}
               ></ReviewComponent>
             ))}
         </>
