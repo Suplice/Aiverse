@@ -24,7 +24,7 @@ const ResponsiveNav = () => {
   };
 
   return (
-    <div className="bg-[#252729] p-6 w-full rounded-lg">
+    <div className="bg-[#252729] p-6 w-full rounded-lg ">
       <nav className="flex justify-center space-x-8">
       <Tooltip label="Full Description" position="top">
         <button
