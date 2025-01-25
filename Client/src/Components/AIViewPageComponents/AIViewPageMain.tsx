@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import FullDescriptionComponent from "./FullDescriptionComponent";
 import ServiceGallery from "./ServiceGallery";
 import PageNavigation from "./PageNavigation";
-import Block from "../UI/Block";
-import LandingNavbar from "../LandingComponents/LandingNavbar";
 
 const galleryImages = [
   "https://picsum.photos/id/237/600/600", // Czarno-białe zdjęcie psa
@@ -40,19 +38,21 @@ const AIViewPageMain = () => {
   }
 
   return (
-      <div className="bg-[#121212] p-6 max-w-[1500px] text-white flex flex-col w-full self-center gap-8">
-        <ServiceDetail service={service} />
-        <PageNavigation />
-        <div id="full-description">
-        <FullDescriptionComponent FullDescription={String(service.FullDescription)} />
-        </div>
-        <div id="gallery">
-        <ServiceGallery images={galleryImages} />
-        </div>
-        <div id="comments">
-        <CommentSection AiServiceId={service.Id} />
-        </div>
+    <div className="bg-[#121212] p-6 max-w-[1500px] text-white flex flex-col w-full self-center gap-8">
+      <ServiceDetail service={service} />
+      <PageNavigation />
+      <div id="full-description">
+        <FullDescriptionComponent
+          FullDescription={String(service.FullDescription)}
+        />
       </div>
+      <div id="gallery">
+        <ServiceGallery images={galleryImages} />
+      </div>
+      <div id="comments">
+        <CommentSection AiServiceId={service.Id} />
+      </div>
+    </div>
   );
 };
 
