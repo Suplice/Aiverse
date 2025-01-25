@@ -94,8 +94,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("AddReview")]
-    public async Task<IActionResult> AddReview(RequestReviewDTO review){
-        
+    public async Task<IActionResult> AddReview(RequestReviewDTO review)
+    {
+
         try
         {
             var ReviewResult = await _AIServiceService.AddReview(review);
@@ -121,7 +122,8 @@ public class AIServiceController : ControllerBase
     [HttpGet("getreviews/{serviceId}")]
     public async Task<IActionResult> GetReviews(long serviceId)
     {
-        try {
+        try
+        {
             var ReviewsResult = await _AIServiceService.GetReviews(serviceId);
 
             if (ReviewsResult == null)
@@ -131,6 +133,55 @@ public class AIServiceController : ControllerBase
             }
 
             var correctResponse = new ApiResponse<List<Review>>(true, "Reviews found", ReviewsResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpPost("addComment")]
+    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment){
+        
+        try
+        {
+            var CommentResult = await _AIServiceService.AddComment(comment);
+
+            if (CommentResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<Comment>(true, "Comment added", CommentResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpGet("getReviewComments/{reviewId}")]
+    public ActionResult GetReviewComments(long reviewId)
+    {
+        try {
+            var CommentsResult =  _AIServiceService.GetReviewComments(reviewId);
+
+            if (CommentsResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<Comment>>(true, "Comments found", CommentsResult);
 
             return Ok(correctResponse);
 

@@ -17,7 +17,7 @@ public class Comment: BaseModel {
     [JsonIgnore]
     public long Id { get; set; } 
 
-    [Column("Comment")]
+    [Column("CommentValue")]
     public string CommentValue { get; set; }
 
     [Column("UserId")]
@@ -27,7 +27,7 @@ public class Comment: BaseModel {
     public long ReviewId { get; set; }
 
     [Column("ParentId")]
-    public long ParentId { get; set; }
+    public long? ParentId { get; set; }
     
     [Column("CreatedAt")]
     public DateTime CreatedAt { get; set; }

@@ -9,53 +9,6 @@ import AddCommentComponent from "./AddCommentComponent";
 import Controls from "./Controls";
 import { User } from "../../Utils/Models/User";
 
-const MockComments: Comment[] = [
-  {
-    Id: 1,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Comment to reviewId 2   ",
-    ParentId: 0,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 2,
-    UserId: 1,
-    ReviewId: 2,
-    CommentValue: "Comment to reviewId 2   ",
-    ParentId: 0,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 3,
-    UserId: 1,
-    ReviewId: 1,
-    CommentValue: "Comment to reviewId 2   ",
-    ParentId: 0,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-  {
-    Id: 4,
-    UserId: 1,
-    ReviewId: 3,
-    CommentValue: "Comment to reviewId 2   ",
-    ParentId: 0,
-    HasComments: true,
-    Likes: 0,
-    Dislikes: 0,
-    CreatedAt: new Date(),
-  },
-];
-
 interface ReviewComponentProps {
   key: number;
   Stars: number;
@@ -120,13 +73,46 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     setIsReplying(!isReplying);
   };
 
-  const handleSendClick = () => {
-    setIsSendingReply(true);
+  const handleSendClick = async () => {
     // TO DO: Send reply to the server
     setTimeout(() => {
       setIsSendingReply(false);
       setIsReplying(false);
     }, 2000);
+
+    try {
+      setIsSendingReply(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CommentValue: replyValue,
+            UserId: user?.Id,
+            ReviewId: id,
+            ParentId: 0,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error(result);
+      }
+
+      LoadComments();
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSendingReply(false);
+      setIsReplying(false);
+    }
   };
 
   const formatDate = () => {
@@ -150,13 +136,43 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     }
   };
 
-  const LoadComments = () => {
+  const LoadComments = async () => {
     setIsLoadingComments(true);
     setTimeout(() => {
-      setComments(MockComments);
       setIsLoadingComments(false);
       setIsShowingComments(true);
     }, 2000);
+
+    try {
+      setIsLoadingComments(true);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/getReviewComments/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      console.log(id);
+
+      if (!response.ok) {
+        console.error(result);
+      }
+
+      setComments(result.data);
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingComments(false);
+      setIsShowingComments(true);
+    }
   };
 
   return (

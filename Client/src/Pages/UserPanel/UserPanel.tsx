@@ -13,7 +13,7 @@ const UserPanel = () => {
   const { user, userImage, isUserImage, saveImageToDatabase } = useUser();
   const [selectedSubPage, setSelectedSubPage] = useState<'Settings' | 'Liked' | 'Rated'>('Liked');
   const pages: Array<"Settings" | "Liked" | "Rated"> = ["Settings", "Liked", "Rated"];
-  
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -109,7 +109,6 @@ const UserPanel = () => {
       </Block>
     </Block>
   </Block>
-  
   );
 };
 
