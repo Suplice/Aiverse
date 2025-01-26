@@ -36,35 +36,46 @@ public class UserController : ControllerBase
         return Ok(user); 
     }
 
-    // PATCH: /user/{id}
-    [HttpPatch("{id}/Email")]
-    public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] User updatedUser)
+    [HttpGet("by-email")]
+    public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
     {
-        // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
-        if (id != updatedUser.Id)
-        {
-            return BadRequest("ID in URL does not match ID in the body.");
-        }
+        var user = await _userService.GetUserByEmailAsync(email);
 
-        // Pobieramy użytkownika z bazy danych
-        var user = await _userService.GetUserById(id);
-
-        // Jeśli użytkownik nie istnieje, zwracamy 404 Not Found
         if (user == null)
         {
-            return NotFound($"User with ID {id} not found.");
+            return NotFound($"User with email '{email}' not found.");
         }
 
-        // Aktualizujemy tylko pola, które zostały dostarczone
-        if (!string.IsNullOrEmpty(updatedUser.Email))
-        {
-            user.Email = updatedUser.Email;
-        }
-   
-        await _userService.UpdateUser(user);
-
-        return NoContent();
+        return Ok(user);
     }
+
+    // PATCH: /user/{id}
+    [HttpPatch("{id}/Email")]
+public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmailDto updateEmailDto)
+{
+    // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
+    if (id != updateEmailDto.Id)
+    {
+        return BadRequest("ID in the URL does not match the ID in the request body.");
+    }
+
+    // Pobieramy użytkownika z bazy danych
+    var user = await _userService.GetUserById(id);
+    if (user == null)
+    {
+        return NotFound($"User with ID {id} not found.");
+    }
+
+    // Aktualizujemy email i obsługujemy potencjalne błędy
+    var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
+
+    if (!isEmailUpdated)
+    {
+        return Conflict("The provided email is already in use.");
+    }
+
+    return NoContent();
+}
 
     [HttpPatch("{id}/Name")]
     public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
