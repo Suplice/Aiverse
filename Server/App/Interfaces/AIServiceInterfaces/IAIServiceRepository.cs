@@ -11,5 +11,7 @@ public interface IAIServiceRepository
     List<Comment>? GetReviewComments(long reviewId);
 
     List<Comment>? GetCommentReplies(long commentId);
+    Task<List<AiService>?> GetUserLikedServicesById(long id);
+    Task<List<AiService>?> GetUserReviewedServicesById(long id);
 
 }

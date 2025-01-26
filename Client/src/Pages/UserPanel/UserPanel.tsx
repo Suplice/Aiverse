@@ -7,6 +7,8 @@ import Block from "../../Components/UI/Block";
 import BlockTextField from "../../Components/UI/BlockTextField";
 import TextField from "../../Components/UI/TextField";
 import Button from "../../Components/UI/Button";
+import UserLikedServices from "../../Components/UserPanelComponents/UserLikedServices";
+import UserReviewedServices from "../../Components/UserPanelComponents/UserReviewedServices";
 
 const UserPanel = () => {
   const { user, userImage, isUserImage, saveImageToDatabase } = useUser();
@@ -111,11 +113,11 @@ const UserPanel = () => {
         <Block align="center" className="mt-16 bg-[#121212]">
           <Block className="w-4/5">
             {selectedSubPage === "Settings" && <UserSettings />}
-            {selectedSubPage === "Liked" && (
-              <div className="text-white text-lg">Liked Content</div>
+            {selectedSubPage === "Liked" && user?.Id !== undefined && (
+              <UserLikedServices userId={user.Id} />
             )}
-            {selectedSubPage === "Rated" && (
-              <div className="text-white text-lg">Rated Content</div>
+            {selectedSubPage === "Rated" && user?.Id !== undefined && (
+              <UserReviewedServices userId={user.Id} />
             )}
           </Block>
         </Block>
