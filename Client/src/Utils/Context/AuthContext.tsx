@@ -18,6 +18,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   Logout: () => Promise<void>;
   LoginWithGoogle: (data: GoogleSignInData) => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -222,6 +223,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         Logout,
         LoginWithGoogle,
+        setUser,
       }}
     >
       {isLoading ? <LoadingPage /> : children}

@@ -3,6 +3,7 @@ import Block from "../UI/Block";
 import Button from "../UI/Button";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { Review } from "../../Utils/Models/Review";
+import { useNavigate } from "react-router";
 
 interface AddReviewComponentProps {
   AiServiceId: number;
@@ -21,6 +22,8 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const { user } = useAuth();
 
@@ -73,12 +76,28 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
   return (
     <Block
       direction="column"
-      className="p-4 bg-gray-800 rounded-lg shadow-md m-4"
+      className="p-6 bg-gray-800 rounded-lg shadow-lg m-4 relative "
     >
+      {!user && (
+        <div className="absolute inset-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center rounded-lg shadow-lg backdrop-blur-md">
+          <div className="text-center">
+            <p className="text-white text-lg font-semibold mb-4">
+              You need to be logged in to review a service.
+            </p>
+            <Button
+              value="Log In"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+              onClick={() => {
+                navigate("/auth/signin");
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       {alreadyReviewed && userReview ? (
-        // Display the existing review
         <>
-          <h2 className="text-lg font-semibold text-white mb-4">Your Review</h2>
+          <h2 className="text-xl font-semibold text-white mb-4">Your Review</h2>
           <div className="flex items-center gap-1 mb-4">
             {Array.from({ length: 5 }).map((_, index) => (
               <svg
@@ -98,14 +117,14 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
               </svg>
             ))}
           </div>
-          <p className="text-white bg-gray-700 p-3 rounded-md">
+          <p className="text-white bg-gray-700 p-4 rounded-md">
             {userReview.CommentValue}
           </p>
         </>
       ) : (
         // Display the form for adding a review
         <>
-          <h2 className="text-lg font-semibold text-white mb-2">
+          <h2 className="text-xl font-semibold text-white mb-4">
             Add your review
           </h2>
           <div className="flex items-center gap-1 mb-4">
@@ -138,13 +157,13 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Write your own review here..."
-            className="outline-none m-2 bg-gray-700 text-white resize-none h-[100px] p-2 rounded-lg border border-gray-600 focus:border-blue-500"
+            placeholder="Write your review here..."
+            className="outline-none m-2 bg-gray-700 text-white resize-none h-[100px] p-3 rounded-lg border border-gray-600 focus:border-blue-500"
           ></textarea>
           <div className="flex justify-end mt-4 gap-4">
             <Button
               value={isSubmitting ? "Adding..." : "Add Review"}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
               onClick={handleSubmit}
             ></Button>
           </div>
