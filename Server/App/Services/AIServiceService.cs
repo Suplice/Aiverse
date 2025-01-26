@@ -107,13 +107,14 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
-    public async Task<List<AiService>?> GetUserLikedServicesById(long userId)
-    {
 
-        var result = await _AIServiceRepository.GetUserLikedServicesById(userId);
+    public List<long>? GetLikedServices(long userId)
+    {
+        var result = _AIServiceRepository.GetLikedServices(userId);
 
         return result;
     }
+
 
     public async Task<List<AiService>?> GetUserReviewedServicesById(long id)
     {
@@ -122,4 +123,19 @@ public class AIServiceService : IAIServiceService
 
         return result;
     }
+
+    public async Task<bool> LikeService(long userId, long serviceId)
+    {
+        var result = await _AIServiceRepository.LikeService(userId, serviceId);
+
+        return result;
+    }
+
+    public async Task<bool> DislikeService(long userId, long reviewId)
+    {
+        var result = await _AIServiceRepository.DislikeService(userId, reviewId);
+
+        return result;
+    }
+
 }

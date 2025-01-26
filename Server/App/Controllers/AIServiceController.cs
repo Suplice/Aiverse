@@ -241,28 +241,79 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
     }
-
-    [HttpGet("LikedServices/{id}")]
-    public async Task<IActionResult> GetUserLikedServicesById(long id){
-        
-        
-        if (id <= 0)
+    [HttpGet("likedbyuser/{userId}")]
+    public IActionResult GetLikedServices(long userId)
+    {
+        try
         {
-            var response = new ApiResponse<bool>(false, "User not exist", false);
+            var LikedServicesResult =  _AIServiceService.GetLikedServices(userId);
+
+            if (LikedServicesResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<long>>(true, "Liked services found", LikedServicesResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
             return BadRequest(response);
         }
+    }
 
-        var ServiceResult = await _AIServiceService.GetUserLikedServicesById(id);
-
-        if (ServiceResult == null)
+    [HttpPost("likeService")]
+    public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService){
+        
+        try
         {
-            var response = new ApiResponse<bool>(false, "Error occured", false);
+            var LikeResult = await _AIServiceService.LikeService(likeService.UserId, likeService.AiServiceId);
+
+            if (LikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service liked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
             return BadRequest(response);
         }
+    }
 
-        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServiceResult);
+    [HttpPost("dislikeService")]
+    public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService){
+        
+        try
+        {
+            var DislikeResult = await _AIServiceService.DislikeService(likeService.UserId, likeService.AiServiceId);
 
-        return Ok(correctResponse);
+            if (DislikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service disliked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
     }
 
     [HttpGet("reviewedServices/{id}")]

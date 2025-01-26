@@ -149,7 +149,7 @@ const UserSettings = () => {
                 </form>
               </div>
             ) : (
-              <div className="flex justify-end lg:pr-16">
+              <div className="w-full flex justify-center md:justify-end lg:pr-16">
                 {user?.Provider === "EMAIL" && (
                   <button
                     onClick={handleEditName}
@@ -180,7 +180,6 @@ const UserSettings = () => {
               {user?.Email}
             </span>
             </div>
-            
             {isEditingEmail ? (
               <div className="flex items-center gap-2 w-full flex-col ">
                 <form
@@ -210,7 +209,7 @@ const UserSettings = () => {
                 </form>
               </div>
             ) : (
-              <div className="flex justify-end lg:pr-16">
+              <div className="w-full flex justify-center md:justify-end lg:pr-16">
                 {user?.Provider === "EMAIL" && (
                   <button
                     onClick={handleEditEmail}

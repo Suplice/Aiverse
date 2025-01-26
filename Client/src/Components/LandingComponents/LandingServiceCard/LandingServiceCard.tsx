@@ -72,6 +72,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
             isDescriptionVisible={isDescriptionVisible}
             setIsDescriptionVisible={setIsDescriptionVisible}
             isAuthenticated={isAuthenticated}
+            id={Id}
           />
         </Block>
 
