@@ -105,11 +105,14 @@ const UserSettings = () => {
     <div className="p-4 bg-[#121212]">
       <div className="flex flex-col items-start justify-center gap-6 mt-4">
       <div className="flex flex-col lg:flex-col items-center bg-[#1E1E1E] gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-2  p-6 h-auto border-[#333333]">
-          <div className="flex-row flex w-full items-center gap-4">
-            <strong className="text-lg text-white lg:pl-16">Name:</strong>
-            <span className="text-lg text-gray-400 flex-grow">
-              {user?.Name}
-            </span>
+          <div className="flex-col md:flex-row flex w-full items-center gap-4">
+            <div className="flex gap-4 items-start">
+              <strong className="text-lg text-white lg:pl-16">Name:</strong>
+              <span className="text-lg text-gray-400 flex-grow">
+                {user?.Name}
+              </span>
+            </div>
+
 
             {isEditingName ? (
               <div className="flex items-center gap-2 w-full flex-col ">
@@ -170,12 +173,14 @@ const UserSettings = () => {
         </div>
         
         <div className="flex flex-col lg:flex-col items-center bg-[#1E1E1E] gap-4 w-full rounded-lg shadow-md focus:outline-none transition duration-300 border-2  p-6 h-auto border-[#333333]">
-          <div className="flex-row flex w-full items-center gap-4">
+        <div className="flex-col md:flex-row flex w-full items-center gap-4">
+            <div className="flex gap-4 items-start">
             <strong className="text-lg text-white lg:pl-16">Email:</strong>
             <span className="text-lg text-gray-400 flex-grow">
               {user?.Email}
             </span>
-
+            </div>
+            
             {isEditingEmail ? (
               <div className="flex items-center gap-2 w-full flex-col ">
                 <form
@@ -299,14 +304,15 @@ const UserSettings = () => {
                     )}
                   </div>
 
-                  <button
-                    type="submit"
-                    className="px-4 py-2 mt-4 bg-blue-500 rounded text-white"
-                  >
-                    Submit
-                  </button>
+                  <div className="flex justify-center my-2">
+                    <button
+                      type="submit"
+                      className="px-6 py-3 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform ease-in-out border-2 bg-[#1E1E1E] text-green-500 hover:bg-green-500 hover:text-black"
+                    >
+                      Save
+                    </button>
+                  </div>
                 </form>
-              );
               </div>
             )}
           </div>
