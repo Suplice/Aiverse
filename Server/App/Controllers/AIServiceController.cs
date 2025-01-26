@@ -241,6 +241,80 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
     }
+    [HttpGet("likedbyuser/{userId}")]
+    public IActionResult GetLikedServices(long userId)
+    {
+        try
+        {
+            var LikedServicesResult =  _AIServiceService.GetLikedServices(userId);
+
+            if (LikedServicesResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<long>>(true, "Liked services found", LikedServicesResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpPost("likeService")]
+    public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService){
+        
+        try
+        {
+            var LikeResult = await _AIServiceService.LikeService(likeService.UserId, likeService.AiServiceId);
+
+            if (LikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service liked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpPost("dislikeService")]
+    public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService){
+        
+        try
+        {
+            var DislikeResult = await _AIServiceService.DislikeService(likeService.UserId, likeService.AiServiceId);
+
+            if (DislikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service disliked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
 
 
 }
