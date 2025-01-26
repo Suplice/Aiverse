@@ -8,24 +8,21 @@ interface Form {
 }
 
 const FormsToCheck = () => {
-  
   const [forms, setForms] = useState<Form[]>([
     { id: 1, title: "Form 1", description: "Details of Form 1", status: "pending" },
     { id: 2, title: "Form 2", description: "Details of Form 2", status: "pending" },
     { id: 3, title: "Form 3", description: "Details of Form 3", status: "pending" },
   ]);
 
-  
   const [selectedForm, setSelectedForm] = useState<Form | null>(null);
 
-  
   const handleAccept = (id: number) => {
     setForms((prevForms) =>
       prevForms.map((form) =>
         form.id === id ? { ...form, status: "accepted" } : form
       )
     );
-    setSelectedForm(null); 
+    setSelectedForm(null);
   };
 
   const handleDeny = (id: number) => {
@@ -34,27 +31,27 @@ const FormsToCheck = () => {
         form.id === id ? { ...form, status: "denied" } : form
       )
     );
-    setSelectedForm(null); 
+    setSelectedForm(null);
   };
 
   return (
-    <div className="p-4 bg-white rounded shadow-md w-3/4">
+    <div className="p-4 bg-[#1E1E1E] rounded shadow-md w-3/4 text-white">
       <h2 className="text-2xl font-bold mb-4">Forms to Check</h2>
 
       {selectedForm ? (
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold">{selectedForm.title}</h3>
-          <p className="text-gray-600">{selectedForm.description}</p>
+          <h3 className="text-xl font-bold">{selectedForm.title}</h3>
+          <p className="text-gray-400">{selectedForm.description}</p>
           <div className="space-x-2">
             <button
               onClick={() => handleAccept(selectedForm.id)}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition duration-200"
             >
               Accept
             </button>
             <button
               onClick={() => handleDeny(selectedForm.id)}
-              className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
+              className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition duration-200"
             >
               Deny
             </button>
@@ -65,15 +62,15 @@ const FormsToCheck = () => {
           {forms.map((form) => (
             <li
               key={form.id}
-              className="flex items-center justify-between bg-gray-100 p-3 rounded"
+              className="flex items-center justify-between bg-[#2C2C2C] p-3 rounded"
             >
               <span
                 className={`text-lg ${
                   form.status === "accepted"
-                    ? "text-black"
+                    ? "text-green-400"
                     : form.status === "denied"
-                    ? "text-black"
-                    : ""
+                    ? "text-orange-400"
+                    : "text-white"
                 }`}
               >
                 {form.title}
@@ -81,17 +78,17 @@ const FormsToCheck = () => {
               <div className="space-x-2">
                 <button
                   onClick={() => setSelectedForm(form)}
-                  className="px-4 py-2 bg-gray-300 text-white rounded hover:bg-violet-300"
+                  className="px-4 py-2 bg-[#444444] text-white rounded hover:bg-[#555555] transition duration-200"
                 >
                   View
                 </button>
                 <span
                   className={`text-sm font-semibold ${
                     form.status === "accepted"
-                      ? "text-green-700"
+                      ? "text-green-400"
                       : form.status === "denied"
-                      ? "text-orange-700"
-                      : "text-gray-500"
+                      ? "text-orange-400"
+                      : "text-gray-400"
                   }`}
                 >
                   {form.status === "pending" ? "Pending" : form.status}
