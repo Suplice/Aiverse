@@ -107,4 +107,25 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
+    public List<long>? GetLikedServices(long userId)
+    {
+        var result = _AIServiceRepository.GetLikedServices(userId);
+
+        return result;
+    }
+
+    public async Task<bool> LikeService(long userId, long serviceId)
+    {
+        var result = await _AIServiceRepository.LikeService(userId, serviceId);
+
+        return result;
+    }
+
+    public async Task<bool> DislikeService(long userId, long reviewId)
+    {
+        var result = await _AIServiceRepository.DislikeService(userId, reviewId);
+
+        return result;
+    }
+
 }
