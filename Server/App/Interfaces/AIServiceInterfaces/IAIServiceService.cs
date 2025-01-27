@@ -14,6 +14,8 @@ public interface IAIServiceService
 
     List<Comment>? GetCommentComments(long commentId);
 
+
+    Task<List<AiService>?> GetUserReviewedServicesById(long id);
     List<long>? GetLikedServices(long userId);
 
     Task<bool> LikeService(long userId, long serviceId);

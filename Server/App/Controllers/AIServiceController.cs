@@ -316,5 +316,27 @@ public class AIServiceController : ControllerBase
         }
     }
 
+    [HttpGet("reviewedServices/{id}")]
+    public async Task<IActionResult> GetUserReviewedServicesById(long id){
+        
+        
+        if (id <= 0)
+        {
+            var response = new ApiResponse<bool>(false, "User not exist", false);
+            return BadRequest(response);
+        }
+
+        var ServiceResult = await _AIServiceService.GetUserReviewedServicesById(id);
+
+        if (ServiceResult == null)
+        {
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServiceResult);
+
+        return Ok(correctResponse);
+    }
 
 }
