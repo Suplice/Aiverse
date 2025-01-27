@@ -39,11 +39,11 @@ const UserPanel = () => {
           direction="row"
           justify="center"
         >
-          <Block className="w-48 rounded-full overflow-hidden relative border-4 border-[#5A5A5A] group shadow-lg aspect-square min-w-[180px] min-h-[180px]">
+          <Block className="w-[20vw] max-w-[180px] min-w-[80px] rounded-full overflow-hidden relative border-4 border-[#5A5A5A] group shadow-lg aspect-square">
             {isUserImage && userImage ? (
               <img
                 src={userImage}
-                alt="User"
+                alt="user"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
               />
             ) : (
@@ -63,6 +63,7 @@ const UserPanel = () => {
               onChange={handleImageChange}
             />
           </Block>
+
 
 
           <Block direction="column" className="ml-8 text-center">
