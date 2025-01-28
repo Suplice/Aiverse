@@ -1,5 +1,7 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import { AiService } from "../Models/AiService";
+import { useAuth } from "./AuthContext";
+import { HandleLike } from "../Models/handleLike";
 
 interface AiServiceContextType {
   services: AiService[];
@@ -7,6 +9,11 @@ interface AiServiceContextType {
   addService: (service: AiService) => Promise<void>;
   updateService: (service: AiService) => Promise<void>;
   deleteService: (Id: number) => Promise<void>;
+  likedServices: number[];
+  setLikedServices: (likedServices: number[]) => void;
+  handleLike: (data: HandleLike) => Promise<void>;
+  handleUnLike: (data: HandleLike) => Promise<void>;
+  fetchServices: () => Promise<void>;
 }
 
 const AiServiceContext = createContext<AiServiceContextType | undefined>(
@@ -19,12 +26,34 @@ export const AiServiceProvider = ({
   children: React.ReactNode;
 }) => {
   const [services, setServices] = useState<AiService[]>([]);
+  const [likedServices, setLikedServices] = useState<number[]>([]);
+
+  const { user } = useAuth();
 
   const fetchServices = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/getall`);
+      const cachedServices = sessionStorage.getItem("services");
+      const cachedTimestamp = sessionStorage.getItem("servicesTimestamp");
+
+      if (
+        cachedServices &&
+        cachedTimestamp &&
+        Date.now() - parseInt(cachedTimestamp, 10) < 30000
+      ) {
+        setServices(JSON.parse(cachedServices));
+        console.log("Użyto cache dla serwisów.");
+        return;
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/getall`
+      );
       const data = await response.json();
       setServices(data.data);
+
+      sessionStorage.setItem("services", JSON.stringify(data.data));
+      sessionStorage.setItem("servicesTimestamp", Date.now().toString());
+      console.log("Pobrano serwisy z API i zapisano w cache.");
     } catch (error) {
       console.log(error);
     }
@@ -80,9 +109,86 @@ export const AiServiceProvider = ({
     }
   };
 
+  const fetchServicesLikedByUser = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/likedbyuser/${user?.Id}`
+      );
+      const data = await response.json();
+      setLikedServices(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLike = async (data: HandleLike) => {
+    try {
+      if (!user) return;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/likeService`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            AiServiceId: data.AiServiceId,
+            UserId: data.UserId,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setLikedServices([...likedServices, data.AiServiceId]);
+      }
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUnLike = async (data: HandleLike) => {
+    try {
+      if (!user) return;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/dislikeService`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            AiServiceId: data.AiServiceId,
+            UserId: data.UserId,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setLikedServices(likedServices.filter((s) => s !== data.AiServiceId));
+      }
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchServices();
-    console.log("fetching services");
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchServicesLikedByUser();
+    }
   }, []);
 
   return (
@@ -93,6 +199,11 @@ export const AiServiceProvider = ({
         addService,
         updateService,
         deleteService,
+        likedServices,
+        setLikedServices,
+        handleLike,
+        handleUnLike,
+        fetchServices,
       }}
     >
       {children}

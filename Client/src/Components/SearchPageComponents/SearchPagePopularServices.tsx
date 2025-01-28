@@ -5,49 +5,12 @@ import { useAuth } from "../../Utils/Context/AuthContext";
 import TextField from "../UI/TextField";
 import Button from "../UI/Button";
 import BlockTextField from "../UI/BlockTextField";
+import { useAiService } from "../../Utils/Context/AiServiceContext";
 import Block from "../UI/Block";
-import { AiService } from "../../Utils/Models/AiService";
-
-const mockSearchPageServices: AiService[] = [
-  {
-    Id: 1,
-    Title: "ChatGPT",
-    Description: "Description 1",
-    Price: "Free",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.5,
-    Reviews: 1200,
-    Categories: ["AI", "Chatbot"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-  {
-    Id: 2,
-    Title: "ReelMagic",
-    Description: "Description 2",
-    Price: "$10 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 3.2,
-    Reviews: 172,
-    Categories: ["AI", "Video"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-  {
-    Id: 3,
-    Title: "DeepSeek-V3",
-    Description: "Description 3",
-    Price: "$1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.1,
-    Reviews: 32,
-    Categories: ["AI", "Search"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-];
 
 const SearchPagePopularServices = () => {
+  const { services } = useAiService();
+
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -67,8 +30,12 @@ const SearchPagePopularServices = () => {
         </BlockTextField>
       </div>
       <div className="border-2 border-[#4B4B4D] shadow-[0px_0px_12px_0px_#2d3748] relative rounded-lg">
-        {mockSearchPageServices.map((service, index) => (
-          <SearchPagePopularServiceCard {...service} index={index} />
+        {services.slice(0, 3).map((service, index) => (
+          <SearchPagePopularServiceCard
+            {...service}
+            index={index}
+            key={index}
+          />
         ))}
 
         {isAuthenticated ? null : (

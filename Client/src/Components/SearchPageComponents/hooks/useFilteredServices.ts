@@ -3,20 +3,29 @@ import { AiService } from "../../../Utils/Models/AiService";
 
 const useFilteredServices = (services: AiService[]) => {
   const [filteredServices, setFilteredServices] = useState(services);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const filterServices = (params: URLSearchParams) => {
+    if (services.length === 0) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     setTimeout(() => {
       const newServices = services.filter((service) => {
         const categories = params.get("categories")?.split(",") || [];
+
         const priceRange =
           params.get("priceRange")?.split(",").map(Number) || [];
         const searchText = params.get("searchText")?.toLowerCase() || "";
 
-        const isCategoryMatch =
-          (categories[0] === "" && categories.length === 1) ||
-          service.Categories.some((category) => categories.includes(category));
+        const isCategoryMatch = service.Categories
+          ? (categories[0] === "" && categories.length === 1) ||
+            service.Categories.some((category) => categories.includes(category))
+          : false;
+
+        console.log("isCategoryMatch", isCategoryMatch);
+
         const isPriceMatch =
           priceRange.length === 0 ||
           (service.Price === "Free" && priceRange[0] === 0) ||
@@ -33,6 +42,8 @@ const useFilteredServices = (services: AiService[]) => {
 
         return isCategoryMatch && isPriceMatch && isSearchTextMatch;
       });
+
+      console.log("newServices", newServices);
 
       setFilteredServices(newServices);
       setIsLoading(false);

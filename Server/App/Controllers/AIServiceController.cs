@@ -1,4 +1,5 @@
 
+using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
@@ -71,8 +72,13 @@ public class AIServiceController : ControllerBase
         try
         {
 
-            var filePath = await _fileService.SaveFileAsync(service.Image, "AIServiceImages");
+            var filePath = await _fileService.SaveFileAsync(service.Image, "AIServiceImages/" + service.Title);
             var ServiceResult = await _AIServiceService.AddNewService(service, filePath);
+
+            foreach (var image in service.GalleryImages)
+            {
+                await _fileService.SaveFileAsync(image, "AIServiceImages/" + service.Title + "/galleryFiles");
+            }
 
             if (ServiceResult == null)
             {
@@ -83,6 +89,7 @@ public class AIServiceController : ControllerBase
             var correctResponse = new ApiResponse<AiService>(true, "Service added", ServiceResult);
 
             return Ok(correctResponse);
+
 
         }
         catch (Exception e)
@@ -145,8 +152,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("addComment")]
-    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment){
-        
+    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment)
+    {
+
         try
         {
             var CommentResult = await _AIServiceService.AddComment(comment);
@@ -172,8 +180,9 @@ public class AIServiceController : ControllerBase
     [HttpGet("getReviewComments/{reviewId}")]
     public ActionResult GetReviewComments(long reviewId)
     {
-        try {
-            var CommentsResult =  _AIServiceService.GetReviewComments(reviewId);
+        try
+        {
+            var CommentsResult = _AIServiceService.GetReviewComments(reviewId);
 
             if (CommentsResult == null)
             {
@@ -196,8 +205,9 @@ public class AIServiceController : ControllerBase
     [HttpGet("getCommentReplies/{commentId}")]
     public ActionResult GetCommentReplies(long commentId)
     {
-        try {
-            var RepliesResult =  _AIServiceService.GetCommentComments(commentId);
+        try
+        {
+            var RepliesResult = _AIServiceService.GetCommentComments(commentId);
 
             if (RepliesResult == null)
             {
@@ -218,8 +228,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("addCommentReply")]
-    public async Task<IActionResult> AddCommentReply(RequestAddCommentDTO comment){
-        
+    public async Task<IActionResult> AddCommentReply(RequestAddCommentDTO comment)
+    {
+
         try
         {
             var CommentResult = await _AIServiceService.AddComment(comment);
@@ -241,6 +252,105 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
     }
+    [HttpGet("likedbyuser/{userId}")]
+    public IActionResult GetLikedServices(long userId)
+    {
+        try
+        {
+            var LikedServicesResult = _AIServiceService.GetLikedServices(userId);
 
+            if (LikedServicesResult == null)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<List<long>>(true, "Liked services found", LikedServicesResult);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpPost("likeService")]
+    public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService)
+    {
+
+        try
+        {
+            var LikeResult = await _AIServiceService.LikeService(likeService.UserId, likeService.AiServiceId);
+
+            if (LikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service liked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpPost("dislikeService")]
+    public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService)
+    {
+
+        try
+        {
+            var DislikeResult = await _AIServiceService.DislikeService(likeService.UserId, likeService.AiServiceId);
+
+            if (DislikeResult == false)
+            {
+                var response = new ApiResponse<bool>(false, "Error occured", false);
+                return BadRequest(response);
+            }
+
+            var correctResponse = new ApiResponse<bool>(true, "Service disliked", true);
+
+            return Ok(correctResponse);
+
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(false, e.Message, false);
+            return BadRequest(response);
+        }
+    }
+
+    [HttpGet("reviewedServices/{id}")]
+    public async Task<IActionResult> GetUserReviewedServicesById(long id)
+    {
+
+
+        if (id <= 0)
+        {
+            var response = new ApiResponse<bool>(false, "User not exist", false);
+            return BadRequest(response);
+        }
+
+        var ServiceResult = await _AIServiceService.GetUserReviewedServicesById(id);
+
+        if (ServiceResult == null)
+        {
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServiceResult);
+
+        return Ok(correctResponse);
+    }
 
 }

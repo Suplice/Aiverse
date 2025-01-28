@@ -13,12 +13,14 @@ interface LandingServiceCardMainDataProps {
   price: string;
 }
 
-const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (props) => {
+const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (
+  props
+) => {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     navigate(`/aiservice/${7}`);
-  }
+  };
 
   return (
     <>
@@ -41,7 +43,7 @@ const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (p
             <TextField color="white" className="text-2xl">
               {props.title}
             </TextField>
-            <Block direction="row" gap={2}>
+            <Block direction="row" gap={2} align="center" justify="center">
               <BlockTextField className="flex flex-row gap-1 items-center text-white">
                 <TiStarFullOutline className="text-yellow-300" />
                 {props.stars}
@@ -63,7 +65,7 @@ const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (p
 
       <BlockTextField color="white" className="w-full md:w-1/4">
         <TextField color="white" className="font-mono md:text-left">
-          {props.Categories.join(", ")}
+          {props.Categories ? props.Categories.join(", ") : "No Categories"}
         </TextField>
       </BlockTextField>
     </>

@@ -71,44 +71,49 @@ public class AuthController: ControllerBase{
 
     [HttpGet("credentials")]
     public async Task<IActionResult> CheckCredentials(){
-        var token = Request.Cookies["authToken"];
-        if(token == null){
-            return BadRequest(new ApiResponse<bool>(false, "No token found", false));
+        try{
+            var token = Request.Cookies["authToken"];
+            if(token == null){
+                return BadRequest(new ApiResponse<bool>(false, "No token found", false));
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_secretKey);
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var userId = jwtToken.Claims.First(x => x.Type == "userId").Value;
+
+            var user = await _authService.GetUserById(userId);
+
+            if(user == null){
+                Response.Cookies.Delete("authToken");
+                return BadRequest(new ApiResponse<bool>(false, "User not found", false));
+            }
+
+            var newToken = GenerateJwtToken(userId);
+
+            Response.Cookies.Append("authToken", token, new CookieOptions
+            {
+                HttpOnly = true, 
+                Secure = true,  
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(1) 
+            });
+
+            var response = new ApiResponse<ResponseAuthDTO>(true, "User found", user);
+            return Ok(response);
         }
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_secretKey);
-        tokenHandler.ValidateToken(token, new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
-        }, out SecurityToken validatedToken);
-
-        var jwtToken = (JwtSecurityToken)validatedToken;
-        var userId = jwtToken.Claims.First(x => x.Type == "userId").Value;
-
-        var user = await _authService.GetUserById(userId);
-
-        if(user == null){
-            Response.Cookies.Delete("authToken");
-            return BadRequest(new ApiResponse<bool>(false, "User not found", false));
+        catch(Exception e){
+            return BadRequest(new ApiResponse<bool>(false, e.Message, false));
         }
-
-        var newToken = GenerateJwtToken(userId);
-
-        Response.Cookies.Append("authToken", token, new CookieOptions
-        {
-            HttpOnly = true, 
-            Secure = true,  
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(1) 
-        });
-
-        var response = new ApiResponse<ResponseAuthDTO>(true, "User found", user);
-        return Ok(response);
     }
 
 

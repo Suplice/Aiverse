@@ -7,125 +7,19 @@ import LoadingServicesSkeleton from "./LoadingServicesSkeleton";
 import useSearchParams from "./hooks/useSearchParams";
 import useSearchInput from "./hooks/useSearchInput";
 import useFilteredServices from "./hooks/useFilteredServices";
-import { AiService } from "../../Utils/Models/AiService";
 import { useEffect } from "react";
 import Button from "../UI/Button";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
-
-const mockSearchPageServices: AiService[] = [
-  {
-    Id: 1,
-    Title: "ChatGPT",
-    Description: "Description 1",
-    Price: "Free",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.5,
-    Reviews: 1200,
-    Categories: ["AI", "Chatbot", "LLM"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 2,
-    Title: "ReelMagic",
-    Description: "Description 2",
-    Price: "$10 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 3.2,
-    Reviews: 172,
-    Categories: ["AI", "VIdeo", "Art"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 3,
-    Title: "DeepSeek-V3",
-    Description: "Description 3",
-    Price: "$100 - 490 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.1,
-    Reviews: 32,
-    Categories: ["AI", "Search", "Music"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 4,
-    Title: "Leffa",
-    Description: "Description 4",
-    Price: "Free + $1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.3,
-    Reviews: 983,
-    Categories: ["AI", "VIdeo", "LLM"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 5,
-    Title: "DeepSeek-V3",
-    Description: "Description 3",
-    Price: "$1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.1,
-    Reviews: 32,
-    Categories: ["AI", "Search", "Art"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 6,
-    Title: "Leffa",
-    Description: "Description 4",
-    Price: "Free + $1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.3,
-    Reviews: 983,
-    Categories: ["AI", "VIdeo", "Music"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 7,
-    Title: "DeepSeek-V3",
-    Description: "Description 3",
-    Price: "$1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.1,
-    Reviews: 32,
-    Categories: ["AI", "Search", "VIdeo"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-  {
-    Id: 8,
-    Title: "Leffa",
-    Description: "Description 4",
-    Price: "Free + $1 - 49 / Month",
-    Image: "https://via.placeholder.com/150",
-    Stars: 4.3,
-    Reviews: 983,
-    Categories: ["AI", "VIdeo"],
-    Status: "Verified",
-    CreatedAt: new Date(),
-    CreatorId: 1,
-  },
-];
+import { useAiService } from "../../Utils/Context/AiServiceContext";
 
 const SearchPageServices = () => {
+  const { services } = useAiService();
+
   const { getParams, updateParams } = useSearchParams();
   const { inputRef, resetInput, lastInput } = useSearchInput("");
-  const { filteredServices, filterServices, isLoading } = useFilteredServices(
-    mockSearchPageServices
-  );
+  const { filteredServices, filterServices, isLoading } =
+    useFilteredServices(services);
 
   useEffect(() => {
     const params = getParams;
@@ -133,8 +27,11 @@ const SearchPageServices = () => {
     if (searchText && inputRef.current) {
       inputRef.current.value = searchText;
     }
+
+    console.log("services", services);
+
     filterServices(params);
-  }, []);
+  }, [services]);
 
   const handleSearch = () => {
     const searchText = inputRef.current?.value || "";
@@ -175,6 +72,18 @@ const SearchPageServices = () => {
     filterServices(updatedParams);
   };
 
+  const handleRemoveFilters = () => {
+    const currentParams = getParams;
+
+    const updatedParams = new URLSearchParams(currentParams);
+
+    updatedParams.set("categories", "");
+    updatedParams.set("priceRange", "0,1000");
+
+    updateParams(Object.fromEntries(updatedParams.entries()));
+    filterServices(updatedParams);
+  };
+
   return (
     <Block
       className="w-full lg:w-3/4 lg:px-10 md:px-6 sm:px-2 "
@@ -210,6 +119,7 @@ const SearchPageServices = () => {
           </Block>
         </div>
         <FilterButtons
+          handleRemoveFilters={handleRemoveFilters}
           isFiltering={isLoading}
           handleFilter={handleSearchWithFilters}
         />

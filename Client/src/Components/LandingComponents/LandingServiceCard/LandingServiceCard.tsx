@@ -42,7 +42,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
     <Block
       key={Id}
       className={`flex-col border-[#3B3B3D]    p-4 ${
-        Id === 1 ? "border-t-0" : "border-t-2"
+        index === 0 ? "border-t-0" : "border-t-2"
       }`}
       direction="column"
     >
@@ -72,6 +72,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
             isDescriptionVisible={isDescriptionVisible}
             setIsDescriptionVisible={setIsDescriptionVisible}
             isAuthenticated={isAuthenticated}
+            id={Id}
           />
         </Block>
 
