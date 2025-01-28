@@ -1,60 +1,11 @@
-import { AiService } from "../../Utils/Models/AiService";
+import { useAiService } from "../../Utils/Context/AiServiceContext";
 import BlockTextField from "../UI/BlockTextField";
 import TextField from "../UI/TextField";
 import LandingServiceCard from "./LandingServiceCard/LandingServiceCard";
 
-const MockServices: AiService[] = [
-  {
-    Id: 1,
-    Title: "ChatGPT",
-    Description: "Description 1",
-    Price: "Free",
-    Image: "https://picsum.photos/id/237/600/600",
-    Stars: 4.5,
-    Reviews: 1200,
-    Categories: ["AI", "Chatbot"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-  {
-    Id: 2,
-    Title: "ReelMagic",
-    Description: "Description 2",
-    Price: "$10 - 49 / Month",
-    Image: "https://picsum.photos/id/237/600/600",
-    Stars: 3.2,
-    Reviews: 172,
-    Categories: ["AI", "Video"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-  {
-    Id: 3,
-    Title: "DeepSeek-V3",
-    Description: "Description 3",
-    Price: "$1 - 49 / Month",
-    Image: "https://picsum.photos/id/237/600/600",
-    Stars: 4.1,
-    Reviews: 32,
-    Categories: ["AI", "Search"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-  {
-    Id: 4,
-    Title: "Leffa",
-    Description: "Description 4",
-    Price: "Free + $1 - 49 / Month",
-    Image: "https://picsum.photos/id/237/600/600",
-    Stars: 4.3,
-    Reviews: 983,
-    Categories: ["AI", "Video"],
-    Status: "Verified",
-    CreatorId: 1,
-  },
-];
-
 const LandingPopularServices = () => {
+  const { services } = useAiService();
+
   return (
     <div className="w-full mt-5 ">
       <BlockTextField color="white" className="font-bold my-4 ">
@@ -66,7 +17,7 @@ const LandingPopularServices = () => {
       </BlockTextField>
 
       <div className=" border-2 border-[#3B3B3D] rounded-lg bg-[#121212] ">
-        {MockServices.map((service, index) => (
+        {services.slice(0, 5).map((service, index) => (
           <LandingServiceCard {...service} index={index} />
         ))}
       </div>
