@@ -5,6 +5,7 @@ import Block from "../../UI/Block";
 import { useNavigate } from "react-router-dom";
 
 interface LandingServiceCardMainDataProps {
+  Id: number;
   image: string;
   title: string;
   stars: number;
@@ -19,7 +20,7 @@ const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    navigate(`/aiservice/${7}`);
+    navigate(`/aiservice/${props.Id}`);
   };
 
   return (
@@ -32,7 +33,7 @@ const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (
         onClick={handleNavigation}
         style={{ cursor: "pointer" }}
       >
-        <img src={props.image} alt={props.title} className="w-14 " />
+        <img src={`${import.meta.env.VITE_API_URL}${props.image}`} alt={props.title} className="w-14 " />
         <Block
           direction="column"
           gap={2}

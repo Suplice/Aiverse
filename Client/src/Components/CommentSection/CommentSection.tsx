@@ -69,7 +69,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
       ) : (
         <>
           <AddReviewComponent
-            AiServiceId={7}
+            AiServiceId={AiServiceId}
             alreadyReviewed={isAlreadyReviewed}
             setReviewed={handleReviewed}
             userReview={

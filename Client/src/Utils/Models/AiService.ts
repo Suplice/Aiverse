@@ -14,5 +14,4 @@ export type AiService = {
   CreatedAt?: Date;
   CreatorId: number;
   ServiceURL: string;
-  ImageGallery: GalleryImages;
 };
