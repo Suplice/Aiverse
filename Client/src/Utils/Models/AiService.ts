@@ -1,3 +1,5 @@
+import { GalleryImages } from "./ImageGallery";
+
 export type AiService = {
   Id: number;
   Title: string;
@@ -11,4 +13,6 @@ export type AiService = {
   Status: "Verified" | "Declined" | "Pending";
   CreatedAt?: Date;
   CreatorId: number;
+  ServiceURL: string;
+  ImageGallery: GalleryImages;
 };

@@ -8,7 +8,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
   return (
     <div className="file-upload mb-4">
       <label htmlFor="file" className="block text-sm font-medium mb-2 text-gray-300">
-        Upload the picture
+        Upload AI Service Logo
       </label>
       <input
         type="file"
