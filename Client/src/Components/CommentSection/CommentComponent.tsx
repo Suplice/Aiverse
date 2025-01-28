@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Controls from "./Controls";
 import AddCommentComponent from "./AddCommentComponent";
 import { User } from "../../Utils/Models/User";
+import { Avatar } from "@mantine/core";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 interface CommentProps {
   Id: number;
@@ -38,7 +40,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [isShowingComments, setIsShowingComments] = useState<boolean>(false);
   const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
 
-  const [user, setUser] = useState<User>();
+  const [commentUser, setCommentUser] = useState<User>();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,7 +61,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         if (!response.ok) {
           console.error(result);
         }
-        setUser(result);
+        setCommentUser(result);
         console.log(result);
       } catch (error) {
         console.log(error);
@@ -169,14 +172,14 @@ const CommentComponent: React.FC<CommentProps> = ({
 
   return (
     <div className="grid grid-cols-[40px_auto] grid-rows-[40px_auto] mb-2 ">
-      <img
-        src="https://placehold.co/400"
-        alt="User"
-        className="w-9/12 rounded-full self-center place-self-center"
-      ></img>
+      {commentUser ? (
+        <Avatar name={commentUser.Name?.at(0) ?? "G"}></Avatar>
+      ) : (
+        <Avatar radius="xl"></Avatar>
+      )}
       <Block direction="row" className="ml-3 " gap={3} align="center">
         <TextField color="white" className="text-lg">
-          {user?.Name ? user?.Name : "Anonymous"}
+          {commentUser?.Name ? commentUser?.Name : "Guest"}
         </TextField>
         <TextField className="text-sm text-gray-500">{formatDate()}</TextField>
       </Block>
