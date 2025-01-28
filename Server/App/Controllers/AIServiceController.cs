@@ -1,4 +1,5 @@
 
+using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
@@ -71,8 +72,13 @@ public class AIServiceController : ControllerBase
         try
         {
 
-            var filePath = await _fileService.SaveFileAsync(service.Image, "AIServiceImages");
+            var filePath = await _fileService.SaveFileAsync(service.Image, "AIServiceImages/" + service.Title);
             var ServiceResult = await _AIServiceService.AddNewService(service, filePath);
+
+            foreach (var image in service.GalleryImages)
+            {
+                await _fileService.SaveFileAsync(image, "AIServiceImages/" + service.Title + "/galleryFiles");
+            }
 
             if (ServiceResult == null)
             {
@@ -83,6 +89,7 @@ public class AIServiceController : ControllerBase
             var correctResponse = new ApiResponse<AiService>(true, "Service added", ServiceResult);
 
             return Ok(correctResponse);
+
 
         }
         catch (Exception e)
@@ -145,8 +152,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("addComment")]
-    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment){
-        
+    public async Task<IActionResult> AddComment(RequestAddCommentDTO comment)
+    {
+
         try
         {
             var CommentResult = await _AIServiceService.AddComment(comment);
@@ -172,8 +180,9 @@ public class AIServiceController : ControllerBase
     [HttpGet("getReviewComments/{reviewId}")]
     public ActionResult GetReviewComments(long reviewId)
     {
-        try {
-            var CommentsResult =  _AIServiceService.GetReviewComments(reviewId);
+        try
+        {
+            var CommentsResult = _AIServiceService.GetReviewComments(reviewId);
 
             if (CommentsResult == null)
             {
@@ -196,8 +205,9 @@ public class AIServiceController : ControllerBase
     [HttpGet("getCommentReplies/{commentId}")]
     public ActionResult GetCommentReplies(long commentId)
     {
-        try {
-            var RepliesResult =  _AIServiceService.GetCommentComments(commentId);
+        try
+        {
+            var RepliesResult = _AIServiceService.GetCommentComments(commentId);
 
             if (RepliesResult == null)
             {
@@ -218,8 +228,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("addCommentReply")]
-    public async Task<IActionResult> AddCommentReply(RequestAddCommentDTO comment){
-        
+    public async Task<IActionResult> AddCommentReply(RequestAddCommentDTO comment)
+    {
+
         try
         {
             var CommentResult = await _AIServiceService.AddComment(comment);
@@ -246,7 +257,7 @@ public class AIServiceController : ControllerBase
     {
         try
         {
-            var LikedServicesResult =  _AIServiceService.GetLikedServices(userId);
+            var LikedServicesResult = _AIServiceService.GetLikedServices(userId);
 
             if (LikedServicesResult == null)
             {
@@ -267,8 +278,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("likeService")]
-    public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService){
-        
+    public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService)
+    {
+
         try
         {
             var LikeResult = await _AIServiceService.LikeService(likeService.UserId, likeService.AiServiceId);
@@ -292,8 +304,9 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpPost("dislikeService")]
-    public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService){
-        
+    public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService)
+    {
+
         try
         {
             var DislikeResult = await _AIServiceService.DislikeService(likeService.UserId, likeService.AiServiceId);
@@ -317,9 +330,10 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpGet("reviewedServices/{id}")]
-    public async Task<IActionResult> GetUserReviewedServicesById(long id){
-        
-        
+    public async Task<IActionResult> GetUserReviewedServicesById(long id)
+    {
+
+
         if (id <= 0)
         {
             var response = new ApiResponse<bool>(false, "User not exist", false);

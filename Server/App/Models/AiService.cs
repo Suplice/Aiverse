@@ -34,6 +34,8 @@ namespace Server.App.Models
         public int Reviews { get; set; }
         [Column("Status")]
         public string Status { get; set; }
+        [Column("ServiceURL")]
+        public string ServiceURL { get; set; }
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; }
         [Column("CreatorId")]
