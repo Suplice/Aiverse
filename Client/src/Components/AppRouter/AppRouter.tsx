@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useActionData } from "react-router-dom";
 import SignUp from "../../Pages/SignUp/SignUp";
 import SignIn from "../../Pages/SignIn/SignIn";
-import { AuthProvider } from "../../Utils/Context/AuthContext";
+import { AuthProvider, useAuth } from "../../Utils/Context/AuthContext";
 import UserPanel from "../../Pages/UserPanel/UserPanel";
 import ManagerPanel from "../../Pages/ManagerPanel/ManagerPanel";
 import LandingPage from "../../Pages/LandingPage/LandingPage";

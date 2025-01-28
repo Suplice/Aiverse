@@ -1,0 +1,1 @@
+export type GalleryImages = (File | Blob)[] | undefined

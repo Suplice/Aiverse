@@ -33,11 +33,13 @@ public class AIServiceService : IAIServiceService
 
         var newService = new AiService
         {
+            CreatorId = service.CreatorId,
             Title = service.Title,
             Description = service.Description,
             FullDescription = service.FullDescription,
             Price = service.Price,
             Image = filePath,
+            ServiceURL = service.ServiceURL,
             Stars = 0,
             Reviews = 0,
             Status = "Pending",
@@ -68,7 +70,8 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
-    public async Task<List<Review>?> GetReviews(long serviceId){
+    public async Task<List<Review>?> GetReviews(long serviceId)
+    {
         var result = await _AIServiceRepository.GetReviews(serviceId);
 
         return result;
@@ -95,14 +98,14 @@ public class AIServiceService : IAIServiceService
 
     public List<Comment>? GetReviewComments(long reviewId)
     {
-        var result =  _AIServiceRepository.GetReviewComments(reviewId);
+        var result = _AIServiceRepository.GetReviewComments(reviewId);
 
         return result;
     }
 
     public List<Comment>? GetCommentComments(long commentId)
     {
-        var result =  _AIServiceRepository.GetCommentReplies(commentId);
+        var result = _AIServiceRepository.GetCommentReplies(commentId);
 
         return result;
     }
