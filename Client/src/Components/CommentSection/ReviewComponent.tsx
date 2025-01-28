@@ -8,6 +8,8 @@ import CommentComponent from "./CommentComponent";
 import AddCommentComponent from "./AddCommentComponent";
 import Controls from "./Controls";
 import { User } from "../../Utils/Models/User";
+import { Avatar } from "@mantine/core";
+import { useAuth } from "../../Utils/Context/AuthContext";
 
 interface ReviewComponentProps {
   key: number;
@@ -36,9 +38,11 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>("");
   const [isSendingReply, setIsSendingReply] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [reviewUser, setReviewUser] = useState<User>();
   const [isShowingComments, setIsShowingComments] = useState<boolean>(false);
   const [isLoadingComments, setIsLoadingComments] = useState<boolean>(false);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,15 +62,13 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
         if (!response.ok) {
           console.error(result);
         }
-        setUser(result);
-        console.log(result);
+        setReviewUser(result);
+
+        console.log("fetched user for review", result);
       } catch (error) {
         console.log(error);
       }
     };
-
-    // TO DO: get user data and image from the server
-    // TO DO: get all comments for review
 
     fetchUser();
   }, []);
@@ -167,14 +169,14 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
 
   return (
     <div className="grid grid-cols-[40px_auto] grid-rows-[40px_auto]  ">
-      <img
-        src="https://placehold.co/400"
-        alt="User"
-        className="w-9/12 rounded-full self-center place-self-center"
-      ></img>
+      {reviewUser ? (
+        <Avatar name={reviewUser.Name?.at(0) ?? "G"}></Avatar>
+      ) : (
+        <Avatar radius="xl"></Avatar>
+      )}
       <Block direction="row" className="ml-3 " gap={3} align="center">
         <TextField color="white" className="text-lg">
-          {user?.Name ? user?.Name : "Anonymous"}
+          {reviewUser?.Name ? reviewUser?.Name : "Guest"}
         </TextField>
         <Block className="text-sm" direction="row" align="center" gap={1}>
           <TiStarFullOutline className="text-yellow-300" />

@@ -13,12 +13,14 @@ const Categories = ["Video", "Music", "Art", "LLM"];
 
 interface FilterButtonsProps {
   handleFilter: (searchParams: SearchParams) => void;
+  handleRemoveFilters: () => void;
   isFiltering: boolean;
 }
 
 const FilterButtons: React.FC<FilterButtonsProps> = ({
   handleFilter,
   isFiltering,
+  handleRemoveFilters,
 }) => {
   const [isCategoryMenuVisible, setIsCategoryMenuVisible] =
     useState<boolean>(false);
@@ -230,7 +232,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       <Block className="relative " align="center" gap={4} direction="row">
         <div className="relative flex flex-row gap-4 items-center ">
           <Tooltip label="Remove filters" position="bottom" withArrow>
-            <div>
+            <div onClick={handleRemoveFilters}>
               <FcClearFilters size={24} className="hover:cursor-pointer" />
             </div>
           </Tooltip>
