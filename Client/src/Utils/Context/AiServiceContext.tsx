@@ -13,6 +13,7 @@ interface AiServiceContextType {
   setLikedServices: (likedServices: number[]) => void;
   handleLike: (data: HandleLike) => Promise<void>;
   handleUnLike: (data: HandleLike) => Promise<void>;
+  fetchServices: () => Promise<void>;
 }
 
 const AiServiceContext = createContext<AiServiceContextType | undefined>(
@@ -31,12 +32,28 @@ export const AiServiceProvider = ({
 
   const fetchServices = async () => {
     try {
+      const cachedServices = sessionStorage.getItem("services");
+      const cachedTimestamp = sessionStorage.getItem("servicesTimestamp");
+
+      if (
+        cachedServices &&
+        cachedTimestamp &&
+        Date.now() - parseInt(cachedTimestamp, 10) < 30000
+      ) {
+        setServices(JSON.parse(cachedServices));
+        console.log("Użyto cache dla serwisów.");
+        return;
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/aiservice/getall`
       );
       const data = await response.json();
       setServices(data.data);
-      console.log(data.data);
+
+      sessionStorage.setItem("services", JSON.stringify(data.data));
+      sessionStorage.setItem("servicesTimestamp", Date.now().toString());
+      console.log("Pobrano serwisy z API i zapisano w cache.");
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +115,6 @@ export const AiServiceProvider = ({
         `${import.meta.env.VITE_API_URL}/aiservice/likedbyuser/${user?.Id}`
       );
       const data = await response.json();
-      console.log(data);
       setLikedServices(data.data);
     } catch (error) {
       console.log(error);
@@ -167,13 +183,10 @@ export const AiServiceProvider = ({
 
   useEffect(() => {
     fetchServices();
-
-    console.log("fetching services");
   }, []);
 
   useEffect(() => {
     if (user) {
-      console.log("fetching services liked by user", user);
       fetchServicesLikedByUser();
     }
   }, []);
@@ -190,6 +203,7 @@ export const AiServiceProvider = ({
         setLikedServices,
         handleLike,
         handleUnLike,
+        fetchServices,
       }}
     >
       {children}

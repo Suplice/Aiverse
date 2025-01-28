@@ -62,14 +62,16 @@ const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
         </BlockTextField>
       </Block>
       <Block className="flex-wrap" gap={1} direction="row">
-        {Categories.map((category) => (
-          <BlockTextField
-            color="white"
-            className="bg-[#2B2D30] px-2 py-1 rounded-lg"
-          >
-            {category}
-          </BlockTextField>
-        ))}
+        {Categories &&
+          Categories.length > 0 &&
+          Categories.map((category) => (
+            <BlockTextField
+              color="white"
+              className="bg-[#2B2D30] px-2 py-1 rounded-lg"
+            >
+              {category}
+            </BlockTextField>
+          ))}
       </Block>
       <div className="absolute  right-0 p-3 text-center top-1/2 ">
         <Tooltip label="View Service" position="top" withArrow>

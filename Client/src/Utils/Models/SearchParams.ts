@@ -1,5 +1,5 @@
 export type SearchParams = {
   priceRange: [number, number];
-  searchText: string;
+  searchText?: string;
   categories: string[];
 };
