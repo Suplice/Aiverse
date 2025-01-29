@@ -57,4 +57,6 @@ public class FileService
 
         return $"/{relativeFolder}/{fileName}"; // Zwraca ścieżkę względną
     }
+
+
 }

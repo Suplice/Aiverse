@@ -61,6 +61,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
           justify="between"
         >
           <LandingServiceCardMainData
+            Id={Id}
             image={Image}
             title={Title}
             stars={Stars}

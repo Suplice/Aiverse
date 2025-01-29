@@ -65,6 +65,35 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    [HttpGet("getservicegallery")]
+    public async Task<IActionResult> GetServiceGallery(string serviceTitle)
+    {
+
+        var galleryPath = Path.Combine("wwwroot", "AIServiceImages", serviceTitle, "galleryFiles");
+        List<string> galleryImages = new List<string>();
+
+        if (Directory.Exists(galleryPath))
+        {
+            var files = Directory.GetFiles(galleryPath);
+            galleryImages = files.Select(file => Path.Combine("/AIServiceImages", serviceTitle, "galleryFiles", Path.GetFileName(file))).ToList();
+        }
+
+        Console.WriteLine(galleryImages);
+
+        if (galleryImages == null)
+        {
+            var response = new ApiResponse<bool>(false, "No images in service Gallery", false);
+            return BadRequest(response);
+        }
+
+        Console.WriteLine(galleryImages);
+
+        var correctResponse = new ApiResponse<List<string>>(true, "Images found", galleryImages);
+
+        return Ok(correctResponse);
+
+    }
+
     [HttpPost("addservice")]
     public async Task<IActionResult> AddNewService(RequestAIServiceDTO service)
     {

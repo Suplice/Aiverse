@@ -20,7 +20,7 @@ const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
       {/* Sekcja obrazu */}
       <div className="md:w-1/4 w-full flex justify-center">
         <img
-          src="https://picsum.photos/id/593/400/400"
+          src={`${import.meta.env.VITE_API_URL}${service.Image}`}
           alt={service.Title}
           className="rounded-lg shadow-lg max-w-full"
         />

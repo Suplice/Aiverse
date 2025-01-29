@@ -22,7 +22,7 @@ const useFilteredServices = (services: AiService[]) => {
         const isCategoryMatch = service.Categories
           ? (categories[0] === "" && categories.length === 1) ||
             service.Categories.some((category) => categories.includes(category))
-          : false;
+          : true;
 
         console.log("isCategoryMatch", isCategoryMatch);
 
