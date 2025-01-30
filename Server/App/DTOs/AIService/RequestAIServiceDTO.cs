@@ -20,6 +20,9 @@ public class RequestAIServiceDTO
     public string Price { get; set; }
 
     [Required]
+    public List<string> Categories { get; set; }
+
+    [Required]
     public string ServiceURL { get; set; }
 
     [Required]
