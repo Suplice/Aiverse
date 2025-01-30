@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import { useAiService } from "../../Utils/Context/AiServiceContext";
 import BlockTextField from "../UI/BlockTextField";
 import TextField from "../UI/TextField";
 import LandingServiceCard from "./LandingServiceCard/LandingServiceCard";
+import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkeleton";
 
 const LandingPopularServices = () => {
   const { services } = useAiService();
+
+  useEffect(() => {
+    console.log(services);
+  });
 
   return (
     <div className="w-full mt-5 ">
@@ -17,9 +23,15 @@ const LandingPopularServices = () => {
       </BlockTextField>
 
       <div className=" border-2 border-[#3B3B3D] rounded-lg bg-[#121212] ">
-        {services.slice(0, 5).map((service, index) => (
-          <LandingServiceCard {...service} index={index} />
-        ))}
+        {services.length > 0 ? (
+          services
+            .slice(0, 5)
+            .map((service, index) => (
+              <LandingServiceCard {...service} index={index} />
+            ))
+        ) : (
+          <LoadingServicesSkeleton />
+        )}
       </div>
     </div>
   );

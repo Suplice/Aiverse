@@ -4,12 +4,13 @@ import Button from "../UI/Button";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { Review } from "../../Utils/Models/Review";
 import { useNavigate } from "react-router";
+import { useAiService } from "../../Utils/Context/AiServiceContext";
 
 interface AddReviewComponentProps {
   AiServiceId: number;
   alreadyReviewed: boolean;
   setReviewed: (review: Review) => void;
-  userReview?: Review; // Pass the existing review if available
+  userReview?: Review;
 }
 
 const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
@@ -26,6 +27,8 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
   const navigate = useNavigate();
 
   const { user } = useAuth();
+
+  const { handleServiceReviewed } = useAiService();
 
   const handleStarClick = (index: number) => {
     setRating(index);
@@ -65,12 +68,17 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
         console.error(result);
       } else {
         setReviewed(result.data);
+        handleChangeServiceData(result.data);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleChangeServiceData = (review: Review) => {
+    handleServiceReviewed(review, AiServiceId);
   };
 
   return (
