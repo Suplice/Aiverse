@@ -8,7 +8,8 @@ import TextField from "../UI/TextField";
 const FormsToCheck = () => {
   const { services, updateService } = useAiService();
 
-  const pendingServices = services.filter((s) => s.Status === "Pending");
+  //const pendingServices = services.filter((s) => s.Status === "Pending");
+  const pendingServices = services
   const [selectedForm, setSelectedForm] = useState<AiService | null>(null);
 
   if (pendingServices.length === 0) {
