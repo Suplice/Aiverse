@@ -79,7 +79,7 @@ const FormInput: React.FC<FormInputProps> = ({ formData, onChange }) => {
         type="text"
         id="service_url"
         name="service_url"
-        className="w-full bg-[#212325] border border-gray-600 mb-2 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full bg-[#212325] border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         value={formData.ServiceURL}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           onChange("ServiceURL", e.target.value)

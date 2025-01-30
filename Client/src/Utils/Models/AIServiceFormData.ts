@@ -7,6 +7,7 @@ export type AIServiceFormData = {
     FullDescription: string;
     Price: string;
     Image?: File | undefined;
+    Categories: string[];
     ServiceURL: string;
     GalleryImages: GalleryImages;
   }
