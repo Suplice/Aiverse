@@ -2,6 +2,7 @@ import { useState, useContext, createContext, useEffect } from "react";
 import { AiService } from "../Models/AiService";
 import { useAuth } from "./AuthContext";
 import { HandleLike } from "../Models/handleLike";
+import { Review } from "../Models/Review";
 
 interface AiServiceContextType {
   services: AiService[];
@@ -14,6 +15,7 @@ interface AiServiceContextType {
   handleLike: (data: HandleLike) => Promise<void>;
   handleUnLike: (data: HandleLike) => Promise<void>;
   fetchServices: () => Promise<void>;
+  handleServiceReviewed: (review: Review, aiServiceId: number) => void;
 }
 
 const AiServiceContext = createContext<AiServiceContextType | undefined>(
@@ -181,6 +183,18 @@ export const AiServiceProvider = ({
     }
   };
 
+  const handleServiceReviewed = (review: Review, aiServiceId: number) => {
+    const service = services.find((s) => s.Id === aiServiceId);
+
+    service!.Stars =
+      (service!.Stars * service!.Reviews + review.Stars) /
+      (service!.Reviews + 1);
+
+    service!.Reviews += 1;
+
+    setServices([...services.filter((s) => s !== undefined), service!]);
+  };
+
   useEffect(() => {
     fetchServices();
   }, []);
@@ -204,6 +218,7 @@ export const AiServiceProvider = ({
         handleLike,
         handleUnLike,
         fetchServices,
+        handleServiceReviewed,
       }}
     >
       {children}

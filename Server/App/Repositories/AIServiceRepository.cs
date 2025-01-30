@@ -66,20 +66,47 @@ public class AIServiceRepository : IAIServiceRepository
     }
 
     public async Task<Review?> AddReview(Review review)
+{
+    await using var transaction = await _context.Database.BeginTransactionAsync();
+
+    try
     {
-        try
+
+        var response = await _supabaseClient
+                                .From<Review>()
+                                .Insert(review);
+
+        if (response == null || response.Model == null)
         {
-            var response = await _supabaseClient
-                                    .From<Review>()
-                                    .Insert(review);
-            return response.Model;
+            throw new Exception("Failed to insert review into Supabase.");
         }
-        catch (Exception e)
+
+        var service =  _context.AiServices.SingleOrDefault(s => s.Id == review.AiServiceId);
+        
+        if (service == null)
         {
-            Console.WriteLine($"{e.Message}");
-            return null;
+            throw new Exception("Service not found.");
         }
+
+ 
+        service.Stars = ((service.Stars * service.Reviews) + review.Stars) / (service.Reviews + 1.0);
+        service.Reviews++;
+
+        _context.AiServices.Update(service);
+        await _context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
+
+        return response.Model;
     }
+    catch (Exception e)
+    {
+        await transaction.RollbackAsync();
+        Console.WriteLine($"{e.Message}");
+        return null;
+    }
+}
+
 
     public async Task<List<Review>?> GetReviews(long serviceId)
     {
