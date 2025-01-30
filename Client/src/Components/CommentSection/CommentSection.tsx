@@ -22,7 +22,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/aiservice/GetReviews/${7}`,
+          `${import.meta.env.VITE_API_URL}/aiservice/GetReviews/${AiServiceId}`,
           {
             method: "GET",
             headers: {
@@ -78,6 +78,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
                 : undefined
             }
           />
+
+          <div className="flex justify-between items-center px-3 py-2  rounded-md">
+            <h2 className="font-extrabold text-2xl text-white">
+              {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
+            </h2>
+          </div>
+
           {reviews &&
             reviews.map((review) => (
               <ReviewComponent

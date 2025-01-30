@@ -5,7 +5,7 @@ import Block from "../../Components/UI/Block";
 
 const LandingPage = () => {
   return (
-    <Block className="bg-[#121212] p-6" direction="column">
+    <Block className="bg-[#121212] p-6 " direction="column">
       <LandingNavbar />
       <LandingServiceSearch />
       <LandingPopularServices />
