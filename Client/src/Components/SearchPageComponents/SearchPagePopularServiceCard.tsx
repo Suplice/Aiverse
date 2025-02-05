@@ -32,7 +32,7 @@ const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
       align="center"
     >
       <img
-        src={Image}
+        src={`${import.meta.env.VITE_API_URL}${Image}`}
         alt={Title}
         className=" h-24 object-cover rounded-lg mb-5 aspect-auto"
       />

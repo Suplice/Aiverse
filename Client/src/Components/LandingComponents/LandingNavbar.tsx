@@ -86,10 +86,20 @@ const LandingNavbar = () => {
 
                 <BlockTextField
                   color="white"
-                  className="hover:bg-black/10 px-4 py-2 rounded-lg  transition-all duration-200 "
+                  className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-all duration-200"
+                  onClick={() => {
+                    navigate("/forms");
+                  }}
+                >
+                  <TextField value="Add Service" className="text-white" />
+                </BlockTextField>
+
+                <BlockTextField
+                  color="white"
+                  className="bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded-lg  transition-all duration-200 "
                   onClick={handleLogout}
                 >
-                  <TextField value="Logout" className="text-red/50" />
+                  <TextField value="Logout" className="text-white" />
                 </BlockTextField>
               </motion.div>
             )}
