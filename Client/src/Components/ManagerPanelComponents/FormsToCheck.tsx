@@ -116,7 +116,7 @@ const FormsToCheck = () => {
                   className="w-full md:w-1/4 px-2 flex-wrap md:flex-row "
                   align="center"
                 >
-                  <img src={form.Image} alt={form.Title} className="w-14 " />
+                  <img src={`${import.meta.env.VITE_API_URL}${form.Image}`} alt={form.Title} className="w-14 " />
                   <Block
                     direction="column"
                     gap={2}
