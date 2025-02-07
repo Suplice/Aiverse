@@ -39,6 +39,8 @@ builder.Services.AddScoped<IAIServiceService, AIServiceService>();
 builder.Services.AddScoped<IAIServiceRepository, AIServiceRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<FileService>();
 
 builder.Services.AddControllers()
@@ -59,7 +61,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<SupabaseOptions>(builder.Configuration.GetSection("Supabase"));
 
-builder.Services.AddScoped<Supabase.Client>(_ => 
+builder.Services.AddScoped<Supabase.Client>(_ =>
 new Supabase.Client(
     builder.Configuration["Supabase:Url"],
     builder.Configuration["Supabase:Key"],

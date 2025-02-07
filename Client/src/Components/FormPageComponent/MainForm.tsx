@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormInput from "./FormInput";
 import FormButtons from "./FormButtons";
 import FileUpload from "./FileUpload";
 import { AIServiceFormData } from "../../Utils/Models/AIServiceFormData";
 import GalleryUpload from "./GalleryUpload/GalleryUpload";
 import { GalleryImages } from "../../Utils/Models/ImageGallery";
-import { useActionData } from "react-router";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import { useNavigate } from "react-router";
+import CategoryCheckboxes from "./CategoryCheckboxes";
 
 const MainForm = () => {
 
-    const { user } = useAuth();
+    const { user, isAuthenticated} = useAuth();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if(!isAuthenticated){
+        navigate("/auth/signin");
+      }
+    },[])
 
     const [formData, setFormData] = useState<AIServiceFormData>({
         CreatorId: user?.Id ?? 0,
@@ -20,6 +29,7 @@ const MainForm = () => {
         Price: "",
         Image: undefined ,
         ServiceURL: "",
+        Categories: [],
         GalleryImages: undefined
       });
 
@@ -29,6 +39,14 @@ const MainForm = () => {
           [name]: value,
         }));
       }
+
+      const handleCategoryChange = (selected: string[]) => {
+        setFormData((prevData) => ({
+          ...prevData,
+          Categories: selected,
+        }));
+
+      };
 
       const handleChange = (name: keyof AIServiceFormData, value: string | File | null) => {
         setFormData((prevData) => ({
@@ -58,6 +76,10 @@ const MainForm = () => {
           });
         }
 
+        formData.Categories.forEach((category) => {
+          formDataToSend.append("Categories", category);
+        });
+
         for (const [key, value] of formDataToSend.entries()) {
             console.log(`${key}:`, value);
           }
@@ -72,6 +94,7 @@ const MainForm = () => {
       
             if (response.ok) {
               console.log("Data send succesfully");
+              navigate("/");
             } else {
                 console.log(data);
             }
@@ -82,8 +105,9 @@ const MainForm = () => {
 
       
     return (
-        <form className=" w-3/4 form bg-[#252729] shadow-lg rounded-lg p-6 text-gray-200 md:w-1/2" onSubmit={handleSubmit}>
+        <form className=" w-3/4 form bg-[#252729] shadow-lg rounded-lg p-6 text-gray-200 md:w-1/2 mt-8 mb-8" onSubmit={handleSubmit}>
             <FormInput formData={formData} onChange={handleChange }/>
+            <CategoryCheckboxes selectedCategories={formData.Categories} onChange={handleCategoryChange}/>
             <FileUpload onFileChange={(file) => handleChange("Image", file)} />
             <GalleryUpload onFileChange={(files: GalleryImages) => handleChangeImages("GalleryImages", files )}/>
             <FormButtons />

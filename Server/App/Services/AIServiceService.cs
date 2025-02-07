@@ -6,15 +6,41 @@ public class AIServiceService : IAIServiceService
 
     private readonly IAIServiceRepository _AIServiceRepository;
 
-    public AIServiceService(IAIServiceRepository AIServiceRepository)
+    private readonly ICategoryRepository _CategoryRepository;
+
+    public AIServiceService(IAIServiceRepository AIServiceRepository, ICategoryRepository CategortRepository)
     {
+        _CategoryRepository = CategortRepository;
         _AIServiceRepository = AIServiceRepository;
     }
 
-    public async Task<List<AiService>?> GetAllServices()
+    public async Task<List<ResponseAIServiceDTO>?> GetAllServices()
     {
 
-        var result = await _AIServiceRepository.GetAllServices();
+        var services = await _AIServiceRepository.GetAllServices();
+
+        var result = new List<ResponseAIServiceDTO>();
+
+        foreach (var service in services)
+        {
+            var categoriesList = await _CategoryRepository.getCategoryByAi(service.Id);
+            var responseAi = new ResponseAIServiceDTO
+            {
+                Id = service.Id,
+                Title = service.Title,
+                Description = service.Description,
+                Price = service.Price,
+                Image = service.Image,
+                Stars = service.Stars,
+                Reviews = service.Reviews,
+                Status = service.Status,
+                ServiceURL = service.ServiceURL,
+                CreatedAt = service.CreatedAt,
+                Categories = categoriesList,
+                CreatorId = service.CreatorId
+            };
+            result.Add(responseAi);
+        }
 
         return result;
 

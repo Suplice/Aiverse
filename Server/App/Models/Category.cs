@@ -7,18 +7,20 @@ using Supabase.Postgrest.Models;
 using ColumnAttribute = System.ComponentModel.DataAnnotations.Schema.ColumnAttribute;
 using TableAttribute = Supabase.Postgrest.Attributes.TableAttribute;
 
-namespace Server.App.Models {
-[Table("Categories")]
-public class Category: BaseModel {
+namespace Server.App.Models
+{
+    [Table("Categories")]
+    public class Category : BaseModel
+    {
 
-    public Category(){}
-    [PrimaryKey("Id",false)]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [JsonIgnore]
-    public long Id { get; set; } 
+        public Category() { }
+        [PrimaryKey("Id", false)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
+        public long Id { get; set; }
 
-    [Column("FunctionName")]
-    public string Name { get; set; }
+        [Column("Name")]
+        public string Name { get; set; }
 
-}
+    }
 }
