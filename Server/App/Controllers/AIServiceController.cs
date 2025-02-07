@@ -12,11 +12,14 @@ public class AIServiceController : ControllerBase
 
     private readonly IAIServiceService _AIServiceService;
 
+    private readonly ICategoryService _CategoryService;
+
     private readonly FileService _fileService;
 
 
-    public AIServiceController(IAIServiceService AIServiceService, FileService fileService)
+    public AIServiceController(IAIServiceService AIServiceService, FileService fileService, ICategoryService CategoryService)
     {
+        _CategoryService = CategoryService;
         _AIServiceService = AIServiceService;
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
     }
@@ -37,7 +40,7 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
 
-        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServicesResult);
+        var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServicesResult);
 
         return Ok(correctResponse);
     }
@@ -115,10 +118,40 @@ public class AIServiceController : ControllerBase
                 return BadRequest(response);
             }
 
+            var resultCategories = await _CategoryService.getAllCategories();
+
+            foreach (var Category in resultCategories)
+            {
+                Console.WriteLine(Category.Name);
+            }
+
+            foreach (var category in resultCategories)
+            {
+                foreach (var DtoCategory in service.Categories)
+                {
+                    if (DtoCategory == category.Name)
+                    {
+                        var serviceId = ServiceResult.Id;
+                        var categoryId = category.Id;
+
+                        var ServiceCategory = new AiServicesCategories
+                        {
+                            AiServiceId = serviceId,
+                            CategoryId = categoryId
+                        };
+
+                        Console.WriteLine(serviceId);
+                        Console.WriteLine(categoryId);
+
+                        await _CategoryService.addAiServiceCategory(ServiceCategory);
+                    }
+                }
+
+            }
+
             var correctResponse = new ApiResponse<AiService>(true, "Service added", ServiceResult);
 
             return Ok(correctResponse);
-
 
         }
         catch (Exception e)

@@ -12,6 +12,6 @@ public class ResponseAIServiceDTO
     public string Status { get; set; }
     public string ServiceURL { get; set; }
     public DateTime CreatedAt { get; set; }
+    public List<string> Categories { get; set; }
     public long CreatorId { get; set; }
-    public List<string> GalleryImages { get; set; }
 }

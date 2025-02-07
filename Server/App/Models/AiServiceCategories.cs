@@ -7,19 +7,23 @@ using Supabase.Postgrest.Models;
 using ColumnAttribute = System.ComponentModel.DataAnnotations.Schema.ColumnAttribute;
 using TableAttribute = Supabase.Postgrest.Attributes.TableAttribute;
 
-[Table("AiServicesCategories")]
-public class AiServicesCategories: BaseModel {
+namespace Server.App.Models
+{
+    [Table("AiServicesCategories")]
+    public class AiServicesCategories : BaseModel
+    {
 
-    public AiServicesCategories(){}
-    [PrimaryKey("Id",false)]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [JsonIgnore]
-    public long Id { get; set; } 
+        public AiServicesCategories() { }
+        [PrimaryKey("Id", false)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
+        public long Id { get; set; }
 
-    [Column("AiService")]
-    public int AiServiceId { get; set; }
+        [Column("AiServiceId")]
+        public long AiServiceId { get; set; }
 
-    [Column("Category")]
-    public int CategoryId { get; set; }
+        [Column("CategoryId")]
+        public long CategoryId { get; set; }
 
+    }
 }
