@@ -108,15 +108,14 @@ public class AIServiceRepository : IAIServiceRepository
 }
 
 
-    public async Task<List<Review>?> GetReviews(long serviceId)
+    public  List<Review>? GetReviews(long serviceId)
     {
         try
         {
-            var response = await _supabaseClient
-                                    .From<Review>()
-                                    .Where(r => r.AiServiceId == serviceId)
-                                    .Get();
-            return response.Models;
+
+            var test = _context.Reviews.Where(r => r.AiServiceId == serviceId).ToList(); 
+
+            return test;
         }
         catch (Exception e)
         {

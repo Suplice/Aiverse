@@ -45,7 +45,9 @@ const useFilteredServices = (services: AiService[]) => {
 
       console.log("newServices", newServices);
 
-      setFilteredServices(newServices);
+      setFilteredServices(
+        newServices.filter((service) => service.Status === "Verified")
+      );
       setIsLoading(false);
     }, 2000);
   };

@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Route, Routes, useActionData } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "../../Pages/SignUp/SignUp";
 import SignIn from "../../Pages/SignIn/SignIn";
-import { AuthProvider, useAuth } from "../../Utils/Context/AuthContext";
+import { AuthProvider } from "../../Utils/Context/AuthContext";
 import UserPanel from "../../Pages/UserPanel/UserPanel";
 import ManagerPanel from "../../Pages/ManagerPanel/ManagerPanel";
 import LandingPage from "../../Pages/LandingPage/LandingPage";
@@ -11,9 +11,8 @@ import "@mantine/core/styles.css";
 import { AiServiceProvider } from "../../Utils/Context/AiServiceContext";
 import FormPage from "../../Pages/FormPage/FormPage";
 import AIViewPage from "../../Pages/AIViewPage/AIViewPage";
-import CommentSection from "../CommentSection/CommentSection";
 import { UserProvider } from "../../Utils/Context/UserContext";
-
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRouter = () => {
   return (
@@ -26,21 +25,50 @@ const AppRouter = () => {
                 <Route path="SignUp" element={<SignUp />}></Route>
                 <Route path="SignIn" element={<SignIn />}></Route>
               </Route>
-              <Route path="user">
-                <Route path="panel" element={<UserProvider> <UserPanel /> </UserProvider>}></Route>
+
+              <Route path="services" element={<SearchServices />}></Route>
+              <Route path="*" element={<LandingPage />}></Route>
+
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["USER", "MODERATOR", "ADMIN"]}
+                  />
+                }
+              >
+                <Route path="user">
+                  <Route
+                    path="panel"
+                    element={
+                      <UserProvider>
+                        <UserPanel />
+                      </UserProvider>
+                    }
+                  ></Route>
+                </Route>
               </Route>
-              <Route path="manager">
-                <Route path="panel" element={<ManagerPanel />}></Route>
+
+              <Route
+                element={
+                  <ProtectedRoute allowedRoles={["MODERATOR", "ADMIN"]} />
+                }
+              >
+                <Route path="manager">
+                  <Route path="panel" element={<ManagerPanel />}></Route>
+                </Route>
               </Route>
 
               <Route path="aiservice/:id" element={<AIViewPage />}></Route>
-              <Route path="forms" element={<FormPage />}></Route>
-              <Route path="services" element={<SearchServices />}></Route>
-              <Route path="*" element={<LandingPage />}></Route>
+
               <Route
-                path="Comments"
-                element={<CommentSection AiServiceId={1} />}
-              ></Route>
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["USER", "MODERATOR", "ADMIN"]}
+                  />
+                }
+              >
+                <Route path="forms" element={<FormPage />}></Route>
+              </Route>
             </Routes>
           </MantineProvider>
         </AiServiceProvider>

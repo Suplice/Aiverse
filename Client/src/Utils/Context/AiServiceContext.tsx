@@ -3,6 +3,7 @@ import { AiService } from "../Models/AiService";
 import { useAuth } from "./AuthContext";
 import { HandleLike } from "../Models/handleLike";
 import { Review } from "../Models/Review";
+import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
 
 interface AiServiceContextType {
   services: AiService[];
@@ -30,10 +31,13 @@ export const AiServiceProvider = ({
   const [services, setServices] = useState<AiService[]>([]);
   const [likedServices, setLikedServices] = useState<number[]>([]);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const { user } = useAuth();
 
   const fetchServices = async () => {
     try {
+      setIsLoading(true);
       const cachedServices = sessionStorage.getItem("services");
       const cachedTimestamp = sessionStorage.getItem("servicesTimestamp");
 
@@ -52,12 +56,15 @@ export const AiServiceProvider = ({
       );
       const data = await response.json();
       setServices(data.data);
+      console.log(data.data);
 
       sessionStorage.setItem("services", JSON.stringify(data.data));
       sessionStorage.setItem("servicesTimestamp", Date.now().toString());
       console.log("Pobrano serwisy z API i zapisano w cache.");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -221,7 +228,7 @@ export const AiServiceProvider = ({
         handleServiceReviewed,
       }}
     >
-      {children}
+      {isLoading ? <LoadingPage /> : children}
     </AiServiceContext.Provider>
   );
 };

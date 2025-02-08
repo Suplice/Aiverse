@@ -23,7 +23,7 @@ const UserPanel = () => {
 
   useEffect(() => {
     console.log(userImage);
-  })
+  });
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -32,12 +32,11 @@ const UserPanel = () => {
     }
   };
   return (
-    <Block className="flex flex-col h-screen bg-gradient-to-b bg-[#121212]">
+    <Block className="flex flex-col h-screen bg-gradient-to-b bg-[#121212] ">
       <Block className="py-6 px-6 bg-[#121212]">
         <LandingNavbar />
       </Block>
       <Block direction="column" className="flex-1">
-        {/* User Card */}
         <Block
           className="bg-gradient-to-r bg-[#1E1E1E] mt-10 flex items-center shadow-2xl border-2 border-[#333333] rounded-3xl py-8 px-10 w-11/12 max-w-4xl mx-auto"
           direction="row"
@@ -68,7 +67,6 @@ const UserPanel = () => {
             />
           </Block>
 
-
           <Block direction="column" className="ml-8 text-center">
             <BlockTextField
               value={user?.Name || "Guest"}
@@ -81,13 +79,11 @@ const UserPanel = () => {
           </Block>
         </Block>
 
-        {/* Separator */}
         <Block
           className="border-t-2 border-[#444444] my-12 w-11/12 mx-auto"
           children={undefined}
         ></Block>
 
-        {/* Navigation Buttons */}
         <Block className="bg-[#121212]">
           <Block
             direction="row"
@@ -113,11 +109,10 @@ const UserPanel = () => {
           </Block>
         </Block>
 
-        {/* Content Section */}
-        <Block align="center" className="mt-16 bg-[#121212]">
+        <Block align="center" className="mt-16 bg-[#121212] pb-12">
           <Block className="w-4/5">
             {selectedSubPage === "Settings" && <UserSettings />}
-            {selectedSubPage === "Liked" &&  <UserLikedServices/>}
+            {selectedSubPage === "Liked" && <UserLikedServices />}
             {selectedSubPage === "Rated" && user?.Id !== undefined && (
               <UserReviewedServices userId={user.Id} />
             )}

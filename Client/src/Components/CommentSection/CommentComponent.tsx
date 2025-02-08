@@ -72,7 +72,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     // TO DO: get all comments for review
 
     fetchUser();
-  }, []);
+  }, [UserId]);
 
   const handleReplyClick = () => {
     setIsReplying(!isReplying);
@@ -150,6 +150,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   };
 
   const formatDate = () => {
+    console.log(createdAt);
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));
