@@ -2,7 +2,6 @@ import { TiStarFullOutline } from "react-icons/ti";
 import BlockTextField from "../../UI/BlockTextField";
 import TextField from "../../UI/TextField";
 import Block from "../../UI/Block";
-import { useNavigate } from "react-router-dom";
 
 interface LandingServiceCardMainDataProps {
   Id: number;
@@ -17,23 +16,19 @@ interface LandingServiceCardMainDataProps {
 const LandingServiceCardMainData: React.FC<LandingServiceCardMainDataProps> = (
   props
 ) => {
-  const navigate = useNavigate();
-
-  const handleNavigation = () => {
-    navigate(`/aiservice/${props.Id}`);
-  };
-
   return (
     <>
       <Block
         direction="column"
         gap={2}
-        className="w-full md:w-1/4 px-2 flex-wrap md:flex-row hover: hover:scale-105 transition-transform duration-200"
+        className="w-full md:w-1/4 px-2 flex-wrap md:flex-row hover:  transition-transform duration-200"
         align="center"
-        onClick={handleNavigation}
-        style={{ cursor: "pointer" }}
       >
-        <img src={`${import.meta.env.VITE_API_URL}${props.image}`} alt={props.title} className="w-14 " />
+        <img
+          src={`${import.meta.env.VITE_API_URL}${props.image}`}
+          alt={props.title}
+          className="w-14 "
+        />
         <Block
           direction="column"
           gap={2}

@@ -12,6 +12,7 @@ interface LandingServiceCardButtonProps {
   setIsDescriptionVisible: (value: boolean) => void;
   isAuthenticated: boolean;
   id: number;
+  ServiceURL: string;
 }
 
 const LandingServiceCardButtons: React.FC<LandingServiceCardButtonProps> = (
@@ -34,6 +35,9 @@ const LandingServiceCardButtons: React.FC<LandingServiceCardButtonProps> = (
           <Button
             className="rounded-full px-4 py-4 border-black bg-black hover:bg-slate-500"
             TextColor="white"
+            onClick={() => {
+              window.open(props.ServiceURL, "_blank");
+            }}
           >
             <LuExternalLink size={24} />
           </Button>
@@ -46,7 +50,7 @@ const LandingServiceCardButtons: React.FC<LandingServiceCardButtonProps> = (
         position="top"
         withArrow
       >
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <Button
             onClick={() =>
               props.setIsDescriptionVisible(!props.isDescriptionVisible)
@@ -64,7 +68,7 @@ const LandingServiceCardButtons: React.FC<LandingServiceCardButtonProps> = (
         </div>
       </Tooltip>
       {props.isAuthenticated && (
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           {likedServices.some((s) => s === props.id) ? (
             <Tooltip
               label="Remove from liked services"
