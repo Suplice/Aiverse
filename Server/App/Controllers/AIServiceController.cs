@@ -45,6 +45,21 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    [HttpGet("getpendingservices")]
+    public async Task<IActionResult> GetPendingServices(){
+        var ServicesResult = await _AIServiceService.GetPendingServices();
+
+        if (ServicesResult == null)
+        {
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServicesResult);
+
+        return Ok(correctResponse);
+    }
+
     [HttpGet("getservice/{serviceId}")]
     public async Task<IActionResult> GetServiceById(long serviceId)
     {

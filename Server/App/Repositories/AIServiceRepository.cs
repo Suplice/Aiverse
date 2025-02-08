@@ -303,4 +303,15 @@ public class AIServiceRepository : IAIServiceRepository
         }
     }
 
+    public async Task<List<AiService>?> GetPendingServices(){
+        var response = await _supabaseClient
+                                .From<AiService>()
+                                .Where(s => s.Status == "PENDING")
+                                .Get();
+
+        var result = response.Models;
+        return result;
+
+    }
+
 }

@@ -14,6 +14,35 @@ public class AIServiceService : IAIServiceService
         _AIServiceRepository = AIServiceRepository;
     }
 
+    public async Task<List<ResponseAIServiceDTO>?> GetPendingServices(){
+        var services = await _AIServiceRepository.GetPendingServices();
+        var result = new List<ResponseAIServiceDTO>();
+
+        foreach (var service in services!){
+
+            var categoriesList = await _CategoryRepository.getCategoryByAi(service.Id);
+            var responseAi = new ResponseAIServiceDTO
+            {
+                Id = service.Id,
+                Title = service.Title,
+                Description = service.Description,
+                FullDescription = service.FullDescription,
+                Price = service.Price,
+                Image = service.Image,
+                Stars = service.Stars,
+                Reviews = service.Reviews,
+                Status = service.Status,
+                ServiceURL = service.ServiceURL,
+                CreatedAt = service.CreatedAt,
+                Categories = categoriesList,
+                CreatorId = service.CreatorId
+            };
+            result.Add(responseAi);
+        }
+
+        return result;
+    }
+
     public async Task<List<ResponseAIServiceDTO>?> GetAllServices()
     {
 
@@ -69,7 +98,7 @@ public class AIServiceService : IAIServiceService
             ServiceURL = service.ServiceURL,
             Stars = 0,
             Reviews = 0,
-            Status = "Pending",
+            Status = "PENDING",
             CreatedAt = DateTime.Now
         };
 
