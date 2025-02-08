@@ -7,7 +7,7 @@ import Block from "../UI/Block";
 import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkeleton";
 
 const UserReviewedServices = ({ userId }: { userId: number }) => {
-  const [likedServices, setLikedServices] = useState<AiService[]>([]);
+  const [reviewedServices, setReviewedServices] = useState<AiService[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   console.log("Fetching liked services for userId:", userId);
@@ -17,12 +17,16 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
       try {
         setIsLoading(true);
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/reviewedServices/${userId}`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/aiservice/reviewedServices/${userId}`
+        );
         const data = await response.json();
-        setLikedServices(data.data);
+        setReviewedServices(data.data);
+
+        console.log(data.data);
 
         if (data.success) {
-          setLikedServices(data.data); 
+          setReviewedServices(data.data);
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -50,19 +54,21 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
         <LoadingServicesSkeleton />
       ) : (
         <div className="bg-[#121212] border-2 border-[#3B3B3D] rounded-lg">
-          {likedServices.length > 0 ? (
-            likedServices.map((service, index: number) => (
-                <LandingServiceCard
+          {reviewedServices.length > 0 ? (
+            reviewedServices.map((service, index: number) => (
+              <LandingServiceCard
                 key={service.Id}
                 index={index}
-                Image={service.Image} // Zmienna z obiektu `service`
-                Title={service.Title} // Zmienna z obiektu `service`
-                Stars={service.Stars} // Zmienna z obiektu `service`
-                Reviews={service.Reviews} // Zmienna z obiektu `service`
-                Categories={ ["Default Category"]} // Zmienna z obiektu `service`, z wartością domyślną
-                Price={service.Price} // Zmienna z obiektu `service`
-                Id={service.Id} 
-                Description={service.Description}                />
+                Image={service.Image}
+                Title={service.Title}
+                Stars={service.Stars}
+                Reviews={service.Reviews}
+                Categories={service.Categories}
+                Price={service.Price}
+                Id={service.Id}
+                ServiceURL={service.ServiceURL}
+                Description={service.Description}
+              />
             ))
           ) : (
             <BlockTextField

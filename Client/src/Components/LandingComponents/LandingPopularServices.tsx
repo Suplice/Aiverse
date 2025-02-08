@@ -23,8 +23,10 @@ const LandingPopularServices = () => {
       </BlockTextField>
 
       <div className=" border-2 border-[#3B3B3D] rounded-lg bg-[#121212] ">
-        {services.length > 0 ? (
+        {services.filter((service) => service.Status === "Verified").length >
+        0 ? (
           services
+            .filter((service) => service.Status === "Verified")
             .slice(0, 5)
             .map((service, index) => (
               <LandingServiceCard {...service} index={index} />

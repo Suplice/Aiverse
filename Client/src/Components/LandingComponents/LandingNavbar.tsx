@@ -12,7 +12,7 @@ import Block from "../UI/Block";
 const LandingNavbar = () => {
   const navigate = useNavigate();
 
-  const { isAuthenticated, Logout } = useAuth();
+  const { isAuthenticated, Logout, user } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
@@ -77,12 +77,13 @@ const LandingNavbar = () => {
                   <TextField value="Profile" color="black" />
                 </BlockTextField>
 
-                <BlockTextField
-                  color="white"
-                  className="hover:bg-black/10 px-4 py-2 rounded-lg transition-all duration-200"
-                >
-                  <TextField value="Settings" color="black" />
-                </BlockTextField>
+                {user?.Role === "MODERATOR" && (
+                  <BlockTextField
+                    value="Review Services"
+                    color="white"
+                    className=" transition-colors duration-200 cursor-pointer text-xl bg-slate-700 rounded-lg p-1 hover:bg-slate-600"
+                  ></BlockTextField>
+                )}
 
                 <BlockTextField
                   color="white"
@@ -148,30 +149,58 @@ const LandingNavbar = () => {
             align="center"
           >
             <BlockTextField
-              value="Hot Services"
+              value="Home"
               color="white"
               className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+              onClick={() => navigate("/")}
             ></BlockTextField>
             <BlockTextField
-              value="Search via AI"
+              value="Services"
               color="white"
               className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
-            ></BlockTextField>
-            <BlockTextField
-              value="Recently Added"
-              color="white"
-              className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+              onClick={() => {
+                const searchParams = new URLSearchParams({
+                  searchText: "",
+                  categories: [].join(","),
+                  priceRange: [0, 1000].join(","),
+                });
+
+                navigate(`/services?${searchParams.toString()}`);
+              }}
             ></BlockTextField>
           </Block>
           {isAuthenticated ? (
-            <BlockTextField
-              className="text-red/50"
-              onClick={() => {
-                navigate("/auth/SignIn");
-              }}
-            >
-              <TextField value="Logout" className="text-red/50" />
-            </BlockTextField>
+            <>
+              <BlockTextField
+                value="Profile"
+                color="white"
+                className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+                onClick={() => navigate("/user/panel")}
+              ></BlockTextField>
+              <BlockTextField
+                value="Add Service"
+                color="white"
+                className="hover:text-gray-800 transition-colors duration-200 cursor-pointer "
+                onClick={() => navigate("/forms")}
+              ></BlockTextField>
+
+              {user?.Role === "MODERATOR" && (
+                <BlockTextField
+                  value="Review Services"
+                  color="white"
+                  className="hover:text-gray-800 transition-colors duration-200 cursor-pointer text-xl"
+                ></BlockTextField>
+              )}
+
+              <BlockTextField
+                className="text-red/50"
+                onClick={() => {
+                  navigate("/auth/SignIn");
+                }}
+              >
+                <TextField value="Logout" className="text-red/50" />
+              </BlockTextField>
+            </>
           ) : (
             <Block className="space-y-2" align="center" direction="column">
               <BlockTextField
