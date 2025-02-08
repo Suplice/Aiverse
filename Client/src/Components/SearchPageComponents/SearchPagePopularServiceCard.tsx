@@ -3,8 +3,10 @@ import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { Tooltip } from "@mantine/core";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
+import { useNavigate } from "react-router";
 
 interface SearchPagePopularServiceCard {
+  Id: number;
   Title: string;
   Price: string;
   Image: string;
@@ -12,9 +14,12 @@ interface SearchPagePopularServiceCard {
   Reviews: number | string;
   Categories: string[];
   index: number;
+  ServiceURL: string;
 }
 
 const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
+  ServiceURL,
+  Id,
   Title,
   Price,
   Image,
@@ -23,13 +28,16 @@ const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
   Categories,
   index,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <Block
-      className={`w-full relative bg-[#121212] text-white    p-5   border-[#7B7B7D] ${
+      className={`w-full relative bg-[#121212] text-white cursor-pointer    p-5   border-[#7B7B7D] ${
         index === 0 ? "border-t-0 rounded-lg " : "border-t-2"
       }  `}
       direction="column"
       align="center"
+      onClick={() => navigate(`/aiservice/${Id}`)}
     >
       <img
         src={`${import.meta.env.VITE_API_URL}${Image}`}
@@ -73,8 +81,14 @@ const SearchPagePopularServiceCard: React.FC<SearchPagePopularServiceCard> = ({
             </BlockTextField>
           ))}
       </Block>
-      <div className="absolute  right-0 p-3 text-center top-1/2 ">
-        <Tooltip label="View Service" position="top" withArrow>
+      <div
+        className="absolute  right-0 p-3 text-center top-1/2 "
+        onClick={(e) => {
+          e.stopPropagation();
+          window.open(ServiceURL, "_blank");
+        }}
+      >
+        <Tooltip label="Visit service page" position="top" withArrow>
           <div>
             <FaArrowRightFromBracket
               size={24}

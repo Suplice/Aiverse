@@ -18,8 +18,9 @@ const SearchPageServices = () => {
 
   const { getParams, updateParams } = useSearchParams();
   const { inputRef, resetInput, lastInput } = useSearchInput("");
-  const { filteredServices, filterServices, isLoading } =
-    useFilteredServices(services);
+  const { filteredServices, filterServices, isLoading } = useFilteredServices(
+    services.filter((service) => service.Status === "Verified")
+  );
 
   useEffect(() => {
     const params = getParams;

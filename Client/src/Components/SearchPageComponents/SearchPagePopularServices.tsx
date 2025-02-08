@@ -30,13 +30,16 @@ const SearchPagePopularServices = () => {
         </BlockTextField>
       </div>
       <div className="border-2 border-[#4B4B4D] shadow-[0px_0px_12px_0px_#2d3748] relative rounded-lg">
-        {services.slice(0, 3).map((service, index) => (
-          <SearchPagePopularServiceCard
-            {...service}
-            index={index}
-            key={index}
-          />
-        ))}
+        {services
+          .filter((service) => service.Status === "Verified")
+          .slice(0, 3)
+          .map((service, index) => (
+            <SearchPagePopularServiceCard
+              {...service}
+              index={index}
+              key={index}
+            />
+          ))}
 
         {isAuthenticated ? null : (
           <div className="absolute w-full h-full backdrop-blur-lg bg-black/60 inset-0 rounded-lg ">
