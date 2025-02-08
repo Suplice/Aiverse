@@ -11,7 +11,7 @@ const AIViewPageMain = () => {
   const { id } = useParams<{ id: string }>();
   const { services } = useAiService();
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     console.log("ID from URL:", id);
@@ -20,11 +20,15 @@ const AIViewPageMain = () => {
   useEffect(() => {
     const fetchGalleryImages = async () => {
       try {
-        console.log("fetching images")
+        console.log("fetching images");
         const service = services?.find((s) => s.Id === Number(id));
         if (!service) throw new Error("Service not found");
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/getservicegallery?serviceTitle=${service.Title}`);
+        const response = await fetch(
+          `${
+            import.meta.env.VITE_API_URL
+          }/aiservice/getservicegallery?serviceTitle=${service.Title}`
+        );
         const data = await response.json();
 
         if (!response.ok || !data.success) {
@@ -33,8 +37,8 @@ const AIViewPageMain = () => {
 
         console.log("Zdjęcia:" + data);
         setGalleryImages(data.data);
-      } catch (err: any) {
-        console.log(err.message);
+      } catch {
+        console.log("error");
       } finally {
         setLoading(false);
       }
@@ -60,13 +64,11 @@ const AIViewPageMain = () => {
       <ServiceDetail service={service} />
       <PageNavigation />
       <div id="full-description">
-        <FullDescriptionComponent
-          FullDescription={String(service.FullDescription)}
-        />
+        <FullDescriptionComponent FullDescription={service.FullDescription!} />
       </div>
       <div id="gallery">
         <ServiceGallery galleryImages={galleryImages} />
-      </div> 
+      </div>
       <div id="comments">
         <CommentSection AiServiceId={service.Id} />
       </div>
