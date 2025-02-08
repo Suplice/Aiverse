@@ -114,6 +114,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   };
 
   const formatDate = () => {
+    console.log(createdAt);
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));

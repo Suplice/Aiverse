@@ -52,7 +52,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
     };
 
     fetchReviews();
-  }, []);
+  }, [AiServiceId, user?.Id]);
 
   const handleReviewed = (review: Review) => {
     setIsAlreadyReviewed(true);
