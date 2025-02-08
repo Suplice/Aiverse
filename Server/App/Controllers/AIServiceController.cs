@@ -69,7 +69,7 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpGet("getservicegallery")]
-    public async Task<IActionResult> GetServiceGallery(string serviceTitle)
+    public IActionResult GetServiceGallery(string serviceTitle)
     {
 
         var galleryPath = Path.Combine("wwwroot", "AIServiceImages", serviceTitle, "galleryFiles");
@@ -189,11 +189,11 @@ public class AIServiceController : ControllerBase
     }
 
     [HttpGet("getreviews/{serviceId}")]
-    public async Task<IActionResult> GetReviews(long serviceId)
+    public IActionResult GetReviews(long serviceId)
     {
         try
         {
-            var ReviewsResult = await _AIServiceService.GetReviews(serviceId);
+            var ReviewsResult = _AIServiceService.GetReviews(serviceId);
 
             if (ReviewsResult == null)
             {
@@ -410,7 +410,7 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
 
-        var correctResponse = new ApiResponse<List<AiService>>(true, "Services found", ServiceResult);
+        var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServiceResult);
 
         return Ok(correctResponse);
     }

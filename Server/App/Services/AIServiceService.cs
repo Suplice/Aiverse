@@ -21,7 +21,7 @@ public class AIServiceService : IAIServiceService
 
         var result = new List<ResponseAIServiceDTO>();
 
-        foreach (var service in services)
+        foreach (var service in services!)
         {
             var categoriesList = await _CategoryRepository.getCategoryByAi(service.Id);
             var responseAi = new ResponseAIServiceDTO
@@ -29,6 +29,7 @@ public class AIServiceService : IAIServiceService
                 Id = service.Id,
                 Title = service.Title,
                 Description = service.Description,
+                FullDescription = service.FullDescription,
                 Price = service.Price,
                 Image = service.Image,
                 Stars = service.Stars,
@@ -96,9 +97,9 @@ public class AIServiceService : IAIServiceService
         return result;
     }
 
-    public async Task<List<Review>?> GetReviews(long serviceId)
+    public  List<Review>? GetReviews(long serviceId)
     {
-        var result = await _AIServiceRepository.GetReviews(serviceId);
+        var result = _AIServiceRepository.GetReviews(serviceId);
 
         return result;
     }
@@ -145,10 +146,36 @@ public class AIServiceService : IAIServiceService
     }
 
 
-    public async Task<List<AiService>?> GetUserReviewedServicesById(long id)
+    public async Task<List<ResponseAIServiceDTO>?> GetUserReviewedServicesById(long id)
     {
 
-        var result = await _AIServiceRepository.GetUserReviewedServicesById(id);
+        var data = await _AIServiceRepository.GetUserReviewedServicesById(id);
+
+
+        var result = new List<ResponseAIServiceDTO>();
+
+        foreach (var service in data!)
+        {
+            var categoriesList = await _CategoryRepository.getCategoryByAi(service.Id);
+            var responseAi = new ResponseAIServiceDTO
+            {
+                Id = service.Id,
+                Title = service.Title,
+                Description = service.Description,
+                FullDescription = service.FullDescription,
+                Price = service.Price,
+                Image = service.Image,
+                Stars = service.Stars,
+                Reviews = service.Reviews,
+                Status = service.Status,
+                ServiceURL = service.ServiceURL,
+                CreatedAt = service.CreatedAt,
+                Categories = categoriesList,
+                CreatorId = service.CreatorId
+            };
+            result.Add(responseAi);
+        }
+
 
         return result;
     }
