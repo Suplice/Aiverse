@@ -1,5 +1,3 @@
-import { GalleryImages } from "./ImageGallery";
-
 export type AiService = {
   Id: number;
   Title: string;
