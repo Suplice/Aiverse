@@ -98,7 +98,7 @@ public class AIServiceService : IAIServiceService
             ServiceURL = service.ServiceURL,
             Stars = 0,
             Reviews = 0,
-            Status = "PENDING",
+            Status = "Pending",
             CreatedAt = DateTime.Now
         };
 
@@ -221,6 +221,22 @@ public class AIServiceService : IAIServiceService
         var result = await _AIServiceRepository.DislikeService(userId, reviewId);
 
         return result;
+    }
+
+    public async Task<AiService?> UpdateStatus(long serviceId){
+
+        var service = await _AIServiceRepository.GetServiceById(serviceId);
+
+        if(service == null){
+            return null;
+        }
+
+        service.Status = "Verified";
+
+        var result = await _AIServiceRepository.UpdateStatus(service);
+
+        return result;
+
     }
 
 }

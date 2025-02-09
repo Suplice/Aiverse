@@ -413,7 +413,7 @@ public class AIServiceController : ControllerBase
 
         if (id <= 0)
         {
-            var response = new ApiResponse<bool>(false, "User not exist", false);
+            var response = new ApiResponse<bool>(false, "Service not exist", false);
             return BadRequest(response);
         }
 
@@ -426,6 +426,26 @@ public class AIServiceController : ControllerBase
         }
 
         var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServiceResult);
+
+        return Ok(correctResponse);
+    }
+
+    [HttpPatch("updatestatus/{id}")]
+    public async Task<IActionResult> UpdateStatus(long id){
+
+        if(id <= 0){
+            var response = new ApiResponse<bool>(false, "Service not exist", false);
+            return BadRequest(response);
+        }
+
+        var updatedService = await _AIServiceService.UpdateStatus(id);
+
+        if(updatedService == null){
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<AiService>(true, "Service updated", updatedService);
 
         return Ok(correctResponse);
     }

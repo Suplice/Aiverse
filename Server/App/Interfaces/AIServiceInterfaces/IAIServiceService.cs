@@ -17,4 +17,6 @@ public interface IAIServiceService
 
     Task<bool> LikeService(long userId, long serviceId);
     Task<bool> DislikeService(long userId, long reviewId);
+
+    Task<AiService?> UpdateStatus(long serviceId);
 }
