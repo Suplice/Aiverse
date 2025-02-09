@@ -1,106 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PendingAIServicesCard from "./PendingAIServicesCard";
+import { AiService } from "../../Utils/Models/AiService";
 
-interface Form {
-  id: number;
-  title: string;
-  description: string;
-  status: "pending" | "accepted" | "denied";
+interface FormsToCheckProps {
+  services: AiService[];
 }
 
-const FormsToCheck = () => {
-  
-  const [forms, setForms] = useState<Form[]>([
-    { id: 1, title: "Form 1", description: "Details of Form 1", status: "pending" },
-    { id: 2, title: "Form 2", description: "Details of Form 2", status: "pending" },
-    { id: 3, title: "Form 3", description: "Details of Form 3", status: "pending" },
-  ]);
+const FormsToCheck: React.FC<FormsToCheckProps> = ({services}) => {
 
-  
-  const [selectedForm, setSelectedForm] = useState<Form | null>(null);
-
-  
-  const handleAccept = (id: number) => {
-    setForms((prevForms) =>
-      prevForms.map((form) =>
-        form.id === id ? { ...form, status: "accepted" } : form
-      )
-    );
-    setSelectedForm(null); 
-  };
-
-  const handleDeny = (id: number) => {
-    setForms((prevForms) =>
-      prevForms.map((form) =>
-        form.id === id ? { ...form, status: "denied" } : form
-      )
-    );
-    setSelectedForm(null); 
-  };
 
   return (
-    <div className="p-4 bg-white rounded shadow-md w-3/4">
-      <h2 className="text-2xl font-bold mb-4">Forms to Check</h2>
+    <div className="p-6 bg-[#1E1E1E] rounded-2xl shadow-lg w-5/6 text-gray-300">
+      <h2 className="text-2xl font-bold mb-6 text-white">Pending AI Services</h2>
 
-      {selectedForm ? (
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold">{selectedForm.title}</h3>
-          <p className="text-gray-600">{selectedForm.description}</p>
-          <div className="space-x-2">
-            <button
-              onClick={() => handleAccept(selectedForm.id)}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              Accept
-            </button>
-            <button
-              onClick={() => handleDeny(selectedForm.id)}
-              className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
-            >
-              Deny
-            </button>
-          </div>
-        </div>
-      ) : (
-        <ul className="space-y-3">
-          {forms.map((form) => (
-            <li
-              key={form.id}
-              className="flex items-center justify-between bg-gray-100 p-3 rounded"
-            >
-              <span
-                className={`text-lg ${
-                  form.status === "accepted"
-                    ? "text-black"
-                    : form.status === "denied"
-                    ? "text-black"
-                    : ""
-                }`}
-              >
-                {form.title}
-              </span>
-              <div className="space-x-2">
-                <button
-                  onClick={() => setSelectedForm(form)}
-                  className="px-4 py-2 bg-gray-300 text-white rounded hover:bg-violet-300"
-                >
-                  View
-                </button>
-                <span
-                  className={`text-sm font-semibold ${
-                    form.status === "accepted"
-                      ? "text-green-700"
-                      : form.status === "denied"
-                      ? "text-orange-700"
-                      : "text-gray-500"
-                  }`}
-                >
-                  {form.status === "pending" ? "Pending" : form.status}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="space-y-3">
+        {services.map((service, index) => (
+          <li key={service.Id} className="flex w-full bg-[#2E2E2E] p-4 md:p-2 mb:p-1 rounded-xl">
+            <PendingAIServicesCard service={service} index={index} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

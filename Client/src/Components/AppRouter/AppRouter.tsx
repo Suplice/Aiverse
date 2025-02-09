@@ -13,6 +13,7 @@ import FormPage from "../../Pages/FormPage/FormPage";
 import AIViewPage from "../../Pages/AIViewPage/AIViewPage";
 import { UserProvider } from "../../Utils/Context/UserContext";
 import ProtectedRoute from "./ProtectedRoute";
+import AIReviewPage from "../../Pages/AIReviewPage/AIReviewPage";
 
 const AppRouter = () => {
   return (
@@ -55,10 +56,12 @@ const AppRouter = () => {
               >
                 <Route path="manager">
                   <Route path="panel" element={<ManagerPanel />}></Route>
+                  <Route path="review/:id" element={<AIReviewPage />}></Route>
                 </Route>
-              </Route>
 
+              </Route>
               <Route path="aiservice/:id" element={<AIViewPage />}></Route>
+              
 
               <Route
                 element={
@@ -68,6 +71,7 @@ const AppRouter = () => {
                 }
               >
                 <Route path="forms" element={<FormPage />}></Route>
+
               </Route>
             </Routes>
           </MantineProvider>
