@@ -45,6 +45,21 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    [HttpGet("getpendingservices")]
+    public async Task<IActionResult> GetPendingServices(){
+        var ServicesResult = await _AIServiceService.GetPendingServices();
+
+        if (ServicesResult == null)
+        {
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServicesResult);
+
+        return Ok(correctResponse);
+    }
+
     [HttpGet("getservice/{serviceId}")]
     public async Task<IActionResult> GetServiceById(long serviceId)
     {
@@ -398,7 +413,7 @@ public class AIServiceController : ControllerBase
 
         if (id <= 0)
         {
-            var response = new ApiResponse<bool>(false, "User not exist", false);
+            var response = new ApiResponse<bool>(false, "Service not exist", false);
             return BadRequest(response);
         }
 
@@ -413,6 +428,46 @@ public class AIServiceController : ControllerBase
         var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServiceResult);
 
         return Ok(correctResponse);
+    }
+
+    [HttpPatch("updatestatus/{id}")]
+    public async Task<IActionResult> UpdateStatus(long id){
+
+        if(id <= 0){
+            var response = new ApiResponse<bool>(false, "Service does not exist", false);
+            return BadRequest(response);
+        }
+
+        var updatedService = await _AIServiceService.UpdateStatus(id);
+
+        if(updatedService == null){
+            var response = new ApiResponse<bool>(false, "Error occured", false);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<AiService>(true, "Service updated", updatedService);
+
+        return Ok(correctResponse);
+    }
+
+    [HttpDelete("deletebyid/{id}")]
+    public async Task<IActionResult> DeleteServiceById(long id){
+        if(id <= 0){
+            var response = new ApiResponse<bool>(false, "Service does not exist", false);
+            return BadRequest(response);
+        }
+
+        var result = await _AIServiceService.DeleteServiceById(id);
+
+        if(result == false){
+            var response = new ApiResponse<bool>(false, "Error while deleting service", result);
+            return BadRequest(response);
+        }
+
+        var correctResponse = new ApiResponse<bool>(true, "The service has been deleted", result); 
+
+        return Ok(correctResponse);
+
     }
 
 }

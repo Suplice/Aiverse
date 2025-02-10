@@ -7,8 +7,7 @@ import Block from "../../Components/UI/Block";
 const AIViewPage = () => {
     return (
         <>
-        
-        <Block className="bg-[#121212] p-6 w-full" direction="column" >
+        <Block className="bg-[#121212] p-6 " direction="column" >
             <LandingNavbar /> 
             <AIViewPageMain />
         </Block>

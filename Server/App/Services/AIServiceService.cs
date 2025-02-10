@@ -14,6 +14,35 @@ public class AIServiceService : IAIServiceService
         _AIServiceRepository = AIServiceRepository;
     }
 
+    public async Task<List<ResponseAIServiceDTO>?> GetPendingServices(){
+        var services = await _AIServiceRepository.GetPendingServices();
+        var result = new List<ResponseAIServiceDTO>();
+
+        foreach (var service in services!){
+
+            var categoriesList = await _CategoryRepository.getCategoryByAi(service.Id);
+            var responseAi = new ResponseAIServiceDTO
+            {
+                Id = service.Id,
+                Title = service.Title,
+                Description = service.Description,
+                FullDescription = service.FullDescription,
+                Price = service.Price,
+                Image = service.Image,
+                Stars = service.Stars,
+                Reviews = service.Reviews,
+                Status = service.Status,
+                ServiceURL = service.ServiceURL,
+                CreatedAt = service.CreatedAt,
+                Categories = categoriesList,
+                CreatorId = service.CreatorId
+            };
+            result.Add(responseAi);
+        }
+
+        return result;
+    }
+
     public async Task<List<ResponseAIServiceDTO>?> GetAllServices()
     {
 
@@ -190,6 +219,29 @@ public class AIServiceService : IAIServiceService
     public async Task<bool> DislikeService(long userId, long reviewId)
     {
         var result = await _AIServiceRepository.DislikeService(userId, reviewId);
+
+        return result;
+    }
+
+    public async Task<AiService?> UpdateStatus(long serviceId){
+
+        var service = await _AIServiceRepository.GetServiceById(serviceId);
+
+        if(service == null){
+            return null;
+        }
+
+        service.Status = "Verified";
+
+        var result = await _AIServiceRepository.UpdateStatus(service);
+
+        return result;
+
+    }
+
+    public async Task<bool> DeleteServiceById(long id){
+
+        var result = await _AIServiceRepository.DeleteServiceById(id);
 
         return result;
     }

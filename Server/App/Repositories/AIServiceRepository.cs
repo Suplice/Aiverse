@@ -303,4 +303,44 @@ public class AIServiceRepository : IAIServiceRepository
         }
     }
 
+    public async Task<List<AiService>?> GetPendingServices(){
+        var response = await _supabaseClient
+                                .From<AiService>()
+                                .Where(s => s.Status == "Pending")
+                                .Get();
+
+        var result = response.Models;
+        return result;
+
+    }
+
+    public async Task<AiService?> UpdateStatus(AiService service){
+        var response = await _supabaseClient
+                                .From<AiService>()
+                                .Where(s => s.Id == service.Id)
+                                .Update(service);
+
+        var resultservice = response.Model;
+
+        return resultservice;
+    }
+
+    public async Task<bool> DeleteServiceById(long id)
+{
+    try
+    {
+        await _supabaseClient
+            .From<AiService>()
+            .Where(s => s.Id == id)
+            .Delete();
+
+        return true;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error deleting service: {e.Message}");
+        return false;
+    }
+}
+
 }

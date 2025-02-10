@@ -82,6 +82,9 @@ const LandingNavbar = () => {
                     value="Review Services"
                     color="white"
                     className=" transition-colors duration-200 cursor-pointer text-xl bg-slate-700 rounded-lg p-1 hover:bg-slate-600"
+                    onClick={() => {
+                      navigate("/manager/panel");
+                    }}
                   ></BlockTextField>
                 )}
 
@@ -189,6 +192,7 @@ const LandingNavbar = () => {
                   value="Review Services"
                   color="white"
                   className="hover:text-gray-800 transition-colors duration-200 cursor-pointer text-xl"
+                  onClick={() => navigate("/manager/panel")}
                 ></BlockTextField>
               )}
 

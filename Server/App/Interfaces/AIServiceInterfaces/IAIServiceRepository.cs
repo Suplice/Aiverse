@@ -9,14 +9,13 @@ public interface IAIServiceRepository
     List<Review>? GetReviews(long serviceId);
     Task<Comment?> AddComment(Comment comment);
     List<Comment>? GetReviewComments(long reviewId);
-
     List<Comment>? GetCommentReplies(long commentId);
     Task<List<AiService>?> GetUserReviewedServicesById(long id);
-
     List<long>? GetLikedServices(long userId);
-
     Task<bool> LikeService(long userId, long serviceId);
-
     Task<bool> DislikeService(long userId, long serviceId);
+    Task<List<AiService>?> GetPendingServices();
+    Task<AiService?> UpdateStatus(AiService service);
+    Task<bool> DeleteServiceById(long id);
 
 }
