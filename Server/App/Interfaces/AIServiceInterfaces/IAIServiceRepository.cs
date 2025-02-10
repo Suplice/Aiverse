@@ -16,5 +16,6 @@ public interface IAIServiceRepository
     Task<bool> DislikeService(long userId, long serviceId);
     Task<List<AiService>?> GetPendingServices();
     Task<AiService?> UpdateStatus(AiService service);
+    Task<bool> DeleteServiceById(long id);
 
 }

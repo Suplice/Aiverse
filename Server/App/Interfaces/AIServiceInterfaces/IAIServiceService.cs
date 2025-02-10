@@ -14,9 +14,8 @@ public interface IAIServiceService
     Task<List<ResponseAIServiceDTO>?> GetPendingServices();
     Task<List<ResponseAIServiceDTO>?> GetUserReviewedServicesById(long id);
     List<long>? GetLikedServices(long userId);
-
     Task<bool> LikeService(long userId, long serviceId);
     Task<bool> DislikeService(long userId, long reviewId);
-
     Task<AiService?> UpdateStatus(long serviceId);
+    Task<bool> DeleteServiceById(long id);
 }

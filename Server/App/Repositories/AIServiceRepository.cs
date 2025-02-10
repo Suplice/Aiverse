@@ -325,4 +325,22 @@ public class AIServiceRepository : IAIServiceRepository
         return resultservice;
     }
 
+    public async Task<bool> DeleteServiceById(long id)
+{
+    try
+    {
+        await _supabaseClient
+            .From<AiService>()
+            .Where(s => s.Id == id)
+            .Delete();
+
+        return true;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error deleting service: {e.Message}");
+        return false;
+    }
+}
+
 }

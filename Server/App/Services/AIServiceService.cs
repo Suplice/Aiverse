@@ -239,4 +239,11 @@ public class AIServiceService : IAIServiceService
 
     }
 
+    public async Task<bool> DeleteServiceById(long id){
+
+        var result = await _AIServiceRepository.DeleteServiceById(id);
+
+        return result;
+    }
+
 }
