@@ -11,6 +11,7 @@ interface AiServiceContextType {
   addService: (service: AiService) => Promise<void>;
   updateService: (service: AiService) => Promise<void>;
   deleteService: (Id: number) => Promise<void>;
+  updateServiceStatus: (Id: number) => Promise<void>;
   likedServices: number[];
   setLikedServices: (likedServices: number[]) => void;
   handleLike: (data: HandleLike) => Promise<void>;
@@ -106,15 +107,41 @@ export const AiServiceProvider = ({
     }
   };
 
+  const updateServiceStatus = async (Id: number) => {
+    try {
+
+        console.log("Id :" + Id )
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`, {
+            method: "PATCH",
+        });
+    
+        if (!response.ok) {
+            throw new Error("Błąd podczas aktualizacji statusu");
+        }
+        setServices((prevServices) =>
+          prevServices.map((service) =>
+              service.Id === Id ? { ...service, Status: "Verified" } : service
+          )
+      );
+    } catch (error) {
+      console.error("Błąd:", error);
+    }
+  };
+
   const deleteService = async (Id: number) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/services/${Id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`, {
         method: "DELETE",
-      });
+    });
+
+    if (!response.ok) {
+        throw new Error("Błąd podczas usuwania serwisu");
+    }
+
       const updatedServices = services.filter((s) => s.Id !== Id);
       setServices(updatedServices);
     } catch (error) {
-      console.log(error);
+      console.log("Błąd usuwania" + error);
     }
   };
 
@@ -219,6 +246,7 @@ export const AiServiceProvider = ({
         setServices,
         addService,
         updateService,
+        updateServiceStatus,
         deleteService,
         likedServices,
         setLikedServices,
