@@ -109,19 +109,21 @@ export const AiServiceProvider = ({
 
   const updateServiceStatus = async (Id: number) => {
     try {
-
-        console.log("Id :" + Id )
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`, {
-            method: "PATCH",
-        });
-    
-        if (!response.ok) {
-            throw new Error("Błąd podczas aktualizacji statusu");
+      console.log("Id :" + Id);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`,
+        {
+          method: "PATCH",
         }
-        setServices((prevServices) =>
-          prevServices.map((service) =>
-              service.Id === Id ? { ...service, Status: "Verified" } : service
-          )
+      );
+
+      if (!response.ok) {
+        throw new Error("Błąd podczas aktualizacji statusu");
+      }
+      setServices((prevServices) =>
+        prevServices.map((service) =>
+          service.Id === Id ? { ...service, Status: "Verified" } : service
+        )
       );
     } catch (error) {
       console.error("Błąd:", error);
@@ -130,13 +132,16 @@ export const AiServiceProvider = ({
 
   const deleteService = async (Id: number) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`, {
-        method: "DELETE",
-    });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    if (!response.ok) {
+      if (!response.ok) {
         throw new Error("Błąd podczas usuwania serwisu");
-    }
+      }
 
       const updatedServices = services.filter((s) => s.Id !== Id);
       setServices(updatedServices);
@@ -226,7 +231,7 @@ export const AiServiceProvider = ({
 
     service!.Reviews += 1;
 
-    setServices([...services.filter((s) => s !== undefined), service!]);
+    setServices(services.map((s) => (s.Id === aiServiceId ? service! : s)));
   };
 
   useEffect(() => {

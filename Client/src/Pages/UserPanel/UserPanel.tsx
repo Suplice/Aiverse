@@ -47,7 +47,7 @@ const UserPanel = () => {
               <img
                 src={userImage}
                 alt="User"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
+                className=" h-full  transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
               />
             ) : (
               <Avatar size={180} />
