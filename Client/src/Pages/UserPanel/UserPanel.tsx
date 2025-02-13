@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "../../Utils/Context/UserContext";
 import UserSettings from "../../Components/UserPanelComponents/UserSettings";
 import { Avatar } from "@mantine/core";
@@ -20,10 +20,6 @@ const UserPanel = () => {
     "Liked",
     "Rated",
   ];
-
-  useEffect(() => {
-    console.log(userImage);
-  });
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {

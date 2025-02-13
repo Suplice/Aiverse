@@ -14,13 +14,8 @@ const AIViewPageMain = () => {
   const [, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("ID from URL:", id);
-  }, [id]);
-
-  useEffect(() => {
     const fetchGalleryImages = async () => {
       try {
-        console.log("fetching images");
         const service = services?.find((s) => s.Id === Number(id));
         if (!service) throw new Error("Service not found");
 
@@ -35,7 +30,6 @@ const AIViewPageMain = () => {
           throw new Error(data.message || "Failed to fetch gallery images");
         }
 
-        console.log("Zdjęcia:" + data.data);
         setGalleryImages(
           data.data.map((image: string) => ({
             original: import.meta.env.VITE_API_URL + image,
@@ -43,7 +37,7 @@ const AIViewPageMain = () => {
           }))
         );
       } catch {
-        console.log("error");
+        console.error("error");
       } finally {
         setLoading(false);
       }

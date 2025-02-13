@@ -29,8 +29,6 @@ const SearchPageServices = () => {
       inputRef.current.value = searchText;
     }
 
-    console.log("services", services);
-
     filterServices(params);
   }, [services]);
 

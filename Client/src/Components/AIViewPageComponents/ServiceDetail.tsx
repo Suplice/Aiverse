@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AiService } from "../../Utils/Models/AiService";
 import { Tooltip } from "@mantine/core";
 import Button from "../UI/Button";
@@ -7,10 +7,6 @@ import { useAiService } from "../../Utils/Context/AiServiceContext";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
 const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
-  useEffect(() => {
-    console.log(service);
-  }, []);
-
   const { likedServices, handleLike, handleUnLike } = useAiService();
 
   const { user, isAuthenticated } = useAuth();

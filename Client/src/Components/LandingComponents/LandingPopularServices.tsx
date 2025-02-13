@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAiService } from "../../Utils/Context/AiServiceContext";
 import BlockTextField from "../UI/BlockTextField";
 import TextField from "../UI/TextField";
@@ -7,10 +6,6 @@ import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkel
 
 const LandingPopularServices = () => {
   const { services } = useAiService();
-
-  useEffect(() => {
-    console.log(services);
-  });
 
   return (
     <div className="w-full mt-5 ">

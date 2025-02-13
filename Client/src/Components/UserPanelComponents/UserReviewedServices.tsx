@@ -10,8 +10,6 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
   const [reviewedServices, setReviewedServices] = useState<AiService[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  console.log("Fetching liked services for userId:", userId);
-
   useEffect(() => {
     const fetchLikedServices = async () => {
       try {
@@ -22,8 +20,6 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
         );
         const data = await response.json();
         setReviewedServices(data.data);
-
-        console.log(data.data);
 
         if (data.success) {
           setReviewedServices(data.data);

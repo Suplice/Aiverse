@@ -20,7 +20,6 @@ const SignIn = () => {
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
     Password: yup.string().required(),
-    RememberMe: yup.boolean().required(),
   });
 
   const {
@@ -102,7 +101,11 @@ const SignIn = () => {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
+                  className={`border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black ${
+                    errors.Email?.message
+                      ? "border-red focus:border-red"
+                      : "border-gray-400 focus:border-black"
+                  }`}
                   {...register("Email")}
                 />
 
@@ -118,27 +121,17 @@ const SignIn = () => {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black"
+                  className={`border-2 border-gray-400 rounded-lg px-4 py-2 transition-all duration-200 outline-none focus:border-black ${
+                    errors.Password?.message
+                      ? "border-red focus:border-red"
+                      : "border-gray-400 focus:border-black"
+                  }`}
                   {...register("Password")}
                 />
 
                 <TextField className="text-red text-sm text-left">
                   {errors.Password?.message}
                 </TextField>
-                <Block
-                  className="mt-1 ml-1"
-                  gap={1}
-                  direction="row"
-                  align="center"
-                >
-                  <input
-                    type="checkbox"
-                    className="transition-all duration-200 accent-black hover:cursor-pointer"
-                    {...register("RememberMe")}
-                  />
-
-                  <TextField value="Remember Me" className="" />
-                </Block>
               </Block>
 
               <Button

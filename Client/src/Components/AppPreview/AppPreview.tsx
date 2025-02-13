@@ -31,7 +31,7 @@ const AppPreview = () => {
   });
 
   return (
-    <div className="flex flex-col w-full h-full items-center gap-10 justify-center relative">
+    <div className="flex flex-col w-full h-full items-center  justify-center relative">
       <div className="relative w-[380px]  h-[380px] flex items-center justify-center">
         {images.map((image, index) => (
           <motion.img

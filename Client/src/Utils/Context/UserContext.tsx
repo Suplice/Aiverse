@@ -39,8 +39,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
       if (response.ok) {
         const userData = await response.json();
-        console.log(userData);
-        //setUser(userData);
+
         if (userData?.Picture) {
           setUserImage(`${import.meta.env.VITE_API_URL}${userData.Picture}`);
         } else {
@@ -121,9 +120,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           credentials: "include",
         }
       );
-      if (response.ok) {
-        console.log("User name updated successfully");
-      } else {
+      if (!response.ok) {
         console.error("Failed to update user name");
       }
     } catch (error) {
@@ -150,9 +147,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           credentials: "include",
         }
       );
-      if (response.ok) {
-        console.log("User email updated successfully");
-      } else {
+      if (!response.ok) {
         console.error("Failed to update user email");
       }
     } catch (error) {
@@ -180,9 +175,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
       );
 
-      if (response.ok) {
-        console.log("Password updated successfully");
-      } else {
+      if (!response.ok) {
         console.error("Failed to update password. Status:", response.status);
       }
     } catch (error) {

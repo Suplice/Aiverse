@@ -34,7 +34,6 @@ const SignUp = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmitHandler = async (data: SignUpFormData) => {
-    console.log(data);
     await registerWithEmailAndPassword(data);
     reset();
   };
@@ -165,9 +164,9 @@ const SignUp = () => {
                 gap={2}
                 justify="center"
               >
-                <TextField value="Not registered yet?" color="black" />
+                <TextField value="Already have an account?" color="black" />
                 <TextField
-                  value="Sign Up"
+                  value="Sign In"
                   className="underline-offset-auto underline font-extrabold  hover:cursor-pointer"
                   color="black"
                   onClick={() => {
