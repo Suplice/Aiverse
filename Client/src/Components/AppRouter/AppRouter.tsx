@@ -21,56 +21,51 @@ const AppRouter = () => {
       <AuthProvider>
         <AiServiceProvider>
           <MantineProvider>
-            <Routes>
-              <Route path="auth">
-                <Route path="SignUp" element={<SignUp />}></Route>
-                <Route path="SignIn" element={<SignIn />}></Route>
-              </Route>
-
-              <Route path="services" element={<SearchServices />}></Route>
-              <Route path="*" element={<LandingPage />}></Route>
-
-              <Route
-                element={
-                  <ProtectedRoute
-                    allowedRoles={["USER", "MODERATOR", "ADMIN"]}
-                  />
-                }
-              >
-                <Route path="user">
-                  <Route
-                    path="panel"
-                    element={
-                      <UserProvider>
-                        <UserPanel />
-                      </UserProvider>
-                    }
-                  ></Route>
+            <UserProvider>
+              <Routes>
+                <Route path="auth">
+                  <Route path="SignUp" element={<SignUp />}></Route>
+                  <Route path="SignIn" element={<SignIn />}></Route>
                 </Route>
-              </Route>
 
-              <Route
-                element={
-                  <ProtectedRoute allowedRoles={["MODERATOR", "ADMIN"]} />
-                }
-              >
-                <Route path="manager">
-                  <Route path="panel" element={<ManagerPanel />}></Route>
-                  <Route path="review/:id" element={<AIReviewPage />}></Route>
+                <Route path="services" element={<SearchServices />}></Route>
+                <Route path="*" element={<LandingPage />}></Route>
+
+                <Route
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={["USER", "MODERATOR", "ADMIN"]}
+                    />
+                  }
+                >
+                  <Route path="user">
+                    <Route path="panel" element={<UserPanel />}></Route>
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="aiservice/:id" element={<AIViewPage />}></Route>
 
-              <Route
-                element={
-                  <ProtectedRoute
-                    allowedRoles={["USER", "MODERATOR", "ADMIN"]}
-                  />
-                }
-              >
-                <Route path="forms" element={<FormPage />}></Route>
-              </Route>
-            </Routes>
+                <Route
+                  element={
+                    <ProtectedRoute allowedRoles={["MODERATOR", "ADMIN"]} />
+                  }
+                >
+                  <Route path="manager">
+                    <Route path="panel" element={<ManagerPanel />}></Route>
+                    <Route path="review/:id" element={<AIReviewPage />}></Route>
+                  </Route>
+                </Route>
+                <Route path="aiservice/:id" element={<AIViewPage />}></Route>
+
+                <Route
+                  element={
+                    <ProtectedRoute
+                      allowedRoles={["USER", "MODERATOR", "ADMIN"]}
+                    />
+                  }
+                >
+                  <Route path="forms" element={<FormPage />}></Route>
+                </Route>
+              </Routes>
+            </UserProvider>
           </MantineProvider>
         </AiServiceProvider>
       </AuthProvider>

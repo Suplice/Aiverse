@@ -8,11 +8,13 @@ import LandingNavbarOptions from "./LandingNavbarOptions";
 import LandingNavbarLogo from "./LandingNavbarLogo";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
+import { useUser } from "../../Utils/Context/UserContext";
 
 const LandingNavbar = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, Logout, user } = useAuth();
+  const { userImage } = useUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
@@ -55,7 +57,7 @@ const LandingNavbar = () => {
           }}
           className="hidden md:flex hover:cursor-pointer relative user-menu-container"
         >
-          <Avatar radius="xl" size="lg" />
+          <Avatar radius="xl" size="lg" src={userImage} />
           <AnimatePresence>
             {isUserMenuVisible && (
               <motion.div

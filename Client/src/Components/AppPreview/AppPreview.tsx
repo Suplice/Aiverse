@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const images = [
   "/02e9154a-30e4-4d71-8c90-a834833b60cb.png",
