@@ -97,7 +97,9 @@ public class AIServiceRepository : IAIServiceRepository
 
         await transaction.CommitAsync();
 
-        return response.Model;
+        var model = _context.Reviews.SingleOrDefault(r => r.Id == response.Model.Id);
+
+        return model;
     }
     catch (Exception e)
     {
