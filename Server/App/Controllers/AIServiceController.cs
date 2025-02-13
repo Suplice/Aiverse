@@ -14,10 +14,10 @@ public class AIServiceController : ControllerBase
 
     private readonly ICategoryService _CategoryService;
 
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
 
 
-    public AIServiceController(IAIServiceService AIServiceService, FileService fileService, ICategoryService CategoryService)
+    public AIServiceController(IAIServiceService AIServiceService, IFileService fileService, ICategoryService CategoryService)
     {
         _CategoryService = CategoryService;
         _AIServiceService = AIServiceService;
@@ -426,16 +426,19 @@ public class AIServiceController : ControllerBase
 
     [AuthorizeByCookie("MODERATOR")]
     [HttpPatch("updatestatus/{id}")]
-    public async Task<IActionResult> UpdateStatus(long id){
+    public async Task<IActionResult> UpdateStatus(long id)
+    {
 
-        if(id <= 0){
+        if (id <= 0)
+        {
             var response = new ApiResponse<bool>(false, "Service does not exist", false);
             return BadRequest(response);
         }
 
         var updatedService = await _AIServiceService.UpdateStatus(id);
 
-        if(updatedService == null){
+        if (updatedService == null)
+        {
             var response = new ApiResponse<bool>(false, "Error occured", false);
             return BadRequest(response);
         }
@@ -448,20 +451,33 @@ public class AIServiceController : ControllerBase
 
     [AuthorizeByCookie("MODERATOR")]
     [HttpDelete("deletebyid/{id}")]
-    public async Task<IActionResult> DeleteServiceById(long id){
-        if(id <= 0){
+    public async Task<IActionResult> DeleteServiceById(long id)
+    {
+        if (id <= 0)
+        {
             var response = new ApiResponse<bool>(false, "Service does not exist", false);
             return BadRequest(response);
         }
 
+        var service = await _AIServiceService.GetServiceById(id);
+
+        if (service == null)
+        {
+            var response = new ApiResponse<bool>(false, "Service does not exist", false);
+            return BadRequest(response);
+        }
+
+        _fileService.DeleteFile(service.Image);
+
         var result = await _AIServiceService.DeleteServiceById(id);
 
-        if(result == false){
+        if (result == false)
+        {
             var response = new ApiResponse<bool>(false, "Error while deleting service", result);
             return BadRequest(response);
         }
 
-        var correctResponse = new ApiResponse<bool>(true, "The service has been deleted", result); 
+        var correctResponse = new ApiResponse<bool>(true, "The service has been deleted", result);
 
         return Ok(correctResponse);
 
