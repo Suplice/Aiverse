@@ -24,6 +24,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
           `${import.meta.env.VITE_API_URL}/aiservice/GetReviews/${AiServiceId}`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },

@@ -50,6 +50,7 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/AddReview`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

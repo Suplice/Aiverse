@@ -30,12 +30,14 @@ public class AuthController: ControllerBase{
         return errors;
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("logout")]
     public IActionResult Logout(){
         Response.Cookies.Delete("authToken");
         return Ok(new ApiResponse<bool>(true, "Logout successful", true));
     }
 
+    
     [HttpPost("google")]
     public async Task<IActionResult> GoogleLogin(RequestGoogleDTO GoogleData){
         if(!ModelState.IsValid){
@@ -51,7 +53,7 @@ public class AuthController: ControllerBase{
         }
 
 
-        var token = GenerateJwtToken(GoogleResult.Id.ToString());
+        var token = GenerateJwtToken(GoogleResult.Id.ToString(), GoogleResult.Role);
 
         var cookieOptions = new CookieOptions
         {
@@ -98,7 +100,7 @@ public class AuthController: ControllerBase{
                 return BadRequest(new ApiResponse<bool>(false, "User not found", false));
             }
 
-            var newToken = GenerateJwtToken(userId);
+            var newToken = GenerateJwtToken(userId, user.Role);
 
             Response.Cookies.Append("authToken", token, new CookieOptions
             {
@@ -131,7 +133,7 @@ public class AuthController: ControllerBase{
             return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
         }
 
-        var token = GenerateJwtToken(LoginResult.Id.ToString());
+        var token = GenerateJwtToken(LoginResult.Id.ToString(), LoginResult.Role);
 
         var cookieOptions = new CookieOptions
         {
@@ -160,7 +162,7 @@ public class AuthController: ControllerBase{
         if(RegisterResult == null)
             return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
 
-        var token = GenerateJwtToken(RegisterResult.Id.ToString());
+        var token = GenerateJwtToken(RegisterResult.Id.ToString(), RegisterResult.Role);
 
         var cookieOptions = new CookieOptions
         {
@@ -178,12 +180,13 @@ public class AuthController: ControllerBase{
     } 
 
 
-    private string GenerateJwtToken(string userId)
+    private string GenerateJwtToken(string userId, string role)
     {
         var claims = new[]
         {
             new Claim("userId", userId),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, role)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey)); 
