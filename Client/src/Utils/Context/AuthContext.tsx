@@ -33,8 +33,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginWithEmailAndPassword = async (data: SignInFormData) => {
     setIsLoading(true);
     try {
-      console.log(data);
-
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/login`,
         {
@@ -101,8 +99,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         navigate("/");
       } else {
-        const result = await response.json();
-        console.log(result);
         console.error("Failed to register");
       }
     } catch (error) {
@@ -189,8 +185,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (response.ok) {
           const result = await response.json();
-
-          console.log(result);
 
           setIsAuthenticated(true);
           setUser({

@@ -1,7 +1,6 @@
 export type SignInFormData = {
   Email: string;
   Password: string;
-  RememberMe: boolean;
 };
 
 export type SignUpFormData = {

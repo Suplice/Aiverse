@@ -6,9 +6,9 @@ import Block from "../../Components/UI/Block";
 
 const SearchServices = () => {
   return (
-    <Block className="p-6 w-full bg-[#121212]" direction="column">
+    <Block className="p-6 w-full bg-[#121212]  " direction="column">
       <LandingNavbar />
-      <Block className="lg:p-10 md:p-6 sm:p-2 h-screen" direction="row" gap={4}>
+      <Block className="lg:p-10 md:p-6 sm:p-2 h-fit" direction="row" gap={4}>
         <SearchPageServices />
         <SearchPagePopularServices />
       </Block>

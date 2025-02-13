@@ -58,7 +58,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
     params.set("categories", searchParams.categories.join(","));
     params.set("priceRange", searchParams.priceRange.join(","));
     navigate(`?${params.toString()}`);
-    console.log(searchParams);
+
     handleFilter(searchParams);
   };
 

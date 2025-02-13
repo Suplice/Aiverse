@@ -58,10 +58,8 @@ const AppRouter = () => {
                   <Route path="panel" element={<ManagerPanel />}></Route>
                   <Route path="review/:id" element={<AIReviewPage />}></Route>
                 </Route>
-
               </Route>
               <Route path="aiservice/:id" element={<AIViewPage />}></Route>
-              
 
               <Route
                 element={
@@ -71,7 +69,6 @@ const AppRouter = () => {
                 }
               >
                 <Route path="forms" element={<FormPage />}></Route>
-
               </Route>
             </Routes>
           </MantineProvider>

@@ -24,8 +24,6 @@ const useFilteredServices = (services: AiService[]) => {
             service.Categories.some((category) => categories.includes(category))
           : true;
 
-        console.log("isCategoryMatch", isCategoryMatch);
-
         const isPriceMatch =
           priceRange.length === 0 ||
           (service.Price === "Free" && priceRange[0] === 0) ||
@@ -42,8 +40,6 @@ const useFilteredServices = (services: AiService[]) => {
 
         return isCategoryMatch && isPriceMatch && isSearchTextMatch;
       });
-
-      console.log("newServices", newServices);
 
       setFilteredServices(
         newServices.filter((service) => service.Status === "Verified")

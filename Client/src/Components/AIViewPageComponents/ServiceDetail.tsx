@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AiService } from "../../Utils/Models/AiService";
 import { Tooltip } from "@mantine/core";
 import Button from "../UI/Button";
@@ -7,17 +7,12 @@ import { useAiService } from "../../Utils/Context/AiServiceContext";
 import { useAuth } from "../../Utils/Context/AuthContext";
 
 const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
-  useEffect(() => {
-    console.log(service);
-  }, []);
-
   const { likedServices, handleLike, handleUnLike } = useAiService();
 
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="flex flex-col md:flex-row gap-8 justify-center items-center max-w-full">
-      {/* Sekcja obrazu */}
       <div className="md:w-1/4 w-full flex justify-center">
         <img
           src={`${import.meta.env.VITE_API_URL}${service.Image}`}
@@ -26,12 +21,9 @@ const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
         />
       </div>
 
-      {/* Sekcja opisu */}
       <div className="md:w-3/4 w-full flex flex-col gap-8 h-full">
-        {/* Tytuł */}
         <h1 className="text-4xl font-bold">{service.Title}</h1>
 
-        {/* Oceny */}
         <div className="flex items-center">
           <span className="text-yellow-400 text-2xl">
             {"★".repeat(Math.floor(service.Stars))}
@@ -44,18 +36,14 @@ const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
           </span>
         </div>
 
-        {/* Opis */}
         <p className="text-gray-300 text-lg">{service.Description}</p>
 
-        {/* Pricing i ikony */}
         <div className="flex flex-col md:flex-row gap-8 items-center justify-center mt-auto">
-          {/* Pricing */}
           <div className="bg-[#252729] p-4 rounded-lg w-full md:w-1/2 ">
             <h2 className="text-2xl font-semibold mb-2 text-center">Pricing</h2>
             <p className="text-gray-300 text-center">{service.Price}</p>
           </div>
 
-          {/* Ikony */}
           <div className="flex gap-4 justify-center md:justify-start">
             {likedServices.some((s) => s === service.Id) ? (
               <Tooltip
@@ -81,18 +69,20 @@ const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
             ) : (
               <Tooltip label="Add to liked services" position="top" withArrow>
                 <div>
-                  <Button
-                    className={`rounded-full hover:bg-green-700 px-4 py-4 border-black bg-black  `}
-                    TextColor="white"
-                    onClick={async () => {
-                      await handleLike({
-                        AiServiceId: service.Id,
-                        UserId: user?.Id,
-                      });
-                    }}
-                  >
-                    <FaHeart size={24} />
-                  </Button>
+                  {isAuthenticated && (
+                    <Button
+                      className={`rounded-full hover:bg-green-700 px-4 py-4 border-black bg-black  `}
+                      TextColor="white"
+                      onClick={async () => {
+                        await handleLike({
+                          AiServiceId: service.Id,
+                          UserId: user?.Id,
+                        });
+                      }}
+                    >
+                      <FaHeart size={24} />
+                    </Button>
+                  )}
                 </div>
               </Tooltip>
             )}

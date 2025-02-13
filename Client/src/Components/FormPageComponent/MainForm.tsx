@@ -83,10 +83,6 @@ const MainForm = () => {
       formDataToSend.append("Categories", category);
     });
 
-    for (const [key, value] of formDataToSend.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/aiservice/addservice`,
@@ -96,13 +92,8 @@ const MainForm = () => {
         }
       );
 
-      const data = await response.text();
-
       if (response.ok) {
-        console.log("Data send succesfully");
         navigate("/");
-      } else {
-        console.log(data);
       }
     } catch (error) {
       console.error("Błąd sieci:", error);

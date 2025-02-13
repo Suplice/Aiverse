@@ -18,7 +18,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      console.log("fetching");
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -41,11 +40,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
           setIsAlreadyReviewed(true);
         }
 
-        console.log(result);
-
         setReviews(result.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }

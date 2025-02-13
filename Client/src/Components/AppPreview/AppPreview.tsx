@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
 const images = [
-  "https://via.assets.so/game.png?id=1&q=95&w=360&h=360&fit=fill",
-  "https://via.assets.so/album.png?id=1&q=95&w=360&h=360&fit=fill",
-  "https://via.assets.so/movie.png?id=1&q=95&w=360&h=360&fit=fill",
+  "/02e9154a-30e4-4d71-8c90-a834833b60cb.png",
+  "/5535e59a-3326-45ae-b20d-59504b6b5f4a.png",
+  "/29926b03-3159-43fd-821f-a586a8285d11.png",
 ];
 
 const AppPreview = () => {
@@ -31,14 +31,14 @@ const AppPreview = () => {
   });
 
   return (
-    <div className="flex flex-col w-full h-full items-center gap-10 justify-center relative">
+    <div className="flex flex-col w-full h-full items-center  justify-center relative">
       <div className="relative w-[380px]  h-[380px] flex items-center justify-center">
         {images.map((image, index) => (
           <motion.img
             draggable={false}
             key={index}
             src={image}
-            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[250px] transition-all duration-500 select-none ${getImagePosition(
+            className={`absolute rounded-lg shadow-2xl lg:w-[400px] md:w-[250px] aspect-auto transition-all duration-500 select-none ${getImagePosition(
               index
             )}`}
             initial={{ opacity: 0 }}

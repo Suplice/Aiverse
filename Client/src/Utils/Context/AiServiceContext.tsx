@@ -48,7 +48,6 @@ export const AiServiceProvider = ({
         Date.now() - parseInt(cachedTimestamp, 10) < 30000
       ) {
         setServices(JSON.parse(cachedServices));
-        console.log("Użyto cache dla serwisów.");
         return;
       }
 
@@ -57,13 +56,11 @@ export const AiServiceProvider = ({
       );
       const data = await response.json();
       setServices(data.data);
-      console.log(data.data);
 
       sessionStorage.setItem("services", JSON.stringify(data.data));
       sessionStorage.setItem("servicesTimestamp", Date.now().toString());
-      console.log("Pobrano serwisy z API i zapisano w cache.");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +78,7 @@ export const AiServiceProvider = ({
       const data = await response.json();
       setServices([...services, data]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -103,25 +100,26 @@ export const AiServiceProvider = ({
       );
       setServices(updatedServices);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const updateServiceStatus = async (Id: number) => {
     try {
-
-        console.log("Id :" + Id )
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`, {
-            method: "PATCH",
-        });
-    
-        if (!response.ok) {
-            throw new Error("Błąd podczas aktualizacji statusu");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`,
+        {
+          method: "PATCH",
         }
-        setServices((prevServices) =>
-          prevServices.map((service) =>
-              service.Id === Id ? { ...service, Status: "Verified" } : service
-          )
+      );
+
+      if (!response.ok) {
+        throw new Error("Błąd podczas aktualizacji statusu");
+      }
+      setServices((prevServices) =>
+        prevServices.map((service) =>
+          service.Id === Id ? { ...service, Status: "Verified" } : service
+        )
       );
     } catch (error) {
       console.error("Błąd:", error);
@@ -130,18 +128,21 @@ export const AiServiceProvider = ({
 
   const deleteService = async (Id: number) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`, {
-        method: "DELETE",
-    });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    if (!response.ok) {
+      if (!response.ok) {
         throw new Error("Błąd podczas usuwania serwisu");
-    }
+      }
 
       const updatedServices = services.filter((s) => s.Id !== Id);
       setServices(updatedServices);
     } catch (error) {
-      console.log("Błąd usuwania" + error);
+      console.error("Błąd usuwania" + error);
     }
   };
 
@@ -153,7 +154,7 @@ export const AiServiceProvider = ({
       const data = await response.json();
       setLikedServices(data.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -175,15 +176,11 @@ export const AiServiceProvider = ({
         }
       );
 
-      const result = await response.json();
-
       if (response.ok) {
         setLikedServices([...likedServices, data.AiServiceId]);
       }
-
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -205,15 +202,11 @@ export const AiServiceProvider = ({
         }
       );
 
-      const result = await response.json();
-
       if (response.ok) {
         setLikedServices(likedServices.filter((s) => s !== data.AiServiceId));
       }
-
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -226,7 +219,7 @@ export const AiServiceProvider = ({
 
     service!.Reviews += 1;
 
-    setServices([...services.filter((s) => s !== undefined), service!]);
+    setServices(services.map((s) => (s.Id === aiServiceId ? service! : s)));
   };
 
   useEffect(() => {

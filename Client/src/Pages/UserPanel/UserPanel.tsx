@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "../../Utils/Context/UserContext";
 import UserSettings from "../../Components/UserPanelComponents/UserSettings";
 import { Avatar } from "@mantine/core";
@@ -20,10 +20,6 @@ const UserPanel = () => {
     "Liked",
     "Rated",
   ];
-
-  useEffect(() => {
-    console.log(userImage);
-  });
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -47,7 +43,7 @@ const UserPanel = () => {
               <img
                 src={userImage}
                 alt="User"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
+                className=" h-full  transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
               />
             ) : (
               <Avatar size={180} />

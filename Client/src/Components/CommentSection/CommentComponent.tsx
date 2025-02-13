@@ -29,7 +29,6 @@ const CommentComponent: React.FC<CommentProps> = ({
   likes,
   dislikes,
   hasComments,
-  ParentId,
   UserId,
   createdAt,
 }) => {
@@ -62,9 +61,8 @@ const CommentComponent: React.FC<CommentProps> = ({
           console.error(result);
         }
         setCommentUser(result);
-        console.log(result);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -80,8 +78,6 @@ const CommentComponent: React.FC<CommentProps> = ({
 
   const handleSendClick = async () => {
     try {
-      console.log(ParentId);
-
       setIsSendingReply(true);
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
@@ -106,10 +102,8 @@ const CommentComponent: React.FC<CommentProps> = ({
       } else {
         LoadComments();
       }
-
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsSendingReply(false);
       setIsReplying(false);
@@ -132,17 +126,13 @@ const CommentComponent: React.FC<CommentProps> = ({
 
       const result = await response.json();
 
-      console.log(Id);
-
       if (!response.ok) {
         console.error(result);
       } else {
         setComments(result.data);
       }
-
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoadingComments(false);
       setIsShowingComments(true);
@@ -150,7 +140,6 @@ const CommentComponent: React.FC<CommentProps> = ({
   };
 
   const formatDate = () => {
-    console.log(createdAt);
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));
