@@ -186,6 +186,7 @@ public class AIServiceController : ControllerBase
         var correctResponse = new ApiResponse<AiService>(true, "Service updated", updatedService);
 
         return Ok(correctResponse);
+
     }
 
 
