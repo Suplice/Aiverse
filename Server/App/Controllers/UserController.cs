@@ -21,109 +21,138 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserById(long id)
     {
-        if (id < 0)
+        try
         {
-            return BadRequest("Invalid ID.");
+            if (id < 0)
+            {
+                return BadRequest("Invalid ID.");
+            }
+
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(400, new { message = e.Message });
         }
 
-        var user = await _userService.GetUserById(id);
-
-        if (user == null)
-        {
-            return NotFound($"User with ID {id} not found.");
-        }
-
-        return Ok(user);
     }
 
     [AuthorizeByCookie("USER")]
     [HttpGet("by-email")]
     public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
     {
-        var user = await _userService.GetUserByEmailAsync(email);
-
-        if (user == null)
+        try
         {
-            return NotFound($"User with email '{email}' not found.");
-        }
+            var user = await _userService.GetUserByEmailAsync(email);
 
-        return Ok(user);
+            if (user == null)
+            {
+                return NotFound($"User with email '{email}' not found.");
+            }
+
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(400, new { message = e.Message });
+        }
     }
 
     [AuthorizeByCookie("USER")]
     [HttpPatch("{id}/Email")]
     public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmailDto updateEmailDto)
     {
-
-        if (id != updateEmailDto.Id)
+        try
         {
-            return BadRequest("ID in the URL does not match the ID in the request body.");
+            if (id != updateEmailDto.Id)
+            {
+                return BadRequest("ID in the URL does not match the ID in the request body.");
+            }
+
+            var user = await _userService.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+            var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
+
+            if (!isEmailUpdated)
+            {
+                return Conflict("The provided email is already in use.");
+            }
+
+            return NoContent();
         }
-
-
-        var user = await _userService.GetUserById(id);
-        if (user == null)
+        catch (Exception e)
         {
-            return NotFound($"User with ID {id} not found.");
+            return StatusCode(400, new { message = e.Message });
         }
-
-
-        var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
-
-        if (!isEmailUpdated)
-        {
-            return Conflict("The provided email is already in use.");
-        }
-
-        return NoContent();
     }
 
     [AuthorizeByCookie("USER")]
     [HttpPatch("{id}/Name")]
     public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
     {
-
-        if (id != updatedUser.Id)
+        try
         {
-            return BadRequest("ID in URL does not match ID in the body.");
+            if (id != updatedUser.Id)
+            {
+                return BadRequest("ID in URL does not match ID in the body.");
+            }
+
+            var user = await _userService.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+            if (!string.IsNullOrEmpty(updatedUser.Name))
+            {
+                user.Name = updatedUser.Name;
+            }
+
+            await _userService.UpdateUser(user);
+
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return StatusCode(400, new { message = e.Message });
         }
 
-
-        var user = await _userService.GetUserById(id);
-
-
-        if (user == null)
-        {
-            return NotFound($"User with ID {id} not found.");
-        }
-
-
-        if (!string.IsNullOrEmpty(updatedUser.Name))
-        {
-            user.Name = updatedUser.Name;
-        }
-
-
-        await _userService.UpdateUser(user);
-
-        return NoContent();
     }
 
     [AuthorizeByCookie("USER")]
     [HttpPatch("{id}/Password")]
     public async Task<IActionResult> UpdateUserPassword(long id, [FromBody] String newPassword)
     {
-
-        var user = await _userService.GetUserById(id);
-        if (user == null)
+        try
         {
-            return NotFound($"User with ID {id} not found.");
+            var user = await _userService.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+
+            await _userService.UpdateUserPasswordAsync(id, newPassword);
+
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return StatusCode(400, new { message = e.Message });
         }
 
-
-        await _userService.UpdateUserPasswordAsync(id, newPassword);
-
-        return NoContent();
     }
 
     [AuthorizeByCookie("USER")]
@@ -165,9 +194,9 @@ public class UserController : ControllerBase
 
             return Ok(new { message = "Profile picture updated successfully.", filePath });
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return StatusCode(500, new { message = ex.Message });
+            return StatusCode(400, new { message = e.Message });
         }
     }
 }

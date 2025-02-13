@@ -28,7 +28,7 @@ const UserReviewedServices = () => {
         const response = await fetch(
           `${
             import.meta.env.VITE_API_URL
-          }/reviews/reviewedServices/${userId}`,
+          }/reviews/reviewedServices/${user?.Id}`,
           {
             method: "GET",
             credentials: "include",
