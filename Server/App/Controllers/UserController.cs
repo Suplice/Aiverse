@@ -6,11 +6,11 @@ using Server.App.Models;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly FileService _fileService; 
+    private readonly IFileService _fileService; 
     private readonly IWebHostEnvironment _env;  
 
     // Konstruktor kontrolera
-    public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
+    public UserController(IUserRepository userRepository, IUserService userService, IFileService fileService, IWebHostEnvironment env)
     {
         _userService = userService;
         _fileService = fileService;  

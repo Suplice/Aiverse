@@ -5,10 +5,20 @@ import { useEffect, useState } from "react";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
 import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkeleton";
+import { useAuth } from "../../Utils/Context/AuthContext";
+import { useNavigate } from "react-router";
 
-const UserReviewedServices = ({ userId }: { userId: number }) => {
+const UserReviewedServices = () => {
   const [reviewedServices, setReviewedServices] = useState<AiService[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const { user } = useAuth();
+
+  const navigate = useNavigate();
+
+  if (!user) {
+    navigate("/login");
+  }
 
   useEffect(() => {
     const fetchLikedServices = async () => {
@@ -16,9 +26,9 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
         setIsLoading(true);
 
         const response = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/aiservice/reviewedServices/${userId}`,
+          `${import.meta.env.VITE_API_URL}/aiservice/reviewedServices/${
+            user!.Id
+          }`,
           {
             method: "GET",
             credentials: "include",
@@ -37,13 +47,13 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
       }
     };
 
-    if (userId > 0) {
+    if (user!.Id > 0) {
       fetchLikedServices();
     } else {
-      console.warn("Invalid userId:", userId);
+      console.warn("Invalid userId:", user!.Id);
       setIsLoading(false);
     }
-  }, [userId]);
+  }, [user!.Id]);
 
   return (
     <Block
