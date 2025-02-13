@@ -21,7 +21,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/aiservice/GetReviews/${AiServiceId}`,
+          `${import.meta.env.VITE_API_URL}/reviews/getreviews/${AiServiceId}`,
           {
             method: "GET",
             credentials: "include",

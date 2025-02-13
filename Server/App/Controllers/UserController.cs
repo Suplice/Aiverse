@@ -6,15 +6,15 @@ using Server.App.Models;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly FileService _fileService; 
-    private readonly IWebHostEnvironment _env;  
+    private readonly IFileService _fileService;
+    private readonly IWebHostEnvironment _env;
 
     // Konstruktor kontrolera
-    public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
+    public UserController(IUserRepository userRepository, IUserService userService, IFileService fileService, IWebHostEnvironment env)
     {
         _userService = userService;
-        _fileService = fileService;  
-        _env = env; 
+        _fileService = fileService;
+        _env = env;
     }
 
     [AuthorizeByCookie("USER")]
@@ -33,7 +33,7 @@ public class UserController : ControllerBase
             return NotFound($"User with ID {id} not found.");
         }
 
-        return Ok(user); 
+        return Ok(user);
     }
 
     [AuthorizeByCookie("USER")]
@@ -54,20 +54,20 @@ public class UserController : ControllerBase
     [HttpPatch("{id}/Email")]
     public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmailDto updateEmailDto)
     {
-     
+
         if (id != updateEmailDto.Id)
         {
             return BadRequest("ID in the URL does not match the ID in the request body.");
         }
 
-    
+
         var user = await _userService.GetUserById(id);
         if (user == null)
         {
             return NotFound($"User with ID {id} not found.");
         }
 
-   
+
         var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
 
         if (!isEmailUpdated)
@@ -82,13 +82,13 @@ public class UserController : ControllerBase
     [HttpPatch("{id}/Name")]
     public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
     {
-  
+
         if (id != updatedUser.Id)
         {
             return BadRequest("ID in URL does not match ID in the body.");
         }
 
-    
+
         var user = await _userService.GetUserById(id);
 
 
@@ -97,13 +97,13 @@ public class UserController : ControllerBase
             return NotFound($"User with ID {id} not found.");
         }
 
- 
+
         if (!string.IsNullOrEmpty(updatedUser.Name))
         {
             user.Name = updatedUser.Name;
         }
 
-        
+
         await _userService.UpdateUser(user);
 
         return NoContent();
@@ -120,9 +120,9 @@ public class UserController : ControllerBase
             return NotFound($"User with ID {id} not found.");
         }
 
- 
+
         await _userService.UpdateUserPasswordAsync(id, newPassword);
-        
+
         return NoContent();
     }
 
@@ -140,7 +140,7 @@ public class UserController : ControllerBase
         {
             var user = await _userService.GetUserById(userId);
 
-  
+
             if (user == null)
             {
                 return NotFound($"User with ID {userId} not found.");
@@ -152,14 +152,14 @@ public class UserController : ControllerBase
                 var oldFilePath = Path.Combine(_env.WebRootPath, user.Picture.TrimStart('/'));
                 if (System.IO.File.Exists(oldFilePath))
                 {
-                    System.IO.File.Delete(oldFilePath); 
+                    System.IO.File.Delete(oldFilePath);
                 }
             }
 
- 
+
             var filePath = await _fileService.SaveFileAsync(file, "uploads/user-images");
 
- 
+
             user.Picture = filePath;
             await _userService.UpdateUser(user);
 

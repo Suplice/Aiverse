@@ -11,36 +11,41 @@ using TaskManagementApp.Core.ApiResponse;
 
 [ApiController]
 [Route("auth")]
-public class AuthController: ControllerBase{
+public class AuthController : ControllerBase
+{
 
     private readonly IAuthService _authService;
     private readonly string? _secretKey;
 
-    public AuthController(IAuthService authService, IConfiguration config){
+    public AuthController(IAuthService authService, IConfiguration config)
+    {
         _authService = authService;
         _secretKey = config["JwtSettings:SecretKey"];
     }
 
-    private Dictionary<string, List<string>?> GetModelStateErrors (ModelStateDictionary modelState)
+    private Dictionary<string, List<string>?> GetModelStateErrors(ModelStateDictionary modelState)
     {
-         var errors = modelState.ToDictionary(
-             k => k.Key,
-             v => v.Value?.Errors.Select(e => e.ErrorMessage).ToList());
+        var errors = modelState.ToDictionary(
+            k => k.Key,
+            v => v.Value?.Errors.Select(e => e.ErrorMessage).ToList());
 
         return errors;
     }
 
     [AuthorizeByCookie("USER")]
     [HttpPost("logout")]
-    public IActionResult Logout(){
+    public IActionResult Logout()
+    {
         Response.Cookies.Delete("authToken");
         return Ok(new ApiResponse<bool>(true, "Logout successful", true));
     }
 
-    
+
     [HttpPost("google")]
-    public async Task<IActionResult> GoogleLogin(RequestGoogleDTO GoogleData){
-        if(!ModelState.IsValid){
+    public async Task<IActionResult> GoogleLogin(RequestGoogleDTO GoogleData)
+    {
+        if (!ModelState.IsValid)
+        {
             var errors = GetModelStateErrors(ModelState);
             var response = new ApiResponse<RequestGoogleDTO>(false, "ModelState is invalid", GoogleData, errors);
             return BadRequest(response);
@@ -48,7 +53,8 @@ public class AuthController: ControllerBase{
 
         var GoogleResult = await _authService.GoogleLogin(GoogleData);
 
-        if(GoogleResult == null){
+        if (GoogleResult == null)
+        {
             return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
         }
 
@@ -57,10 +63,10 @@ public class AuthController: ControllerBase{
 
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true, 
-            Secure = true,  
+            HttpOnly = true,
+            Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(1) 
+            Expires = DateTime.UtcNow.AddDays(1)
         };
 
         Response.Cookies.Append("authToken", token, cookieOptions);
@@ -72,10 +78,13 @@ public class AuthController: ControllerBase{
     }
 
     [HttpGet("credentials")]
-    public async Task<IActionResult> CheckCredentials(){
-        try{
+    public async Task<IActionResult> CheckCredentials()
+    {
+        try
+        {
             var token = Request.Cookies["authToken"];
-            if(token == null){
+            if (token == null)
+            {
                 return BadRequest(new ApiResponse<bool>(false, "No token found", false));
             }
 
@@ -95,7 +104,8 @@ public class AuthController: ControllerBase{
 
             var user = await _authService.GetUserById(userId);
 
-            if(user == null){
+            if (user == null)
+            {
                 Response.Cookies.Delete("authToken");
                 return BadRequest(new ApiResponse<bool>(false, "User not found", false));
             }
@@ -104,24 +114,27 @@ public class AuthController: ControllerBase{
 
             Response.Cookies.Append("authToken", token, new CookieOptions
             {
-                HttpOnly = true, 
-                Secure = true,  
+                HttpOnly = true,
+                Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(1) 
+                Expires = DateTime.UtcNow.AddDays(1)
             });
 
             var response = new ApiResponse<ResponseAuthDTO>(true, "User found", user);
             return Ok(response);
         }
-        catch(Exception e){
+        catch (Exception e)
+        {
             return BadRequest(new ApiResponse<bool>(false, e.Message, false));
         }
     }
 
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(RequestLoginDTO LoginData){
-        if(!ModelState.IsValid){
+    public async Task<IActionResult> Login(RequestLoginDTO LoginData)
+    {
+        if (!ModelState.IsValid)
+        {
             var errors = GetModelStateErrors(ModelState);
             var response = new ApiResponse<RequestLoginDTO>(false, "ModelState is invalid", LoginData, errors);
             return BadRequest(response);
@@ -129,7 +142,8 @@ public class AuthController: ControllerBase{
 
         var LoginResult = await _authService.Login(LoginData);
 
-        if(LoginResult == null){
+        if (LoginResult == null)
+        {
             return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
         }
 
@@ -137,21 +151,23 @@ public class AuthController: ControllerBase{
 
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true, 
-            Secure = true,  
+            HttpOnly = true,
+            Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(1) 
+            Expires = DateTime.UtcNow.AddDays(1)
         };
 
         Response.Cookies.Append("authToken", token, cookieOptions);
 
         var correctResponse = new ApiResponse<ResponseAuthDTO>(true, "Login successful", LoginResult);
         return Ok(correctResponse);
-    } 
+    }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RequestRegisterDTO RegisterData){
-        if(!ModelState.IsValid){
+    public async Task<IActionResult> Register(RequestRegisterDTO RegisterData)
+    {
+        if (!ModelState.IsValid)
+        {
             var errors = GetModelStateErrors(ModelState);
             var response = new ApiResponse<RequestRegisterDTO>(false, "ModelState is invalid", RegisterData, errors);
             return BadRequest(response);
@@ -159,17 +175,17 @@ public class AuthController: ControllerBase{
 
         var RegisterResult = await _authService.Register(RegisterData);
 
-        if(RegisterResult == null)
+        if (RegisterResult == null)
             return BadRequest(new ApiResponse<bool>(false, "Error occured", false));
 
         var token = GenerateJwtToken(RegisterResult.Id.ToString(), RegisterResult.Role);
 
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true, 
-            Secure = true,  
+            HttpOnly = true,
+            Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(1) 
+            Expires = DateTime.UtcNow.AddDays(1)
         };
 
         Response.Cookies.Append("authToken", token, cookieOptions);
@@ -177,7 +193,7 @@ public class AuthController: ControllerBase{
         var correctResponse = new ApiResponse<ResponseAuthDTO>(true, "ModelState is right", RegisterResult);
 
         return Ok(correctResponse);
-    } 
+    }
 
 
     private string GenerateJwtToken(string userId, string role)
@@ -189,7 +205,7 @@ public class AuthController: ControllerBase{
             new Claim(ClaimTypes.Role, role)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey)); 
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

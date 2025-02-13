@@ -38,10 +38,16 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAIServiceService, AIServiceService>();
 builder.Services.AddScoped<IAIServiceRepository, AIServiceRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ILikesRepository, LikesRepository>();
+builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<ILikesService, LikesService>();
+builder.Services.AddScoped<IReviewsService, ReviewsService>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
