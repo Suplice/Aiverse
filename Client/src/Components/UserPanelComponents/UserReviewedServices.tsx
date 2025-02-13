@@ -16,7 +16,13 @@ const UserReviewedServices = ({ userId }: { userId: number }) => {
         setIsLoading(true);
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/aiservice/reviewedServices/${userId}`
+          `${
+            import.meta.env.VITE_API_URL
+          }/aiservice/reviewedServices/${userId}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
         );
         const data = await response.json();
         setReviewedServices(data.data);

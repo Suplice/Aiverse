@@ -49,6 +49,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           `${import.meta.env.VITE_API_URL}/user/${UserId}`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
@@ -83,6 +84,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -118,6 +120,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/GetCommentReplies/${Id}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

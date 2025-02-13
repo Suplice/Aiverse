@@ -24,7 +24,7 @@ const LandingPopularServices = () => {
             .filter((service) => service.Status === "Verified")
             .slice(0, 5)
             .map((service, index) => (
-              <LandingServiceCard {...service} index={index} />
+              <LandingServiceCard {...service} index={index} key={index} />
             ))
         ) : (
           <LoadingServicesSkeleton />

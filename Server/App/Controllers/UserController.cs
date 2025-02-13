@@ -6,18 +6,18 @@ using Server.App.Models;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly FileService _fileService; // Dodanie zależności do FileService
-    private readonly IWebHostEnvironment _env;  // Dodanie IWebHostEnvironment
+    private readonly FileService _fileService; 
+    private readonly IWebHostEnvironment _env;  
 
     // Konstruktor kontrolera
     public UserController(IUserRepository userRepository, IUserService userService, FileService fileService, IWebHostEnvironment env)
     {
         _userService = userService;
         _fileService = fileService;  
-        _env = env; // Inicjalizacja _env
+        _env = env; 
     }
 
-    // GET: /user/{id}
+    [AuthorizeByCookie("USER")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserById(long id)
     {
@@ -36,6 +36,7 @@ public class UserController : ControllerBase
         return Ok(user); 
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpGet("by-email")]
     public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
     {
@@ -49,53 +50,54 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    // PATCH: /user/{id}
+    [AuthorizeByCookie("USER")]
     [HttpPatch("{id}/Email")]
-public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmailDto updateEmailDto)
-{
-    // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
-    if (id != updateEmailDto.Id)
+    public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmailDto updateEmailDto)
     {
-        return BadRequest("ID in the URL does not match the ID in the request body.");
-    }
-
-    // Pobieramy użytkownika z bazy danych
-    var user = await _userService.GetUserById(id);
-    if (user == null)
-    {
-        return NotFound($"User with ID {id} not found.");
-    }
-
-    // Aktualizujemy email i obsługujemy potencjalne błędy
-    var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
-
-    if (!isEmailUpdated)
-    {
-        return Conflict("The provided email is already in use.");
-    }
-
-    return NoContent();
-}
-
-    [HttpPatch("{id}/Name")]
-    public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
-    {
-        // Sprawdzamy, czy ID w URL pasuje do ID w ciele zapytania
-        if (id != updatedUser.Id)
+     
+        if (id != updateEmailDto.Id)
         {
-            return BadRequest("ID in URL does not match ID in the body.");
+            return BadRequest("ID in the URL does not match the ID in the request body.");
         }
 
-        // Pobieramy użytkownika z bazy danych
+    
         var user = await _userService.GetUserById(id);
-
-        // Jeśli użytkownik nie istnieje, zwracamy 404 Not Found
         if (user == null)
         {
             return NotFound($"User with ID {id} not found.");
         }
 
-        // Aktualizujemy tylko pola, które zostały dostarczone
+   
+        var isEmailUpdated = await _userService.TryUpdateUserEmailAsync(id, updateEmailDto.Email);
+
+        if (!isEmailUpdated)
+        {
+            return Conflict("The provided email is already in use.");
+        }
+
+        return NoContent();
+    }
+
+    [AuthorizeByCookie("USER")]
+    [HttpPatch("{id}/Name")]
+    public async Task<IActionResult> UpdateUserName(long id, [FromBody] User updatedUser)
+    {
+  
+        if (id != updatedUser.Id)
+        {
+            return BadRequest("ID in URL does not match ID in the body.");
+        }
+
+    
+        var user = await _userService.GetUserById(id);
+
+
+        if (user == null)
+        {
+            return NotFound($"User with ID {id} not found.");
+        }
+
+ 
         if (!string.IsNullOrEmpty(updatedUser.Name))
         {
             user.Name = updatedUser.Name;
@@ -107,7 +109,7 @@ public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmail
         return NoContent();
     }
 
-    // PATCH: /user/{userId}/Password
+    [AuthorizeByCookie("USER")]
     [HttpPatch("{id}/Password")]
     public async Task<IActionResult> UpdateUserPassword(long id, [FromBody] String newPassword)
     {
@@ -118,13 +120,13 @@ public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmail
             return NotFound($"User with ID {id} not found.");
         }
 
-        // Nie zajmujemy się logiką zmiany hasła w kontrolerze!
+ 
         await _userService.UpdateUserPasswordAsync(id, newPassword);
         
         return NoContent();
     }
 
-    // PATCH: /user/{userId}/profile-picture
+    [AuthorizeByCookie("USER")]
     [HttpPatch("{userId}/profile-picture")]
     public async Task<IActionResult> UpdateUserProfilePicture(long userId, IFormFile file)
     {
@@ -138,26 +140,26 @@ public async Task<IActionResult> UpdateUserEmail(long id, [FromBody] UpdateEmail
         {
             var user = await _userService.GetUserById(userId);
 
-            // Jeśli użytkownik nie istnieje, zwracamy 404 Not Found
+  
             if (user == null)
             {
                 return NotFound($"User with ID {userId} not found.");
             }
 
-            // Jeśli użytkownik ma stare zdjęcie, usuń je
+
             if (!string.IsNullOrEmpty(user.Picture))
             {
                 var oldFilePath = Path.Combine(_env.WebRootPath, user.Picture.TrimStart('/'));
                 if (System.IO.File.Exists(oldFilePath))
                 {
-                    System.IO.File.Delete(oldFilePath); // Usuń stare zdjęcie
+                    System.IO.File.Delete(oldFilePath); 
                 }
             }
 
-            // Zapisz nowe zdjęcie użytkownika
+ 
             var filePath = await _fileService.SaveFileAsync(file, "uploads/user-images");
 
-            // Zaktualizuj ścieżkę zdjęcia użytkownika w bazie danych
+ 
             user.Picture = filePath;
             await _userService.UpdateUser(user);
 

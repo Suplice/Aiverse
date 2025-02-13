@@ -73,6 +73,7 @@ new Supabase.Client(
     }
 ));
 
+
 var app = builder.Build();
 
 
