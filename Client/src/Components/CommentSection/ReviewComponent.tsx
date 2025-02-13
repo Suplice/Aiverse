@@ -51,6 +51,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
           `${import.meta.env.VITE_API_URL}/user/${UserId}`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
@@ -82,6 +83,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -138,6 +140,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/getReviewComments/${id}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

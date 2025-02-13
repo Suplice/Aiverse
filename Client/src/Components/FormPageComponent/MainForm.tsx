@@ -88,6 +88,7 @@ const MainForm = () => {
         `${import.meta.env.VITE_API_URL}/aiservice/addservice`,
         {
           method: "POST",
+          credentials: "include",
           body: formDataToSend,
         }
       );

@@ -1,7 +1,7 @@
 import Block from "../UI/Block";
 import TextField from "../UI/TextField";
 import { Comment } from "../../Utils/Models/Comment";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Controls from "./Controls";
 import AddCommentComponent from "./AddCommentComponent";
 import { User } from "../../Utils/Models/User";
@@ -49,6 +49,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           `${import.meta.env.VITE_API_URL}/user/${UserId}`,
           {
             method: "GET",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
@@ -83,6 +84,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -118,6 +120,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         `${import.meta.env.VITE_API_URL}/aiservice/GetCommentReplies/${Id}`,
         {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -139,7 +142,8 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   };
 
-  const formatDate = () => {
+  const date = useMemo(() => {
+    console.log("formating");
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));
@@ -158,7 +162,7 @@ const CommentComponent: React.FC<CommentProps> = ({
       if (days === 1) return `${days} day ago`;
       return `${days} days ago`;
     }
-  };
+  }, [createdAt]);
 
   return (
     <div className="grid grid-cols-[40px_auto] grid-rows-[40px_auto] mb-2 ">
@@ -171,7 +175,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         <TextField color="white" className="text-lg">
           {commentUser?.Name ? commentUser?.Name : "Guest"}
         </TextField>
-        <TextField className="text-sm text-gray-500">{formatDate()}</TextField>
+        <TextField className="text-sm text-gray-500">{date}</TextField>
       </Block>
       <div className="border-l h-full mt-1 self-center place-self-center border-gray-600"></div>
       <Block

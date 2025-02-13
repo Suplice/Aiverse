@@ -45,21 +45,6 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
-    [HttpGet("getpendingservices")]
-    public async Task<IActionResult> GetPendingServices(){
-        var ServicesResult = await _AIServiceService.GetPendingServices();
-
-        if (ServicesResult == null)
-        {
-            var response = new ApiResponse<bool>(false, "Error occured", false);
-            return BadRequest(response);
-        }
-
-        var correctResponse = new ApiResponse<List<ResponseAIServiceDTO>>(true, "Services found", ServicesResult);
-
-        return Ok(correctResponse);
-    }
-
     [HttpGet("getservice/{serviceId}")]
     public async Task<IActionResult> GetServiceById(long serviceId)
     {
@@ -112,6 +97,7 @@ public class AIServiceController : ControllerBase
 
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("addservice")]
     public async Task<IActionResult> AddNewService(RequestAIServiceDTO service)
     {
@@ -177,6 +163,7 @@ public class AIServiceController : ControllerBase
 
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("AddReview")]
     public async Task<IActionResult> AddReview(RequestReviewDTO review)
     {
@@ -228,6 +215,7 @@ public class AIServiceController : ControllerBase
         }
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("addComment")]
     public async Task<IActionResult> AddComment(RequestAddCommentDTO comment)
     {
@@ -304,6 +292,7 @@ public class AIServiceController : ControllerBase
         }
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("addCommentReply")]
     public async Task<IActionResult> AddCommentReply(RequestAddCommentDTO comment)
     {
@@ -329,6 +318,8 @@ public class AIServiceController : ControllerBase
             return BadRequest(response);
         }
     }
+
+    [AuthorizeByCookie("USER")]
     [HttpGet("likedbyuser/{userId}")]
     public IActionResult GetLikedServices(long userId)
     {
@@ -354,6 +345,7 @@ public class AIServiceController : ControllerBase
         }
     }
 
+    [AuthorizeByCookie("USER")]
     [HttpPost("likeService")]
     public async Task<IActionResult> LikeService(RequestLikeServiceDTO likeService)
     {
@@ -380,6 +372,8 @@ public class AIServiceController : ControllerBase
         }
     }
 
+
+    [AuthorizeByCookie("USER")]
     [HttpPost("dislikeService")]
     public async Task<IActionResult> DislikeService(RequestLikeServiceDTO likeService)
     {
@@ -430,6 +424,7 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    [AuthorizeByCookie("MODERATOR")]
     [HttpPatch("updatestatus/{id}")]
     public async Task<IActionResult> UpdateStatus(long id){
 
@@ -450,6 +445,8 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+
+    [AuthorizeByCookie("MODERATOR")]
     [HttpDelete("deletebyid/{id}")]
     public async Task<IActionResult> DeleteServiceById(long id){
         if(id <= 0){

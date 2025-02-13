@@ -52,7 +52,11 @@ export const AiServiceProvider = ({
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/getall`
+        `${import.meta.env.VITE_API_URL}/aiservice/getall`,
+        {
+          credentials: "include",
+          method: "GET",
+        }
       );
       const data = await response.json();
       setServices(data.data);
@@ -70,6 +74,7 @@ export const AiServiceProvider = ({
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -88,6 +93,7 @@ export const AiServiceProvider = ({
         `${import.meta.env.VITE_API_URL}/services/${service.Id}`,
         {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -109,6 +115,7 @@ export const AiServiceProvider = ({
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/aiservice/updatestatus/${Id}`,
         {
+          credentials: "include",
           method: "PATCH",
         }
       );
@@ -131,6 +138,7 @@ export const AiServiceProvider = ({
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/aiservice/deletebyid/${Id}`,
         {
+          credentials: "include",
           method: "DELETE",
         }
       );
@@ -149,7 +157,10 @@ export const AiServiceProvider = ({
   const fetchServicesLikedByUser = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/likedbyuser/${user?.Id}`
+        `${import.meta.env.VITE_API_URL}/aiservice/likedbyuser/${user?.Id}`,
+        {
+          credentials: "include",
+        }
       );
       const data = await response.json();
       setLikedServices(data.data);
@@ -166,6 +177,7 @@ export const AiServiceProvider = ({
         `${import.meta.env.VITE_API_URL}/aiservice/likeService`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -192,6 +204,7 @@ export const AiServiceProvider = ({
         `${import.meta.env.VITE_API_URL}/aiservice/dislikeService`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

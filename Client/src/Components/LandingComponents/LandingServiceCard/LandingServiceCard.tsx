@@ -42,7 +42,6 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
 
   return (
     <Block
-      key={Id}
       className={`flex-col border-[#3B3B3D] cursor-pointer    p-4 ${
         index === 0 ? "border-t-0" : "border-t-2"
       }`}
