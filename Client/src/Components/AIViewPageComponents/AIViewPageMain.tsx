@@ -5,15 +5,31 @@ import CommentSection from "../CommentSection/CommentSection";
 import { useEffect, useState } from "react";
 import FullDescriptionComponent from "./FullDescriptionComponent";
 import ServiceGallery, { GalleryImage } from "./ServiceGallery";
-import PageNavigation from "./PageNavigation";
+import PageNavigation from "./ResponsiveNav";
 
 const AIViewPageMain = () => {
+  /**
+   * Service id from the url params
+   */
   const { id } = useParams<{ id: string }>();
-  const { services } = useAiService();
+
+  /**
+   * Gallery images state, holds the gallery images
+   * which will be displayed in the gallery component
+   */
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [, setLoading] = useState<boolean>(true);
+
+  const { services } = useAiService();
 
   useEffect(() => {
+    /**
+     * Fetches gallery images for a specific AI service when the component mounts or when `id` or `services` changes.
+     * The `serviceId` is used to find the correct service from the `services` array, and its title is used to fetch the gallery images.
+     *
+     * @async
+     * @function fetchGalleryImages
+     * @returns {Promise<void>}
+     */
     const fetchGalleryImages = async () => {
       try {
         const service = services?.find((s) => s.Id === Number(id));
@@ -42,8 +58,6 @@ const AIViewPageMain = () => {
         );
       } catch {
         console.error("error");
-      } finally {
-        setLoading(false);
       }
     };
 

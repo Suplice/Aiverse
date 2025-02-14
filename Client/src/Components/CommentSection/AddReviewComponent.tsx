@@ -30,18 +30,44 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
 
   const { handleServiceReviewed } = useAiService();
 
+  /**
+   * A function to handle the click event of the star.
+   * It sets the rating state to the index of the star clicked.
+   *
+   * @param {number} index index of the star clicked
+   * @function handleStarClick
+   * @returns {void}
+   */
   const handleStarClick = (index: number) => {
     setRating(index);
   };
 
+  /**
+   *
+   * @param {number} index index of the star hovered
+   * @function handleStarHover
+   * @returns {void}
+   */
   const handleStarHover = (index: number) => {
     setHoverRating(index);
   };
 
+  /**
+   * A function to handle the mouse leave event of the star.
+   * @function handleStarMouseLeave
+   * @returns {void}
+   */
   const handleStarMouseLeave = () => {
     setHoverRating(0);
   };
 
+  /**
+   * A function to handle the submit event of the review form.
+   * It sends a POST request to the server to add a review to the service.
+   * @async
+   * @function handleSubmit
+   * @returns {Promise<void>} Promise
+   */
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
@@ -78,6 +104,12 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
     }
   };
 
+  /**
+   * A function to handle the change of the service data.
+   * It calls the `handleServiceReviewed` function from the `useAiService` hook.
+   * @param {Review} review the review object to be added to the service
+   * @function handleChangeServiceData
+   */
   const handleChangeServiceData = (review: Review) => {
     handleServiceReviewed(review, AiServiceId);
   };
@@ -131,7 +163,6 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
           </p>
         </>
       ) : (
-        // Display the form for adding a review
         <>
           <h2 className="text-xl font-semibold text-white mb-4">
             Add your review

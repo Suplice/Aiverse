@@ -29,7 +29,9 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
   const navigate = useNavigate();
 
   const location = useLocation();
+
   const query = new URLSearchParams(location.search);
+
   const initialSearchParams: SearchParams = {
     searchText: query.get("searchText") || "",
     categories: query.get("categories")?.split(",") || [],
@@ -49,10 +51,23 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
   const [searchParams, setSearchParams] =
     useState<SearchParams>(initialSearchParams);
 
+  /**
+   * useEffect hook to update the search parameters when the location changes
+   * It sets the search parameters to the initial search parameters
+   */
   useEffect(() => {
     setSearchParams(initialSearchParams);
   }, [location.search]);
 
+  /**
+   * A function to apply the filters to the services
+   * It creates a URLSearchParams object
+   * It sets the categories and price range to the URLSearchParams object
+   * It navigates to the new URL with the updated search parameters
+   * It calls the handleFilter function with the search parameters
+   * @function applyFilters
+   * @returns {void}
+   */
   const applyFilters = () => {
     const params = new URLSearchParams();
     params.set("categories", searchParams.categories.join(","));

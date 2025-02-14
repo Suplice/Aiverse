@@ -5,6 +5,16 @@ const useFilteredServices = (services: AiService[]) => {
   const [filteredServices, setFilteredServices] = useState(services);
   const [isLoading, setIsLoading] = useState(true);
 
+  /**
+   * Filters the services based on the search parameters.
+   * It filters the services based on the categories, price range, and search text.
+   * It sets the filtered services to the state and sets the loading state to false.
+   * It uses a setTimeout function to simulate the loading time.
+   *
+   * @function filterServices
+   * @param {URLSearchParams} params Search parameters from the url query used to filter the services.
+   * @returns
+   */
   const filterServices = (params: URLSearchParams) => {
     if (services.length === 0) {
       setIsLoading(false);

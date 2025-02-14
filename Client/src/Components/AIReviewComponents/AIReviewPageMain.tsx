@@ -9,13 +9,28 @@ import ServiceGallery, {
 } from "../AIViewPageComponents/ServiceGallery";
 
 const AIReviewPageMain = () => {
+  /**
+   * Service id from the url params
+   */
   const { id } = useParams<{ id: string }>() || { id: "" };
-  const { services } = useAiService();
+  /**
+   * Gallery images state, holds the gallery images
+   * which will be displayed in the gallery component
+   */
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [, setLoading] = useState<boolean>(true);
+
+  const { services } = useAiService();
 
   const service = services.find((s) => s.Id === Number(id));
 
+  /**
+   * Fetches gallery images for a specific AI service when the component mounts or when `id` or `services` changes.
+   * The `serviceId` is used to find the correct service from the `services` array, and its title is used to fetch the gallery images.
+   *
+   * @async
+   * @function fetchGalleryImages
+   * @returns {Promise<void>}
+   */
   useEffect(() => {
     const fetchGalleryImages = async () => {
       try {
@@ -45,8 +60,6 @@ const AIReviewPageMain = () => {
         );
       } catch {
         console.error("error");
-      } finally {
-        setLoading(false);
       }
     };
 

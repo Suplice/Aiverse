@@ -27,6 +27,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [userImage, setUserImage] = useState<string>("");
   const [isUserImage, setIsUserImage] = useState<boolean>(true);
 
+  /**
+   * A function to fetch the user data by id.
+   * It sends a GET request to the API with the user id.
+   * If the response is successful, the user data is set to the state.
+   * If the user has a profile picture, the profile picture is set to the state.
+   * If there is an error, it logs the error to the console.
+   *
+   * @async
+   * @function fetchUserById
+   * @param {number} id - The id of the user to fetch
+   * @returns {Promise<void>}
+   */
   const fetchUserById = async (id: number) => {
     try {
       const response = await fetch(
@@ -53,6 +65,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to save the image to the database.
+   * It sends a PATCH request to the API with the user id and the file.
+   * If the response is successful, the updated user data is set to the state.
+   * If there is an error, it logs the error to the console.
+   *
+   * @async
+   * @function saveImageToDatabase
+   * @param {File} file - The image file to save
+   * @returns {Promise<void>}
+   */
   const saveImageToDatabase = async (file: File) => {
     if (!user) {
       console.error("User data is not available");
@@ -84,21 +107,39 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to update the user image.
+   * It updates the preview image immediately.
+   * It saves the image to the database.
+   * @function updateUserImage
+   * @param {File} file - The image file to update
+   * @returns {void}
+   */
   const updateUserImage = (file: File) => {
-    // Update the preview image immediately
     const imageUrl = URL.createObjectURL(file);
     setUserImage(imageUrl);
-
-    // Save the image to the database
     saveImageToDatabase(file);
   };
 
+  /**
+   * A function to fetch the user data by id when the component mounts.
+   */
   useEffect(() => {
     if (user?.Id) {
       fetchUserById(user.Id);
     }
   }, []);
 
+  /**
+   * A function to update the user name.
+   * It sends a PATCH request to the API with the user id and the new name.
+   * If the response is successful, the user name is updated.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function updateUserName
+   * @param {string} newName - The new name to update
+   * @returns
+   */
   const updateUserName = async (newName: string) => {
     if (!user) {
       console.error("User data is not available");
@@ -107,7 +148,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const updatedUserData = {
         ...user,
-        Name: newName, // Update only the Name field
+        Name: newName,
       };
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/${user.Id}/Name`,
@@ -128,6 +169,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to update the user email.
+   * It sends a PATCH request to the API with the user id and the new email.
+   * If the response is successful, the user email is updated.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function updateUserEmail
+   * @param {string} newEmail - The new email to update
+   * @returns
+   */
   const updateUserEmail = async (newEmail: string) => {
     if (!user) {
       console.error("User data is not available");
@@ -155,13 +206,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to update the user password.
+   * It sends a PATCH request to the API with the user id and the new password.
+   * If the response is successful, the user password is updated.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function updateUserPassword
+   * @param {string} newUserPassword - The new password to update
+   * @returns
+   */
   const updateUserPassword = async (newUserPassword: string) => {
     if (!user) {
       console.error("User data is not available");
       return;
     }
     try {
-      const passwordData = newUserPassword; // Just the password
+      const passwordData = newUserPassword;
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/${user.Id}/Password`,
@@ -170,7 +231,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(passwordData), // Send only the password
+          body: JSON.stringify(passwordData),
           credentials: "include",
         }
       );

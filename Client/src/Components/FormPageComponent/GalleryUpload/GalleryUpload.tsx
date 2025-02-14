@@ -14,12 +14,26 @@ interface FileUploadProps {
 const GalleryUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
   const [, setFiles] = useState<GalleryImages>([]);
 
+  /**
+   * An instance of the Uppy class.
+   * It is used to handle the file upload.
+   * @constant uppy
+   * @type {Uppy}
+   */
   const uppy = new Uppy({
     restrictions: {
       allowedFileTypes: [".jpg", ".png", ".jpeg"],
     },
   });
 
+  /**
+   * A function to handle the change event of the file upload.
+   * It gets the files from the uppy instance and sets the files state.
+   * It also calls the onFileChange function passed as a prop with the files.
+   *
+   * @function handleChange
+   * @returns {void}
+   */
   const handleChange = () => {
     const currentFiles = uppy.getFiles();
 

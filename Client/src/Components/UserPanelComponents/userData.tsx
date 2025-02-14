@@ -22,6 +22,12 @@ const UserData: React.FC<UserDataProps> = ({
 }) => {
   const { user, userImage, isUserImage, saveImageToDatabase } = useUser();
 
+  /**
+   * Handles the change of the image of the user
+   * and saves it to the database
+   * @function handleImageChange
+   * @param {React.ChangeEvent<HTMLInputElement>} event event object of the input field with the image
+   */
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];

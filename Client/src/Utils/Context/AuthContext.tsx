@@ -34,6 +34,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const navigate = useNavigate();
 
+  /**
+   * A function to login with email and password.
+   * A POST request is sent to the API with the email and password.
+   * If the response is successful, the user is authenticated and the user data is set to the state.
+   * else an error message is shown.
+   * @async
+   * @function loginWithEmailAndPassword
+   * @param {SignInFormData} data holds the email and password of the user
+   * @returns {Promise<void>}
+   */
   const loginWithEmailAndPassword = async (data: SignInFormData) => {
     setIsLoading(true);
     try {
@@ -76,6 +86,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to register with email and password.
+   * A POST request is sent to the API with the email, password, and name.
+   * If the response is successful, the user is authenticated and the user data is set to the state.
+   * else an error message is shown.
+   * @async
+   * @function registerWithEmailAndPassword
+   * @param {SignUpFormData} data holds the email, password, and name of the user
+   * @returns {Promise<void>}
+   */
   const registerWithEmailAndPassword = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {
@@ -119,6 +139,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to login with Google.
+   * A POST request is sent to the API with the google sign in data.
+   * If the response is successful, the user is authenticated and the user data is set to the state.
+   * else an error message is shown.
+   * @async
+   * @function LoginWithGoogle
+   * @param {GoogleSignInData} data holds the google sign in data
+   * @returns {Promise<void>}
+   */
   const LoginWithGoogle = async (data: GoogleSignInData) => {
     setIsLoading(true);
     try {
@@ -160,6 +190,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * A function to logout the user.
+   * A POST request is sent to the API to logout the user.
+   * If the response is successful, the user is logged out and the user data is set to null.
+   * else an error message is shown.
+   * @async
+   * @function Logout
+   * @returns {Promise<void>}
+   */
   const Logout = async () => {
     setIsLoading(true);
     try {
@@ -191,6 +230,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    /**
+     * A function to check the user credentials.
+     * A GET request is sent to the API to check the user credentials.
+     * If the response is successful, the user is authenticated and the user data is set to the state.
+     * else the user is not authenticated and the user data is set to null.
+     * @async
+     * @function checkCredentials
+     * @returns {Promise<void>}
+     */
     const checkCredentials = async () => {
       setIsLoading(true);
       try {

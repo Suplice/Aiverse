@@ -3,6 +3,11 @@ import { useNavigate } from "react-router";
 const FormButtons = () => {
   const navigate = useNavigate();
 
+  /**
+   * handleCancel is a function that navigates back to the previous page
+   * @function handleCancel
+   * @returns {void}
+   */
   const handleCancel = () => {
     navigate(-1);
   };

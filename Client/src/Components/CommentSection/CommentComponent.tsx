@@ -43,6 +43,13 @@ const CommentComponent: React.FC<CommentProps> = ({
   const { user } = useAuth();
 
   useEffect(() => {
+    /**
+     * A function to fetch the user details of the comment.
+     * It sends a GET request to the server to get the user details of the comment.
+     * @async
+     * @function fetchUser
+     * @returns {Promise<void>}
+     */
     const fetchUser = async () => {
       try {
         const response = await fetch(
@@ -67,16 +74,26 @@ const CommentComponent: React.FC<CommentProps> = ({
       }
     };
 
-    // TO DO: get user data and image from the server
-    // TO DO: get all comments for review
-
     fetchUser();
   }, [UserId]);
 
+  /**
+   * A function to handle the reply button click event.
+   * It toggles the `isReplying` state.
+   * @function handleReplyClick
+   * @returns {void}
+   */
   const handleReplyClick = () => {
     setIsReplying(!isReplying);
   };
 
+  /**
+   * A function to handle the send button click event.
+   * It sends a POST request to the server to add a reply to the comment.
+   * @async
+   * @function handleSendClick
+   * @returns {Promise<void>}
+   */
   const handleSendClick = async () => {
     try {
       setIsSendingReply(true);
@@ -112,6 +129,13 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   };
 
+  /**
+   * A function to load the comments of the comment.
+   * It sends a GET request to the server to get the comments of the comment.
+   * @async
+   * @function LoadComments
+   * @returns {Promise<void>}
+   */
   const LoadComments = async () => {
     try {
       setIsLoadingComments(true);
@@ -142,6 +166,12 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   };
 
+  /**
+   * A memoized function to format the date of the comment.
+   * It calculates the difference between the current date and the comment date and returns a formatted string.
+   * @function date
+   * @returns {string}
+   */
   const date = useMemo(() => {
     console.log("formating");
     const now = new Date();
