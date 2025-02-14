@@ -73,7 +73,7 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
       setIsSubmitting(true);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/AddReview`,
+        `${import.meta.env.VITE_API_URL}/reviews/AddReview`,
         {
           method: "POST",
           credentials: "include",

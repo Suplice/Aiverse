@@ -98,7 +98,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     try {
       setIsSendingReply(true);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
+        `${import.meta.env.VITE_API_URL}/reviews/addComment`,
         {
           method: "POST",
           credentials: "include",
@@ -141,7 +141,7 @@ const CommentComponent: React.FC<CommentProps> = ({
       setIsLoadingComments(true);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/GetCommentReplies/${Id}`,
+        `${import.meta.env.VITE_API_URL}/comments/GetCommentReplies/${Id}`,
         {
           method: "GET",
           credentials: "include",

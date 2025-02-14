@@ -216,7 +216,7 @@ export const AiServiceProvider = ({
   const fetchServicesLikedByUser = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/likedbyuser/${user?.Id}`,
+        `${import.meta.env.VITE_API_URL}/likes/likedbyuser/${user?.Id}`,
         {
           credentials: "include",
         }
@@ -243,7 +243,7 @@ export const AiServiceProvider = ({
       if (!user) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/likeService`,
+        `${import.meta.env.VITE_API_URL}/likes/likeService`,
         {
           method: "POST",
           credentials: "include",
@@ -279,7 +279,7 @@ export const AiServiceProvider = ({
       if (!user) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/dislikeService`,
+        `${import.meta.env.VITE_API_URL}/likes/dislikeService`,
         {
           method: "POST",
           credentials: "include",

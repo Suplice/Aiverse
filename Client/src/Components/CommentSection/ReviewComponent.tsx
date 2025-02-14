@@ -100,7 +100,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     try {
       setIsSendingReply(true);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/addComment`,
+        `${import.meta.env.VITE_API_URL}/comments/addComment`,
         {
           method: "POST",
           credentials: "include",
@@ -171,7 +171,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
       setIsLoadingComments(true);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/aiservice/getReviewComments/${id}`,
+        `${import.meta.env.VITE_API_URL}/comments/getReviewComments/${id}`,
         {
           method: "GET",
           credentials: "include",
