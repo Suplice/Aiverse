@@ -14,6 +14,10 @@ const MainForm = () => {
 
   const navigate = useNavigate();
 
+  /**
+   * A function to check if the user is authenticated.
+   * It checks if the user is authenticated and redirects to the sign-in page if not.
+   */
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth/signin");
@@ -32,6 +36,16 @@ const MainForm = () => {
     GalleryImages: undefined,
   });
 
+  /**
+   * A function to handle the change of the gallery images.
+   * It sets the gallery images in the form data.
+   *
+   *
+   * @function
+   * @param {keyof AIServiceFormData} name name of the field to change in the form data
+   * @param {GalleryImages} value value to set in the form data
+   * @returns {void}
+   */
   const handleChangeImages = (
     name: keyof AIServiceFormData,
     value: GalleryImages
@@ -42,6 +56,14 @@ const MainForm = () => {
     }));
   };
 
+  /**
+   * A function to handle the change of the category checkboxes.
+   * It sets the selected categories in the form data.
+   *
+   * @function handleCategoryChange
+   * @param {string[]} selected selected categories to set in the form data
+   * @returns {void}
+   */
   const handleCategoryChange = (selected: string[]) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -49,6 +71,15 @@ const MainForm = () => {
     }));
   };
 
+  /**
+   * A function to handle the change of the form data.
+   * It sets the form data in the state.
+   *
+   * @function handleChange
+   * @param {keyof AIServiceFormData} name name of the field to change in the form data
+   * @param {string | File | null} value value to set in the form data
+   * @returns {void}
+   */
   const handleChange = (
     name: keyof AIServiceFormData,
     value: string | File | null
@@ -59,6 +90,14 @@ const MainForm = () => {
     }));
   };
 
+  /**
+   * A function to handle the submit event of the form.
+   * It sends a POST request to the server to add the AI service.
+   *
+   * @function handleSubmit
+   * @param {React.FormEvent<HTMLFormElement>} e event object of the form submit
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

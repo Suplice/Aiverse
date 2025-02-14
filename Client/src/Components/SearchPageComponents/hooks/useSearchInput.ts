@@ -8,6 +8,12 @@ const useSearchInput = (initialValue: string | null) => {
     inputRef.current.value = initialValue;
   }
 
+  /**
+   * `resetInput` function resets the input value to an empty string.
+   * It also sets the last input value to the current input value.
+   * @function resetInput
+   * @returns {void}
+   */
   const resetInput = () => {
     setLastInput(inputRef.current?.value || null);
     if (inputRef.current) {

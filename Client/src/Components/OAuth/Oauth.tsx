@@ -34,6 +34,13 @@ const OAuthComponent = () => {
   const { LoginWithGoogle } = useAuth();
 
   useEffect(() => {
+    /**
+     * Loads the Google Identity Services SDK and initializes it.
+     * If the SDK is already loaded, it initializes it directly.
+     * If the SDK fails to load, it logs an error.
+     * @function loadGoogleSDK
+     * @returns {void}
+     */
     const loadGoogleSDK = () => {
       if (!window.google) {
         const script = document.createElement("script");
@@ -50,6 +57,13 @@ const OAuthComponent = () => {
       }
     };
 
+    /**
+     * Initializes the Google Identity Services SDK.
+     * If the SDK is already loaded, it initializes it directly.
+     * If the SDK fails to load, it logs an error.
+     * @function initializeGoogleOAuth
+     * @returns {void}
+     */
     const initializeGoogleOAuth = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
@@ -69,6 +83,15 @@ const OAuthComponent = () => {
       }
     };
 
+    /**
+     * Handles the response from Google containing the credential.
+     * It decodes the credential and sends it to the server for authentication.
+     * If decoding fails, it logs an error.
+     *
+     * @function handleGoogleResponse
+     * @param response The response from Google containing the credential.
+     * @returns {void}
+     */
     const handleGoogleResponse = (response: { credential: string }) => {
       try {
         const decoded: {
@@ -89,6 +112,13 @@ const OAuthComponent = () => {
     loadGoogleSDK();
   }, []);
 
+  /**
+   * Handles the click on the Google button.
+   * It clicks the hidden Google button to trigger the Google OAuth flow.
+   *
+   * @function handleGoogleClick
+   * @returns {void}
+   */
   const handleGoogleClick = () => {
     (
       document.getElementsByClassName(
@@ -97,14 +127,37 @@ const OAuthComponent = () => {
     ).click();
   };
 
+  /**
+   * Handles the success response from Facebook.
+   * Currently not implemented.
+   * @function handleFacebookSuccess
+   * @param response The response from Facebook.
+   * @returns {void}
+   */
   const handleFacebookSuccess = (response: unknown) => {
     console.log(response);
   };
 
+  /**
+   * Handles the error response from Facebook.
+   * It logs the error to the console.
+   * Currently not implemented.
+   * @function handleFacebookError
+   * @param error The error from Facebook.
+   * @returns {void}
+   */
   const handleFacebookError = (error: Error) => {
     console.error(error);
   };
 
+  /**
+   * Handles the click on the Facebook button.
+   * It clicks the hidden Facebook button to trigger the Facebook OAuth flow.
+   * Currently not working.
+   *
+   * @function handleFacebookClick
+   * @returns {void}
+   */
   const handleFacebookClick = () => {
     document.getElementById("facebook-login-btn")?.click();
   };

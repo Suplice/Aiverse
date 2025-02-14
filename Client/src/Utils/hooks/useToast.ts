@@ -12,6 +12,15 @@ const useToast = () => {
     theme: "dark",
   };
 
+  /**
+   * A function to show a toast message
+   * The type of the toast is determined by the success parameter
+   * The message is shown in the toast
+   * @function showToast
+   * @param {string} message - The message to be shown in the toast
+   * @param {"info" | "success" | "warning" | "error" | "default"} success - The type of the toast
+   * @returns {void}
+   */
   const showToast = (
     message: ToastProps["message"],
     success: ToastProps["success"]

@@ -21,6 +21,18 @@ const UserReviewedServices = () => {
   }
 
   useEffect(() => {
+    /**
+     * A function to fetch the liked services of the user.
+     * It sets the loading state to true.
+     * It fetches the liked services from the API.
+     * If the response is successful, it sets the liked services to the state.
+     * It sets the loading state to false.
+     * If there is an error, it logs the error to the console.
+     *
+     * @function fetchLikedServices
+     * @async
+     * @returns {Promise<void>}
+     */
     const fetchLikedServices = async () => {
       try {
         setIsLoading(true);

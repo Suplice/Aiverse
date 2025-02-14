@@ -34,6 +34,17 @@ const UserSettings = () => {
     watch,
   } = useForm<FormData>();
 
+  /**
+   * `handleChangeName` function updates the user's name.
+   * It gets the new name from the form data.
+   * It updates the user's name in the database.
+   * If the update is successful, it sets the new name to the user state.
+   * It sets the editing state to false.
+   * It shows a toast message with the result of the operation.
+   * If there is an error, it logs the error to the console.
+   * @function handleChangeName
+   * @param {FormData} data payload of the form
+   */
   const handleChangeName: SubmitHandler<FormData> = async (data) => {
     const { name } = data;
     if (name) {
@@ -56,6 +67,17 @@ const UserSettings = () => {
     }
   };
 
+  /**
+   * `handleChangeEmail` function updates the user's email.
+   * It gets the new email from the form data.
+   * It updates the user's email in the database.
+   * If the update is successful, it sets the new email to the user state.
+   * It sets the editing state to false.
+   * It shows a toast message with the result of the operation.
+   *
+   * @function handleChangeEmail
+   * @param {FormData} data payload of the form
+   */
   const handleChangeEmail: SubmitHandler<FormData> = async (data) => {
     const { email } = data;
     if (email) {
@@ -78,6 +100,18 @@ const UserSettings = () => {
     }
   };
 
+  /**
+   * `handleChangePassword` function updates the user's password.
+   * It gets the new password from the form data.
+   * It updates the user's password in the database.
+   * If the update is successful, it sets the new password to the user state.
+   * It sets the editing state to false.
+   * It shows a toast message with the result of the operation.
+   * If there is an error, it logs the error to the console.
+   *
+   * @function handleChangePassword
+   * @param {FormData} data payload of the form
+   */
   const handleChangePassword: SubmitHandler<FormData> = async (data) => {
     const { password } = data;
     if (password) {
@@ -99,15 +133,35 @@ const UserSettings = () => {
     }
   };
 
+  /**
+   * `handleToggleChangePassword` function toggles the editing state of the password.
+   * It sets the editing state to true.
+   * @function handleToggleChangePassword
+   * @returns {void}
+   */
   const handleToggleChangePassword = () => {
     setIsEditingPassword(true);
   };
 
+  /**
+   * `handleEditEmail` function toggles the editing state of the email.
+   * It sets the editing state to true.
+   * It resets the email input field.
+   * @function handleEditEmail
+   * @returns {void}
+   */
   const handleEditEmail = () => {
     setIsEditingEmail(true);
     setUserEmail("");
   };
 
+  /**
+   * `handleEditName` function toggles the editing state of the name.
+   * It sets the editing state to true.
+   * It resets the name input field.
+   * @function handleEditName
+   * @returns {void}
+   */
   const handleEditName = () => {
     setIsEditingName(true);
     setUserName("");

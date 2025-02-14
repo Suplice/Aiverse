@@ -17,6 +17,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
   const { user } = useAuth();
 
   useEffect(() => {
+    /**
+     * A function to fetch the reviews of the AI service.
+     * It sends a GET request to the server to get the reviews of the AI service.
+     * @async
+     * @function fetchReviews
+     * @returns {Promise<void>}
+     */
     const fetchReviews = async () => {
       setIsLoading(true);
       try {
@@ -52,6 +59,14 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
     fetchReviews();
   }, [AiServiceId, user?.Id]);
 
+  /**
+   * function to handle the reviewed event after the user submits a review.
+   * review is added to the reviews array and isAlreadyReviewed is set to true.
+   *
+   * @function handleReviewed
+   * @param {Review} review
+   * @returns {void}
+   */
   const handleReviewed = (review: Review) => {
     setIsAlreadyReviewed(true);
     setReviews([...reviews, review]);

@@ -8,6 +8,14 @@ import Block from "../UI/Block";
 const LandingServiceSearch = () => {
   const navigate = useNavigate();
 
+  /**
+   * A function to handle the search of the user.
+   * It searches for the services based on the user input.
+   * Function creates a URLSearchParams object and navigates to the services page with the search parameters.
+   *
+   * @function handleSearch
+   * @returns {void}
+   */
   const handleSearch = () => {
     const inputValue = document.querySelector("input")?.value as string;
 
@@ -22,6 +30,12 @@ const LandingServiceSearch = () => {
     navigate(`/services?${searchParams.toString()}`);
   };
 
+  /**
+   * A function to handle the search of the user when the user presses the Enter key.
+   * It searches for the services based on the user input.
+   * Function creates a URLSearchParams object and navigates to the services page with the search parameters.
+   * This function is called when the user presses the Enter key.
+   */
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === "Enter") {

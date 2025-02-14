@@ -36,6 +36,16 @@ export const AiServiceProvider = ({
 
   const { user } = useAuth();
 
+  /**
+   * A function to fetch all services.
+   * It fetches the services from the API.
+   * If the response is successful, it sets the services to the state.
+   * If there is an error, it logs the error to the console.
+   * If the services are already in the session storage and the timestamp is less than 30 seconds, it sets the services to the state.
+   * @async
+   * @function fetchServices
+   * @returns {Promise<void>}
+   */
   const fetchServices = async () => {
     try {
       setIsLoading(true);
@@ -70,6 +80,16 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to add a service to the database.
+   * It sends a POST request to the API with the service data.
+   * If the response is successful, it sets the services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function addService
+   * @param {AiService} service - The service to be added to the database
+   * @returns {Promise<void>}
+   */
   const addService = async (service: AiService) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
@@ -87,6 +107,16 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to update a service in the database.
+   * It sends a PUT request to the API with the service data.
+   * If the response is successful, it sets the services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function updateService
+   * @param {AiService} service - The service to be updated in the database
+   * @returns {Promise<void>}
+   */
   const updateService = async (service: AiService) => {
     try {
       const response = await fetch(
@@ -110,6 +140,16 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to update the status of a service in the database.
+   * It sends a PATCH request to the API with the service id.
+   * If the response is successful, it sets the services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function updateServiceStatus
+   * @param {number} Id - The id of the service to be deleted from the database
+   * @returns {Promise<void>}
+   */
   const updateServiceStatus = async (Id: number) => {
     try {
       const response = await fetch(
@@ -133,6 +173,16 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to delete a service from the database.
+   * It sends a DELETE request to the API with the service id.
+   * If the response is successful, it sets the services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function deleteService
+   * @param {number} Id - The id of the service to be deleted from the database
+   * @returns {Promise<void>}
+   */
   const deleteService = async (Id: number) => {
     try {
       const response = await fetch(
@@ -154,6 +204,15 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to fetch the services liked by the user.
+   * It fetches the liked services from the API.
+   * If the response is successful, it sets the liked services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function fetchServicesLikedByUser
+   * @returns {Promise<void>}
+   */
   const fetchServicesLikedByUser = async () => {
     try {
       const response = await fetch(
@@ -169,6 +228,16 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to like a service.
+   * It sends a POST request to the API with the service id and user id.
+   * If the response is successful, it sets the liked services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @function handleLike
+   * @param {HandleLike} data - Provides id of service to be liked and user id
+   * @returns {Promise<void>}
+   */
   const handleLike = async (data: HandleLike) => {
     try {
       if (!user) return;
@@ -196,6 +265,15 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to unlike a service.
+   * It sends a POST request to the API with the service id and user id.
+   * If the response is successful, it sets the liked services to the state.
+   * If there is an error, it logs the error to the console.
+   * @async
+   * @param {HandleLike} data - Provides id of service to be unliked and user id
+   * @returns {Promise<void>}
+   */
   const handleUnLike = async (data: HandleLike) => {
     try {
       if (!user) return;
@@ -223,6 +301,14 @@ export const AiServiceProvider = ({
     }
   };
 
+  /**
+   * A function to handle a service being reviewed.
+   * It updates the service's stars and reviews count.
+   * @function handleServiceReviewed
+   * @param {Review} review review to be added to the service
+   * @param {number} aiServiceId id of the service to be reviewed
+   * @returns {void}
+   */
   const handleServiceReviewed = (review: Review, aiServiceId: number) => {
     const service = services.find((s) => s.Id === aiServiceId);
 
@@ -235,10 +321,18 @@ export const AiServiceProvider = ({
     setServices(services.map((s) => (s.Id === aiServiceId ? service! : s)));
   };
 
+  /**
+   * Fetches services and liked services when the component mounts.
+   */
   useEffect(() => {
     fetchServices();
   }, []);
 
+  /**
+   * Fetches liked services when the user changes.
+   * If the user is authenticated, it fetches the liked services.
+   * If the user is not authenticated, it sets the liked services to an empty array.
+   */
   useEffect(() => {
     if (user) {
       fetchServicesLikedByUser();

@@ -8,7 +8,6 @@ import { useAuth } from "../../Utils/Context/AuthContext";
 
 const ServiceDetail: React.FC<{ service: AiService }> = ({ service }) => {
   const { likedServices, handleLike, handleUnLike } = useAiService();
-
   const { user, isAuthenticated } = useAuth();
 
   return (

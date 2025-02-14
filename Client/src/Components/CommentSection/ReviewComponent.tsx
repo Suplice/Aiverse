@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Block from "../UI/Block";
 import TextField from "../UI/TextField";
 import { TiStarFullOutline } from "react-icons/ti";
@@ -45,6 +45,13 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   const { user } = useAuth();
 
   useEffect(() => {
+    /**
+     * A function to fetch the user details of the review.
+     * It sends a GET request to the server to get the user details of the review.
+     * @async
+     * @function fetchUser
+     * @returns {Promise<void>}
+     */
     const fetchUser = async () => {
       try {
         const response = await fetch(
@@ -72,10 +79,23 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     fetchUser();
   }, []);
 
+  /**
+   * A function to handle the reply button click event.
+   * It toggles the `isReplying` state to show or hide the reply input.
+   * @function handleReplyClick
+   * @returns {void}
+   */
   const handleReplyClick = () => {
     setIsReplying(!isReplying);
   };
 
+  /**
+   * A function to handle the send button click event.
+   * It sends a POST request to the server to add a comment to the review.
+   * @async
+   * @function handleSendClick
+   * @returns {Promise<void>} Promise
+   */
   const handleSendClick = async () => {
     try {
       setIsSendingReply(true);
@@ -111,7 +131,14 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
     }
   };
 
-  const formatDate = () => {
+  /**
+   * A memoized function to format the date of the comment.
+   * It calculates the difference between the current date and the comment date and returns a formatted string.
+   * @function date
+   * @returns {string}
+   */
+  const date = useMemo(() => {
+    console.log("formating");
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));
@@ -130,8 +157,15 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
       if (days === 1) return `${days} day ago`;
       return `${days} days ago`;
     }
-  };
+  }, [createdAt]);
 
+  /**
+   * A function to fetch the comments of the review.
+   * It sends a GET request to the server to get the comments of the review.
+   * @async
+   * @function LoadComments
+   * @returns {Promise<void>}
+   */
   const LoadComments = async () => {
     try {
       setIsLoadingComments(true);
@@ -179,7 +213,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
             {Stars}
           </TextField>
         </Block>
-        <TextField className="text-sm text-gray-500">{formatDate()}</TextField>
+        <TextField className="text-sm text-gray-500">{date}</TextField>
       </Block>
       <div className="border-l h-full mt-1 self-center place-self-center border-gray-600"></div>
 

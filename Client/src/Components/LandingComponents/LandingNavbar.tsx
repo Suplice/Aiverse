@@ -20,6 +20,15 @@ const LandingNavbar = () => {
   const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
 
   useEffect(() => {
+    /**
+     * A function to handle the click outside of the user menu.
+     * It closes the user menu if the user clicks outside of it.
+     *
+     *
+     * @function handleClickOutside
+     * @param {MouseEvent} event
+     * @returns {void}
+     */
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       if (!target.closest(".user-menu-container")) {
@@ -34,6 +43,12 @@ const LandingNavbar = () => {
     };
   }, []);
 
+  /**
+   * A function to handle the logout of the user.
+   * It logs out the user and redirects to the home page.
+   * @function handleLogout
+   * @returns {void}
+   */
   const handleLogout = async () => {
     await Logout();
     navigate("/");

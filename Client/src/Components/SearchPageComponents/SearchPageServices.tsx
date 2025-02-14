@@ -22,6 +22,11 @@ const SearchPageServices = () => {
     services.filter((service) => service.Status === "Verified")
   );
 
+  /**
+   * A useEffect hook to filter the services based on the search parameters.
+   * It gets the search text from the URL query and sets it to the input field.
+   * It filters the services based on the search parameters.
+   */
   useEffect(() => {
     const params = getParams;
     const searchText = params.get("searchText");
@@ -32,6 +37,14 @@ const SearchPageServices = () => {
     filterServices(params);
   }, [services]);
 
+  /**
+   * `handleSearch` function gets the search text from the input field.
+   * It updates the search parameters in the URL with the new search text.
+   * It filters the services based on the new search parameters.
+   * It resets the input field.
+   * @function handleSearch
+   * @returns {void}
+   */
   const handleSearch = () => {
     const searchText = inputRef.current?.value || "";
     const currentParams = getParams;
@@ -44,6 +57,13 @@ const SearchPageServices = () => {
     resetInput();
   };
 
+  /**
+   * `handleSearchWithFilters` function filters the services based on the search parameters.
+   * It updates the search parameters in the URL with the new categories and price range.
+   * It filters the services based on the new search parameters.
+   * @function handleSearchWithFilters
+   * @param {SearchParams} tempSearchParams search parameters to filter the services
+   */
   const handleSearchWithFilters = (tempSearchParams: SearchParams) => {
     const { categories, priceRange } = tempSearchParams;
     const currentParams = getParams;
@@ -71,6 +91,13 @@ const SearchPageServices = () => {
     filterServices(updatedParams);
   };
 
+  /**
+   * `handleRemoveFilters` function removes the filters from the services.
+   * It updates the search parameters in the URL with the default values.
+   * It filters the services based on the new search parameters.
+   * @function handleRemoveFilters
+   * @returns {void}
+   */
   const handleRemoveFilters = () => {
     const currentParams = getParams;
 

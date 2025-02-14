@@ -16,6 +16,11 @@ const SignIn = () => {
 
   const { loginWithEmailAndPassword } = useAuth();
 
+  /**
+   * A schema to validate the sign in form.
+   * It validates the email and password fields.
+   * @constant schema
+   */
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
     Password: yup.string().required(),
@@ -28,6 +33,15 @@ const SignIn = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
 
+  /**
+   * A function to handle the submit event of the sign in form.
+   * It sends the email and password to the loginWithEmailAndPassword function.
+   * It resets the form after submission
+   * @async
+   * @function onSubmitHandler
+   * @param {SignInFormData} data holds the email and password of the user
+   * @returns {Promise<void>}
+   */
   const onSubmitHandler = async (data: SignInFormData) => {
     await loginWithEmailAndPassword(data);
     reset();
