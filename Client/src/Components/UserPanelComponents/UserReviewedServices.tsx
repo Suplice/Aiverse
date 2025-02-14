@@ -26,9 +26,9 @@ const UserReviewedServices = () => {
         setIsLoading(true);
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/aiservice/reviewedServices/${
-            user!.Id
-          }`,
+          `${
+            import.meta.env.VITE_API_URL
+          }/reviews/reviewedServices/${user?.Id}`,
           {
             method: "GET",
             credentials: "include",

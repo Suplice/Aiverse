@@ -1,5 +1,3 @@
-
-
 using Server.App.Models;
 using Supabase;
 
