@@ -9,6 +9,16 @@ using Microsoft.IdentityModel.Tokens;
 using Supabase.Gotrue;
 using TaskManagementApp.Core.ApiResponse;
 
+/// <summary>
+/// The <see cref="AuthController"/> class is responsible for handling user authentication and authorization processes.
+/// It provides endpoints for user login, registration, logout, and Google authentication, as well as token validation.
+/// </summary>
+/// <remarks>
+/// This controller manages user sessions using JWT (JSON Web Tokens) stored in secure HTTP-only cookies.
+/// It relies on the <see cref="IAuthService"/> to handle core authentication logic, such as user validation,
+/// registration, and role management. The controller also integrates with external authentication providers,
+/// such as Google, to support third-party login functionality.
+/// </remarks>
 [ApiController]
 [Route("auth")]
 public class AuthController : ControllerBase
@@ -17,12 +27,27 @@ public class AuthController : ControllerBase
     private readonly IAuthService _authService;
     private readonly string? _secretKey;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthController"/> class.
+    /// </summary>
+    /// <param name="authService">The service interface responsible for handling authentication and user management operations.</param>
+    /// <param name="config">The application configuration, which provides access to settings such as JWT secret keys.</param>
+    /// <remarks>
+    /// This constructor injects the necessary dependencies for the controller to function. The <see cref="IAuthService"/>
+    /// is used for core authentication logic, while the <see cref="IConfiguration"/> provides access to application
+    /// settings, such as the JWT secret key required for token generation and validation.
+    /// </remarks>
     public AuthController(IAuthService authService, IConfiguration config)
     {
         _authService = authService;
         _secretKey = config["JwtSettings:SecretKey"];
     }
 
+    /// <summary>
+    /// Extracts errors from the ModelState.
+    /// </summary>
+    /// <param name="modelState">The ModelState dictionary.</param>
+    /// <returns>A dictionary containing validation errors.</returns>
     private Dictionary<string, List<string>?> GetModelStateErrors(ModelStateDictionary modelState)
     {
         var errors = modelState.ToDictionary(
@@ -32,6 +57,10 @@ public class AuthController : ControllerBase
         return errors;
     }
 
+    /// <summary>
+    /// Logs out the user by deleting the authentication token cookie.
+    /// </summary>
+    /// <returns>Success response from deleting token cookie</returns>
     [AuthorizeByCookie("USER")]
     [HttpPost("logout")]
     public IActionResult Logout()
@@ -40,7 +69,11 @@ public class AuthController : ControllerBase
         return Ok(new ApiResponse<bool>(true, "Logout successful", true));
     }
 
-
+    /// <summary>
+    /// Logs in a user using Google authentication.
+    /// </summary>
+    /// <param name="GoogleData">The Google authentication data.</param>
+    /// <returns>An authentication response.</returns>
     [HttpPost("google")]
     public async Task<IActionResult> GoogleLogin(RequestGoogleDTO GoogleData)
     {
@@ -77,6 +110,10 @@ public class AuthController : ControllerBase
 
     }
 
+    /// <summary>
+    /// Checks user credentials based on the authentication token.
+    /// </summary>
+    /// <returns>An authentication response.</returns>
     [HttpGet("credentials")]
     public async Task<IActionResult> CheckCredentials()
     {
@@ -129,7 +166,11 @@ public class AuthController : ControllerBase
         }
     }
 
-
+    /// <summary>
+    /// Handles user login using provided credentials.
+    /// </summary>
+    /// <param name="LoginData">User login data containing email and password.</param>
+    /// <returns>Returns an authentication token in a cookie if login is successful.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login(RequestLoginDTO LoginData)
     {
@@ -163,6 +204,11 @@ public class AuthController : ControllerBase
         return Ok(correctResponse);
     }
 
+    /// <summary>
+    /// Registers a new user with the provided data.
+    /// </summary>
+    /// <param name="RegisterData">User registration data including email, password, and other details.</param>
+    /// <returns>Returns an authentication token in a cookie if registration is successful.</returns>
     [HttpPost("register")]
     public async Task<IActionResult> Register(RequestRegisterDTO RegisterData)
     {
@@ -195,7 +241,12 @@ public class AuthController : ControllerBase
         return Ok(correctResponse);
     }
 
-
+    /// <summary>
+    /// Generates a JWT token for authentication.
+    /// </summary>
+    /// <param name="userId">The user's ID.</param>
+    /// <param name="role">The user's role.</param>
+    /// <returns>A JWT token as a string.</returns>
     private string GenerateJwtToken(string userId, string role)
     {
         var claims = new[]

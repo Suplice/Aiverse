@@ -5,18 +5,40 @@ using Microsoft.AspNetCore.Mvc;
 using Server.App.Models;
 using TaskManagementApp.Core.ApiResponse;
 
+
+/// <summary>
+/// The <see cref="AIServiceController"/> class is responsible for managing operations related to AI services.
+/// It provides endpoints for retrieving, adding, updating, and deleting AI services, as well as managing their associated images and categories.
+/// </summary>
+/// <remarks>
+/// This controller handles the lifecycle of AI services, including their creation, verification, and deletion.
+/// It integrates with services such as <see cref="IAIServiceService"/> for core AI service operations,
+/// <see cref="IFileService"/> for managing file uploads (e.g., service images and galleries),
+/// and <see cref="ICategoryService"/> for handling category associations.
+/// The controller also supports role-based authorization, allowing only authorized users (e.g., "USER" or "MODERATOR")
+/// to perform specific actions like adding, updating, or deleting services.
+/// </remarks>
 [ApiController]
 [Route("aiservice")]
 public class AIServiceController : ControllerBase
 {
 
     private readonly IAIServiceService _AIServiceService;
-
     private readonly ICategoryService _CategoryService;
-
     private readonly IFileService _fileService;
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AIServiceController"/> class.
+    /// </summary>
+    /// <param name="AIServiceService">The service interface responsible for handling core AI service operations, such as retrieval, addition, and deletion.</param>
+    /// <param name="fileService">The service interface responsible for managing file uploads and deletions, including service images and gallery files.</param>
+    /// <param name="CategoryService">The service interface responsible for managing categories and their associations with AI services.</param>
+    /// <remarks>
+    /// This constructor injects the necessary dependencies for the controller to function. The <see cref="IAIServiceService"/> handles
+    /// the core logic for AI services, while the <see cref="IFileService"/> manages file-related operations, such as saving and deleting images.
+    /// The <see cref="ICategoryService"/> is used to associate AI services with relevant categories, enabling better organization and filtering.
+    /// </remarks>
     public AIServiceController(IAIServiceService AIServiceService, IFileService fileService, ICategoryService CategoryService)
     {
         _CategoryService = CategoryService;
@@ -24,11 +46,10 @@ public class AIServiceController : ControllerBase
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
     }
 
-    public Boolean UploadServicePicture(long serviceId, IFormFile file)
-    {
-        return true;
-    }
-
+    /// <summary>
+    /// Retrieves all AI services.
+    /// </summary>
+    /// <returns>List of AI services or an error response.</returns>
     [HttpGet("getall")]
     public async Task<IActionResult> GetAllServices()
     {
@@ -45,6 +66,11 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    /// <summary>
+    /// Retrieves an AI service by its ID.
+    /// </summary>
+    /// <param name="serviceId">The ID of the AI service.</param>
+    /// <returns>The AI service details or an error response.</returns>
     [HttpGet("getservice/{serviceId}")]
     public async Task<IActionResult> GetServiceById(long serviceId)
     {
@@ -68,6 +94,11 @@ public class AIServiceController : ControllerBase
         return Ok(correctResponse);
     }
 
+    /// <summary>
+    /// Retrieves the gallery images of a specific AI service.
+    /// </summary>
+    /// <param name="serviceTitle">The title of the AI service.</param>
+    /// <returns>List of gallery image paths or an error response.</returns>
     [HttpGet("getservicegallery")]
     public IActionResult GetServiceGallery(string serviceTitle)
     {
@@ -97,6 +128,11 @@ public class AIServiceController : ControllerBase
 
     }
 
+    /// <summary>
+    /// Adds a new AI service.
+    /// </summary>
+    /// <param name="service">Service data transfer object containing the new service details.</param>
+    /// <returns>Response indicating success or failure.</returns>
     [AuthorizeByCookie("USER")]
     [HttpPost("addservice")]
     public async Task<IActionResult> AddNewService(RequestAIServiceDTO service)
@@ -163,7 +199,11 @@ public class AIServiceController : ControllerBase
 
     }
 
-
+    /// <summary>
+    /// Changes the status of an AI service to "Verified".
+    /// </summary>
+    /// <param name="id">ID of the AI service.</param>
+    /// <returns>Response indicating success or failure.</returns>
     [AuthorizeByCookie("MODERATOR")]
     [HttpPatch("updatestatus/{id}")]
     public async Task<IActionResult> UpdateStatus(long id)
@@ -189,7 +229,11 @@ public class AIServiceController : ControllerBase
 
     }
 
-
+    /// <summary>
+    /// Deletes an AI service by its ID.
+    /// </summary>
+    /// <param name="id">ID of the AI service.</param>
+    /// <returns>Response indicating success or failure.</returns>
     [AuthorizeByCookie("MODERATOR")]
     [HttpDelete("deletebyid/{id}")]
     public async Task<IActionResult> DeleteServiceById(long id)
