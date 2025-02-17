@@ -54,7 +54,7 @@ public class LikesRepository : ILikesRepository
         }
     }
 
-     /// <summary>
+    /// <summary>
     /// Asynchronously adds a like for a specific service by a user.
     /// </summary>
     /// <param name="userId">The unique identifier of the user.</param>
