@@ -28,31 +28,13 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    /// <summary>
-    /// Asynchronously retrieves a user by their unique identifier.
-    /// </summary>
-    /// <param name="id">The unique identifier of the user.</param>
-    /// <returns>
-    /// The <see cref="User"/> object if the user is found; otherwise, null.
-    /// </returns>
-    /// <remarks>
-    /// This method uses <see cref="DbContext.FindAsync"/> to retrieve the user by their ID.
-    /// </remarks>
+    /// <inheritdoc/>
     public async Task<User?> GetUserById(long id)
     {
         return await _context.Users.FindAsync(id); // Używamy FindAsync, by pobrać użytkownika po ID
     }
 
-    /// <summary>
-    /// Asynchronously retrieves a user by their email address.
-    /// </summary>
-    /// <param name="email">The email address of the user.</param>
-    /// <returns>
-    /// The <see cref="User"/> object if the user is found; otherwise, null.
-    /// </returns>
-    /// <remarks>
-    /// This method queries the database to find a user with the specified email address using Entity Framework Core's <see cref="Queryable.FirstOrDefaultAsync"/>.
-    /// </remarks>
+    /// <inheritdoc/>
     public async Task<User?> GetUserByEmailAsync(string email)
     {
         return await _context.Users
@@ -60,13 +42,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
     }
 
-    /// <summary>
-    /// Asynchronously updates a user's information in the database.
-    /// </summary>
-    /// <param name="user">The <see cref="User"/> object containing the updated user details.</param>
-    /// <remarks>
-    /// This method updates the user record in the database and saves the changes asynchronously.
-    /// </remarks>
+    /// <inheritdoc/>
     public async Task UpdateUser(User user)
     {
         _context.Users.Update(user);
