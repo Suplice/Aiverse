@@ -5,6 +5,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
+/// <summary>
+/// Custom authorization attribute that validates a user's authentication token stored in a cookie
+/// and ensures the user has the required role to access the resource.
+/// </summary>
+/// <remarks>
+/// This attribute can be applied to controllers or methods to enforce role-based authorization.
+/// It checks for the presence of a valid JWT token in the "authToken" cookie and validates the token.
+/// If the token is valid and the user has the required role, access is granted; otherwise, a 401 Unauthorized response is returned.
+/// </remarks>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeByCookieAttribute : Attribute, IAuthorizationFilter
 {
@@ -12,11 +22,19 @@ public class AuthorizeByCookieAttribute : Attribute, IAuthorizationFilter
     private readonly string _requiredRole;
     private const string CookieName = "authToken"; 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthorizeByCookieAttribute"/> class.
+    /// </summary>
+    /// <param name="requiredRole">The minimum role required to access the resource. Defaults to "user".</param>
     public AuthorizeByCookieAttribute(string requiredRole = "user")
     {
         _requiredRole = requiredRole;
     }
 
+    /// <summary>
+    /// Called when authorization is required. Validates the token and checks the user's role.
+    /// </summary>
+    /// <param name="context">The context for the authorization filter.</param>
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var request = context.HttpContext.Request;
@@ -59,6 +77,18 @@ public class AuthorizeByCookieAttribute : Attribute, IAuthorizationFilter
         context.HttpContext.User = principal;
     }
 
+    /// <summary>
+    /// Determines if the user's role is sufficient to access the resource.
+    /// </summary>
+    /// <param name="userRole">The role of the user.</param>
+    /// <returns>
+    /// <c>true</c> if the user's role meets the required role; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    /// The logic for role sufficiency is as follows:
+    /// - If the required role is "USER", the user must have the "USER" or "MODERATOR" role.
+    /// - If the required role is "MODERATOR", the user must have the "MODERATOR" role.
+    /// </remarks>
     private bool IsRoleSufficient(string? userRole)
     {
         if (string.IsNullOrEmpty(userRole)) return false;
@@ -76,6 +106,17 @@ public class AuthorizeByCookieAttribute : Attribute, IAuthorizationFilter
         return false;
     }
 
+    /// <summary>
+    /// Validates the JWT token and returns the claims principal if the token is valid.
+    /// </summary>
+    /// <param name="token">The JWT token to validate.</param>
+    /// <returns>
+    /// The <see cref="ClaimsPrincipal"/> if the token is valid; otherwise, <c>null</c>.
+    /// </returns>
+    /// <remarks>
+    /// The token is validated using a symmetric security key and HMAC SHA-256 algorithm.
+    /// The token's signature, expiration, and other claims are checked during validation.
+    /// </remarks>
     private ClaimsPrincipal? ValidateToken(string token)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("uVev3FFvMXsFSVIWhn5XQCdMnYZOoAhu"));
