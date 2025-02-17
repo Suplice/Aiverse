@@ -1,22 +1,40 @@
 using Server.App.Models;
 
 namespace Server.App.Services
-{
+{   
+    /// <summary>
+    /// Provides authentication-related services such as user registration, login, and Google login.
+    /// This service interacts with the <see cref="IAuthRepository"/> to perform database operations.
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="AuthService"/> class is responsible for handling business logic related to user authentication.
+    /// It uses the <see cref="IAuthRepository"/> to interact with the underlying data store.
+    /// </remarks>
     public class AuthService : IAuthService
     {
-
         private readonly IAuthRepository _authRepository;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthService"/> class.
+        /// </summary>
+        /// <param name="authRepository">The repository used for authentication data access.</param>
+        /// <remarks>
+        /// This constructor injects the <see cref="IAuthRepository"/> dependency, which is used to perform database operations.
+        /// </remarks>
         public AuthService(IAuthRepository authRepository)
         {
             _authRepository = authRepository;
         }
 
+
+        /// <inheritdoc/>
         public async Task<User?> FindUserAsync(String Email)
         {
             return await _authRepository.FindUserAsync(Email);
         }
 
+        /// <inheritdoc/>
         public async Task<ResponseAuthDTO> GoogleLogin(RequestGoogleDTO GoogleData)
         {
             User? user = await FindUserAsync(GoogleData.Email);
@@ -63,6 +81,7 @@ namespace Server.App.Services
             return responseAuthDTO;
         }
 
+        /// <inheritdoc/>
         public async Task<ResponseAuthDTO> Login(RequestLoginDTO LoginData)
         {
 
@@ -92,6 +111,7 @@ namespace Server.App.Services
 
         }
 
+        /// <inheritdoc/>
         public async Task<ResponseAuthDTO> Register(RequestRegisterDTO RegisterData)
         {
 
@@ -123,7 +143,7 @@ namespace Server.App.Services
             return responseAuthDTO;
         }
 
-
+        /// <inheritdoc/>
         public async Task<ResponseAuthDTO> GetUserById(String UserId)
         {
             var user = await _authRepository.GetUserById(UserId);
