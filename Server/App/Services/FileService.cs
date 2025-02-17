@@ -1,12 +1,29 @@
+
+/// <summary>
+/// Provides services for managing file operations, such as saving and deleting files.
+/// This service interacts with the web server's file system to handle file storage.
+/// </summary>
+/// <remarks>
+/// The <see cref="FileService"/> class is responsible for handling file-related operations,
+/// including saving uploaded files to a specified folder and deleting files or directories.
+/// </remarks>
 public class FileService : IFileService
 {
     private readonly IWebHostEnvironment _env;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileService"/> class.
+    /// </summary>
+    /// <param name="env">The web hosting environment used to access the web root path.</param>
+    /// <remarks>
+    /// This constructor injects the <see cref="IWebHostEnvironment"/> dependency, which provides access to the web server's file system.
+    /// </remarks>
     public FileService(IWebHostEnvironment env)
     {
         _env = env;
     }
 
+    /// <inheritdoc/>
     public async Task<string> SaveFileAsync(IFormFile file, string relativeFolder)
     {
         if (file == null || file.Length == 0)
@@ -54,6 +71,7 @@ public class FileService : IFileService
         return $"/{relativeFolder}/{fileName}";
     }
 
+    /// <inheritdoc/>
     public void DeleteFile(string filePath)
     {
         Console.WriteLine(filePath);

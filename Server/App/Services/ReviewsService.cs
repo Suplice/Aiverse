@@ -3,6 +3,15 @@ using Server.App.Models;
 
 namespace Server.App.Services
 {
+
+    /// <summary>
+    /// Provides services for managing reviews, including adding reviews, retrieving reviews for a service, and fetching reviewed services by a user.
+    /// This service interacts with the <see cref="IReviewsRepository"/> and <see cref="ICategoryRepository"/> to perform database operations.
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="ReviewsService"/> class is responsible for handling business logic related to reviews,
+    /// such as adding new reviews, retrieving reviews for a specific service, and fetching services reviewed by a specific user.
+    /// </remarks>
     public class ReviewsService : IReviewsService
     {
 
@@ -10,12 +19,22 @@ namespace Server.App.Services
 
         private readonly ICategoryRepository _CategoryRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReviewsService"/> class.
+        /// </summary>
+        /// <param name="ReviewsRepository">The repository used for review data access.</param>
+        /// <param name="CategortRepository">The repository used for category data access.</param>
+        /// <remarks>
+        /// This constructor injects the <see cref="IReviewsRepository"/> and <see cref="ICategoryRepository"/> dependencies,
+        /// which are used to perform database operations related to reviews and categories.
+        /// </remarks>
         public ReviewsService(IReviewsRepository ReviewsRepository, ICategoryRepository CategortRepository)
         {
             _CategoryRepository = CategortRepository;
             _ReviewsRepository = ReviewsRepository;
         }
 
+        /// <inheritdoc/>
         public async Task<Review?> AddReview(RequestReviewDTO review)
         {
             var newReview = new Review
@@ -35,6 +54,7 @@ namespace Server.App.Services
             return result;
         }
 
+        /// <inheritdoc/>
         public List<Review>? GetReviews(long serviceId)
         {
             var result = _ReviewsRepository.GetReviews(serviceId);
@@ -42,6 +62,7 @@ namespace Server.App.Services
             return result;
         }
 
+        /// <inheritdoc/>
         public async Task<List<ResponseAIServiceDTO>?> GetUserReviewedServicesById(long id)
         {
 

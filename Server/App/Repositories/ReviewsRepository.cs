@@ -1,16 +1,35 @@
 using Server.App.Models;
 using Supabase;
+
+/// <summary>
+/// The <see cref="ReviewsRepository"/> class is responsible for handling review-related database operations.
+/// It interacts with the Supabase database and the application database context (<see cref="AppDbContext"/>) to perform operations
+/// such as adding reviews, retrieving reviews for a service, and fetching services reviewed by a user.
+/// </summary>
+/// <remarks>
+/// This class manages reviews for AI services, including updating service ratings and review counts. It uses transactions to ensure
+/// data consistency when adding reviews. Exceptions are handled internally, and methods return null or empty collections in case of errors.
+/// </remarks>
 public class ReviewsRepository : IReviewsRepository
 {
     private readonly Client _supabaseClient;
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReviewsRepository"/> class.
+    /// </summary>
+    /// <param name="supabaseClient">The Supabase client instance used for database operations.</param>
+    /// <param name="context">The application database context (<see cref="AppDbContext"/>).</param>
+    /// <remarks>
+    /// The constructor initializes the Supabase client and the application database context, which are used for database interactions.
+    /// </remarks>
     public ReviewsRepository(Client supabaseClient, AppDbContext context)
     {
         _supabaseClient = supabaseClient;
         _context = context;
     }
 
+    /// <inheritdoc/>
     public async Task<Review?> AddReview(Review review)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -55,6 +74,7 @@ public class ReviewsRepository : IReviewsRepository
         }
     }
 
+    /// <inheritdoc/>
     public List<Review>? GetReviews(long serviceId)
     {
         try
@@ -71,6 +91,7 @@ public class ReviewsRepository : IReviewsRepository
         }
     }
 
+    /// <inheritdoc/>
     public async Task<List<AiService>?> GetUserReviewedServicesById(long id)
     {
         try

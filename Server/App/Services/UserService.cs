@@ -3,17 +3,36 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch.Internal;
 using Server.App.Models;
 
+
+/// <summary>
+/// Provides services for managing user-related operations, such as retrieving user data, updating user information, and handling user images and passwords.
+/// This service interacts with the <see cref="IUserRepository"/> and <see cref="IFileService"/> to perform database and file operations.
+/// </summary>
+/// <remarks>
+/// The <see cref="UserService"/> class is responsible for handling business logic related to users,
+/// including retrieving user details, updating user information, saving user images, and managing user passwords and emails.
+/// </remarks>
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IFileService _fileService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// </summary>
+    /// <param name="userRepository">The repository used for user data access.</param>
+    /// <param name="fileService">The service used for handling file operations, such as saving user images.</param>
+    /// <remarks>
+    /// This constructor injects the <see cref="IUserRepository"/> and <see cref="IFileService"/> dependencies,
+    /// which are used to perform database and file operations.
+    /// </remarks>
     public UserService(IUserRepository userRepository, IFileService fileService)
     {
         _userRepository = userRepository;
         _fileService = fileService;
     }
 
+    /// <inheritdoc/>
     public async Task<User?> GetUserById(long id)
     {
         if (id <= 0) return null;
@@ -22,6 +41,7 @@ public class UserService : IUserService
         return user;
     }
 
+    /// <inheritdoc/>
     public async Task<User?> GetUserByEmailAsync(string email)
     {
         // Sprawdzamy, czy email jest podany
@@ -35,12 +55,13 @@ public class UserService : IUserService
         return user;
     }
 
+    /// <inheritdoc/>
     public async Task UpdateUser(User user)
     {
         await _userRepository.UpdateUser(user);
     }
 
-
+    /// <inheritdoc/>
     public async Task<string> SaveUserImageAsync(long userId, IFormFile image)
     {
         // Zapisz plik
@@ -60,6 +81,7 @@ public class UserService : IUserService
         return relativePath;
     }
 
+    /// <inheritdoc/>
     public async Task UpdateUserPasswordAsync(long id, string newPassword)
     {
         var user = await _userRepository.GetUserById(id);
@@ -95,7 +117,7 @@ public class UserService : IUserService
         await _userRepository.UpdateUser(user);
     }
 
-
+    /// <inheritdoc/>
     public async Task<bool> TryUpdateUserEmailAsync(long id, string newEmail)
     {
         // Sprawdzamy, czy email już istnieje
