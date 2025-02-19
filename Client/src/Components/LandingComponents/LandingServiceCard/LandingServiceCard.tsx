@@ -46,7 +46,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
         index === 0 ? "border-t-0" : "border-t-2"
       }`}
       direction="column"
-      onClick={() => navigate(`/aiservice/${Id}`)}
+      onClick={() => { isAuthenticated && navigate(`/aiservice/${Id}`)}}
     >
       <Block
         className="bg-[#252729] w-full rounded-lg lg:p-10 md:p-6 p-4 md:flex-row  relative"
