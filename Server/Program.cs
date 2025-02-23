@@ -3,6 +3,8 @@ using Server.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+
 var webRootPath = builder.Environment.WebRootPath;
 
 if (webRootPath == null)
