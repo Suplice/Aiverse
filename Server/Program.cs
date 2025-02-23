@@ -67,6 +67,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<SupabaseOptions>(builder.Configuration.GetSection("Supabase"));
 
+Console.WriteLine("Supabase URL", builder.Configuration["Supabase:Url"]);
+Console.WriteLine("Supabase Key", builder.Configuration["Supabase:Key"]);
+
 builder.Services.AddScoped<Supabase.Client>(_ =>
 new Supabase.Client(
     builder.Configuration["Supabase:Url"],
