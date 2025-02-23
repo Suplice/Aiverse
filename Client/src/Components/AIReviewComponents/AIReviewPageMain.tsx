@@ -7,6 +7,7 @@ import FullDescriptionComponent from "../AIViewPageComponents/FullDescriptionCom
 import ServiceGallery, {
   GalleryImage,
 } from "../AIViewPageComponents/ServiceGallery";
+import useToast from "../../Utils/hooks/useToast";
 
 const AIReviewPageMain = () => {
   /**
@@ -20,6 +21,8 @@ const AIReviewPageMain = () => {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   const { services } = useAiService();
+
+  const { showToast } = useToast();
 
   const service = services.find((s) => s.Id === Number(id));
 
@@ -59,7 +62,7 @@ const AIReviewPageMain = () => {
           }))
         );
       } catch {
-        console.error("error");
+        showToast("An error occured, please try again later", "error");
       }
     };
 

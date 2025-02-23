@@ -7,6 +7,7 @@ import { FacebookProvider, LoginButton } from "react-facebook";
 import TextField from "../UI/TextField";
 import BlockTextField from "../UI/BlockTextField";
 import Block from "../UI/Block";
+import useToast from "../../Utils/hooks/useToast";
 
 declare global {
   interface Window {
@@ -33,6 +34,8 @@ declare global {
 const OAuthComponent = () => {
   const { LoginWithGoogle } = useAuth();
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     /**
      * Loads the Google Identity Services SDK and initializes it.
@@ -49,7 +52,7 @@ const OAuthComponent = () => {
         script.defer = true;
         script.onload = initializeGoogleOAuth;
         script.onerror = () => {
-          console.error("Failed to load Google Identity Services SDK.");
+          showToast("An error occured, please try again later", "error");
         };
         document.head.appendChild(script);
       } else {
@@ -104,8 +107,8 @@ const OAuthComponent = () => {
           Email: decoded.email,
           GivenName: decoded.given_name,
         });
-      } catch (error) {
-        console.error("Failed to decode JWT:", error);
+      } catch {
+        showToast("An error occured, please try again later", "error");
       }
     };
 
@@ -127,28 +130,28 @@ const OAuthComponent = () => {
     ).click();
   };
 
-  /**
-   * Handles the success response from Facebook.
-   * Currently not implemented.
-   * @function handleFacebookSuccess
-   * @param response The response from Facebook.
-   * @returns {void}
-   */
-  const handleFacebookSuccess = (response: unknown) => {
-    console.log(response);
-  };
+  // /**
+  //  * Handles the success response from Facebook.
+  //  * Currently not implemented.
+  //  * @function handleFacebookSuccess
+  //  * @param response The response from Facebook.
+  //  * @returns {void}
+  //  */
+  // const handleFacebookSuccess = (response: unknown) => {
+  //   showToast("An error occured, please try again later", "error");
+  // };
 
-  /**
-   * Handles the error response from Facebook.
-   * It logs the error to the console.
-   * Currently not implemented.
-   * @function handleFacebookError
-   * @param error The error from Facebook.
-   * @returns {void}
-   */
-  const handleFacebookError = (error: Error) => {
-    console.error(error);
-  };
+  // /**
+  //  * Handles the error response from Facebook.
+  //  * It logs the error to the console.
+  //  * Currently not implemented.
+  //  * @function handleFacebookError
+  //  * @param error The error from Facebook.
+  //  * @returns {void}
+  //  */
+  // const handleFacebookError = (error: Error) => {
+  //   showToast("An error occured, please try again later", "error");
+  // };
 
   /**
    * Handles the click on the Facebook button.
@@ -192,8 +195,8 @@ const OAuthComponent = () => {
         <div className="hidden">
           <LoginButton
             scope="email"
-            onError={handleFacebookError}
-            onSuccess={handleFacebookSuccess}
+            // onError={handleFacebookError}
+            //onSuccess={handleFacebookSuccess}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             id="facebook-login-btn"

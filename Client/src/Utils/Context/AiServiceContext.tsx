@@ -161,7 +161,7 @@ export const AiServiceProvider = ({
       );
 
       if (!response.ok) {
-        throw new Error("Błąd podczas aktualizacji statusu");
+        throw new Error("Error");
       }
       setServices((prevServices) =>
         prevServices.map((service) =>
@@ -169,7 +169,7 @@ export const AiServiceProvider = ({
         )
       );
     } catch (error) {
-      console.error("Błąd:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -194,13 +194,13 @@ export const AiServiceProvider = ({
       );
 
       if (!response.ok) {
-        throw new Error("Błąd podczas usuwania serwisu");
+        throw new Error("Error");
       }
 
       const updatedServices = services.filter((s) => s.Id !== Id);
       setServices(updatedServices);
     } catch (error) {
-      console.error("Błąd usuwania" + error);
+      console.error("Error" + error);
     }
   };
 

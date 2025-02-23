@@ -7,6 +7,7 @@ import AddCommentComponent from "./AddCommentComponent";
 import { User } from "../../Utils/Models/User";
 import { Avatar } from "@mantine/core";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import useToast from "../../Utils/hooks/useToast";
 
 interface CommentProps {
   Id: number;
@@ -42,6 +43,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [commentUser, setCommentUser] = useState<User>();
   const { user } = useAuth();
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     /**
      * A function to fetch the user details of the comment.
@@ -66,11 +69,11 @@ const CommentComponent: React.FC<CommentProps> = ({
         const result = await response.json();
 
         if (!response.ok) {
-          console.error(result);
+          showToast("An error occured, please try again later", "error");
         }
         setCommentUser(result);
-      } catch (error) {
-        console.error(error);
+      } catch {
+        showToast("An error occured, please try again later", "error");
       }
     };
 
@@ -114,15 +117,13 @@ const CommentComponent: React.FC<CommentProps> = ({
         }
       );
 
-      const result = await response.json();
-
       if (!response.ok) {
-        console.error(result);
+        showToast("An error occured, please try again later", "error");
       } else {
         LoadComments();
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     } finally {
       setIsSendingReply(false);
       setIsReplying(false);
@@ -154,12 +155,12 @@ const CommentComponent: React.FC<CommentProps> = ({
       const result = await response.json();
 
       if (!response.ok) {
-        console.error(result);
+        showToast("An error occured, please try again later", "error");
       } else {
         setComments(result.data);
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     } finally {
       setIsLoadingComments(false);
       setIsShowingComments(true);
@@ -173,7 +174,6 @@ const CommentComponent: React.FC<CommentProps> = ({
    * @returns {string}
    */
   const date = useMemo(() => {
-    console.log("formating");
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));

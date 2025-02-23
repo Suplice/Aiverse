@@ -7,6 +7,7 @@ import Block from "../UI/Block";
 import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkeleton";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { useNavigate } from "react-router";
+import useToast from "../../Utils/hooks/useToast";
 
 const UserReviewedServices = () => {
   const [reviewedServices, setReviewedServices] = useState<AiService[]>([]);
@@ -15,6 +16,8 @@ const UserReviewedServices = () => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
+
+  const { showToast } = useToast();
 
   if (!user) {
     navigate("/login");
@@ -38,9 +41,9 @@ const UserReviewedServices = () => {
         setIsLoading(true);
 
         const response = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/reviews/reviewedServices/${user?.Id}`,
+          `${import.meta.env.VITE_API_URL}/reviews/reviewedServices/${
+            user?.Id
+          }`,
           {
             method: "GET",
             credentials: "include",
@@ -52,8 +55,8 @@ const UserReviewedServices = () => {
         if (data.success) {
           setReviewedServices(data.data);
         }
-      } catch (error) {
-        console.error("Fetch error:", error);
+      } catch {
+        showToast("An error occured, please try again later", "error");
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +65,7 @@ const UserReviewedServices = () => {
     if (user!.Id > 0) {
       fetchLikedServices();
     } else {
-      console.warn("Invalid userId:", user!.Id);
+      showToast("An error occured, please try again later", "error");
       setIsLoading(false);
     }
   }, [user!.Id]);

@@ -10,7 +10,7 @@ import { SignInFormData, SignUpFormData } from "../Models/Forms";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
 import { GoogleSignInData } from "../Models/ProviderLogin";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import useToast from "../hooks/useToast";
 
 interface AuthContextType {
@@ -76,8 +76,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         navigate("/");
       } else {
         showToast("Invalid credentials, please try again", "error");
-        toast.error("Invalid credentials, please try again");
-        console.error("Failed to login");
       }
     } catch (error) {
       console.error(error);
@@ -130,7 +128,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         navigate("/");
       } else {
         showToast("Failed to register, please try again", "error");
-        console.error("Failed to register");
       }
     } catch (error) {
       console.error(error);
@@ -181,7 +178,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         navigate("/");
       } else {
         showToast("Failed to login with Google, please try again", "error");
-        console.error(result);
       }
     } catch (error) {
       console.error(error);
@@ -210,20 +206,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       );
 
-      console.log(user!.Role);
-
       if (response.ok) {
         setIsAuthenticated(false);
         setUser(null);
         navigate("/auth/SignIn");
         showToast("Logged out successfully", "success");
       } else {
-        console.error("Failed to logout");
         showToast("Failed to logout", "error");
       }
-    } catch (error) {
+    } catch {
       showToast("Failed to logout", "error");
-      console.error(error);
     } finally {
       setIsLoading(false);
     }

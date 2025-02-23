@@ -23,7 +23,15 @@ const SignUp = () => {
    */
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
-    Password: yup.string().required(),
+    Password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Minimum length is 8 characters")
+      .max(255, "Password exceeds maximum length")
+      .matches(
+        /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/,
+        "Password has to contain at least:\n- One number\n- One non-alphanumeric character\n- One uppercase letter"
+      ),
     ConfirmPassword: yup
       .string()
       .oneOf([yup.ref("Password")], "Passwords must match")

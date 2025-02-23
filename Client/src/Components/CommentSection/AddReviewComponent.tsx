@@ -5,6 +5,7 @@ import { useAuth } from "../../Utils/Context/AuthContext";
 import { Review } from "../../Utils/Models/Review";
 import { useNavigate } from "react-router";
 import { useAiService } from "../../Utils/Context/AiServiceContext";
+import useToast from "../../Utils/hooks/useToast";
 
 interface AddReviewComponentProps {
   AiServiceId: number;
@@ -29,6 +30,8 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
   const { user } = useAuth();
 
   const { handleServiceReviewed } = useAiService();
+
+  const { showToast } = useToast();
 
   /**
    * A function to handle the click event of the star.
@@ -92,13 +95,13 @@ const AddReviewComponent: React.FC<AddReviewComponentProps> = ({
       const result = await response.json();
 
       if (!response.ok) {
-        console.error(result);
+        showToast("An error occured, please try again later", "error");
       } else {
         setReviewed(result.data);
         handleChangeServiceData(result.data);
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     } finally {
       setIsSubmitting(false);
     }

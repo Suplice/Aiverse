@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import FullDescriptionComponent from "./FullDescriptionComponent";
 import ServiceGallery, { GalleryImage } from "./ServiceGallery";
 import PageNavigation from "./ResponsiveNav";
+import useToast from "../../Utils/hooks/useToast";
 
 const AIViewPageMain = () => {
   /**
@@ -20,6 +21,8 @@ const AIViewPageMain = () => {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   const { services } = useAiService();
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     /**
@@ -57,7 +60,7 @@ const AIViewPageMain = () => {
           }))
         );
       } catch {
-        console.error("error");
+        showToast("An error occured, please try again later", "error");
       }
     };
 

@@ -10,6 +10,7 @@ import OAuthComponent from "../../Components/OAuth/Oauth";
 import TextField from "../../Components/UI/TextField";
 import Button from "../../Components/UI/Button";
 import Block from "../../Components/UI/Block";
+import BlockTextField from "../../Components/UI/BlockTextField";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const SignIn = () => {
    */
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
-    Password: yup.string().required(),
+    Password: yup.string().required("Password is required"),
   });
 
   const {
@@ -142,9 +143,9 @@ const SignIn = () => {
                   {...register("Password")}
                 />
 
-                <TextField className="text-red text-sm text-left">
+                <BlockTextField className="text-red text-sm text-left">
                   {errors.Password?.message}
-                </TextField>
+                </BlockTextField>
               </Block>
 
               <Button

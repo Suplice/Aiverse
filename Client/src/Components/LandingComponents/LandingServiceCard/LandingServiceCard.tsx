@@ -46,7 +46,7 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
         index === 0 ? "border-t-0" : "border-t-2"
       }`}
       direction="column"
-      onClick={() => { isAuthenticated && navigate(`/aiservice/${Id}`)}}
+      onClick={() => navigate(`/aiservice/${Id}`)}
     >
       <Block
         className="bg-[#252729] w-full rounded-lg lg:p-10 md:p-6 p-4 md:flex-row  relative"
@@ -81,7 +81,13 @@ const LandingServiceCard: React.FC<LandingServiceCardProps> = ({
         </Block>
 
         {index > 1 && !isAuthenticated ? (
-          <div className="absolute w-full h-full inset-0 rounded-lg bg-black/20 backdrop-blur-md">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate("/auth/signin");
+            }}
+            className="absolute w-full h-full inset-0 rounded-lg bg-black/20 backdrop-blur-md"
+          >
             <div className="flex flex-col items-center justify-center h-full">
               <TextField
                 value="You need to sign in to view this service."
