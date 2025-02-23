@@ -21,7 +21,7 @@ const UserSettings = () => {
   const { showToast } = useToast();
 
   const [isEditingName, setIsEditingName] = useState(false);
-  const [userName, setUserName] = useState<string>(user?.Name || "");
+  const [, setUserName] = useState<string>(user?.Name || "");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [userEmail, setUserEmail] = useState<string>(user?.Email || "");
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -60,9 +60,8 @@ const UserSettings = () => {
         setIsEditingName(false);
         setUserName(name);
         showToast("Name updated successfully", "success");
-      } catch (error) {
+      } catch {
         showToast("An error occurred. Please try again.", "error");
-        console.error(error);
       }
     }
   };
@@ -93,9 +92,8 @@ const UserSettings = () => {
         setIsEditingEmail(false);
         setUserEmail(email);
         showToast("Email updated successfully", "success");
-      } catch (error) {
+      } catch {
         showToast("An error occurred. Please try again.", "error");
-        console.error(error);
       }
     }
   };
@@ -126,8 +124,7 @@ const UserSettings = () => {
         );
         setIsEditingPassword(false);
         showToast("Password updated successfully", "success");
-      } catch (error) {
-        console.error(error);
+      } catch {
         showToast("An error occurred. Please try again.", "error");
       }
     }

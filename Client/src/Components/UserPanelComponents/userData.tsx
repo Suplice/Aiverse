@@ -50,7 +50,7 @@ const UserData: React.FC<UserDataProps> = ({
               className=" h-full  transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1 aspect-square"
             />
           ) : (
-            <Avatar size={180} />
+            <Avatar className="aspect-square" size={190} />
           )}
           <label
             htmlFor="imageUpload"

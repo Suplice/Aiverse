@@ -10,6 +10,7 @@ import Controls from "./Controls";
 import { User } from "../../Utils/Models/User";
 import { Avatar } from "@mantine/core";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import useToast from "../../Utils/hooks/useToast";
 
 interface ReviewComponentProps {
   key: number;
@@ -44,6 +45,8 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
 
   const { user } = useAuth();
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     /**
      * A function to fetch the user details of the review.
@@ -68,11 +71,11 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
         const result = await response.json();
 
         if (!response.ok) {
-          console.error(result);
+          showToast("An error occured, please try again later", "error");
         }
         setReviewUser(result);
-      } catch (error) {
-        console.error(error);
+      } catch {
+        showToast("An error occured, please try again later", "error");
       }
     };
 
@@ -116,15 +119,13 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
         }
       );
 
-      const result = await response.json();
-
       if (!response.ok) {
-        console.error(result);
+        showToast("An error occured, please try again later", "error");
       }
 
       LoadComments();
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     } finally {
       setIsSendingReply(false);
       setIsReplying(false);
@@ -138,7 +139,6 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
    * @returns {string}
    */
   const date = useMemo(() => {
-    console.log("formating");
     const now = new Date();
     const diff = now.getTime() - new Date(createdAt).getTime();
     const minutes = Math.floor(diff / (1000 * 60));
@@ -184,12 +184,12 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
       const result = await response.json();
 
       if (!response.ok) {
-        console.error(result);
+        showToast("An error occured, please try again later", "error");
       }
 
       setComments(result.data);
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     } finally {
       setIsLoadingComments(false);
       setIsShowingComments(true);

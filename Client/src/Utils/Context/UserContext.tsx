@@ -7,6 +7,7 @@ import {
 } from "react";
 import { User } from "../Models/User";
 import { useAuth } from "./AuthContext";
+import useToast from "../hooks/useToast";
 
 interface UserContextProps {
   user: User | null;
@@ -26,6 +27,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [userImage, setUserImage] = useState<string>("");
   const [isUserImage, setIsUserImage] = useState<boolean>(true);
+
+  const { showToast } = useToast();
 
   /**
    * A function to fetch the user data by id.
@@ -97,13 +100,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
       if (response.ok) {
         const updatedUser = await response.json();
-
+        setIsUserImage(true);
         setUserImage(`${import.meta.env.VITE_API_URL}${updatedUser.filePath}`);
-      } else {
-        console.error("Failed to update profile picture");
       }
-    } catch (error) {
-      console.error("Error updating profile picture:", error);
+    } catch {
+      showToast(
+        "Error occured while trying to update profile picture",
+        "error"
+      );
     }
   };
 
@@ -142,7 +146,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
    */
   const updateUserName = async (newName: string) => {
     if (!user) {
-      console.error("User data is not available");
       return;
     }
     try {
@@ -162,10 +165,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
       );
       if (!response.ok) {
-        console.error("Failed to update user name");
+        showToast("Failed to update user name", "error");
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("Failed to update user name", "error");
     }
   };
 
@@ -181,7 +184,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
    */
   const updateUserEmail = async (newEmail: string) => {
     if (!user) {
-      console.error("User data is not available");
       return;
     }
 
@@ -199,10 +201,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
       );
       if (!response.ok) {
-        console.error("Failed to update user email");
+        showToast("Failed to update user email", "error");
       }
-    } catch (error) {
-      console.error("Error while updating email:", error);
+    } catch {
+      showToast("Failed to update user email", "error");
     }
   };
 
@@ -218,7 +220,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
    */
   const updateUserPassword = async (newUserPassword: string) => {
     if (!user) {
-      console.error("User data is not available");
       return;
     }
     try {
@@ -237,10 +238,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (!response.ok) {
-        console.error("Failed to update password. Status:", response.status);
+        showToast("Failed to update password", "error");
       }
-    } catch (error) {
-      console.error("Error while updating password:", error);
+    } catch {
+      showToast("Failed to update password", "error");
     }
   };
 

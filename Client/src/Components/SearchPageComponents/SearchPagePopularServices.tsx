@@ -62,7 +62,7 @@ const SearchPagePopularServices = () => {
 
               <Button
                 value="Log In"
-                onClick={() => navigate("/auth/SignUp")}
+                onClick={() => navigate("/auth/SignIn")}
                 className="mt-4 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"
                 TextColor="white"
               />

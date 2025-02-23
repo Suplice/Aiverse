@@ -4,6 +4,7 @@ import { Review } from "../../Utils/Models/Review";
 import ReviewComponent from "./ReviewComponent";
 import AddReviewComponent from "./AddReviewComponent";
 import { useAuth } from "../../Utils/Context/AuthContext";
+import useToast from "../../Utils/hooks/useToast";
 
 interface CommentSectionProps {
   AiServiceId: number;
@@ -15,6 +16,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { user } = useAuth();
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     /**
@@ -41,7 +44,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
         const result = await response.json();
 
         if (!response.ok) {
-          console.error(result);
+          showToast("An error occured, please try again later", "error");
         }
 
         if (result.data.some((review: Review) => review.UserId === user?.Id)) {
@@ -49,8 +52,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ AiServiceId }) => {
         }
 
         setReviews(result.data);
-      } catch (error) {
-        console.error(error);
+      } catch {
+        showToast("An error occured, please try again later", "error");
       } finally {
         setIsLoading(false);
       }

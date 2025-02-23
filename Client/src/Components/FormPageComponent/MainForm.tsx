@@ -8,6 +8,7 @@ import { GalleryImages } from "../../Utils/Models/ImageGallery";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { useNavigate } from "react-router";
 import CategoryCheckboxes from "./CategoryCheckboxes";
+import useToast from "../../Utils/hooks/useToast";
 
 const MainForm = () => {
   const { user, isAuthenticated } = useAuth();
@@ -23,6 +24,8 @@ const MainForm = () => {
       navigate("/auth/signin");
     }
   }, [isAuthenticated, navigate]);
+
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState<AIServiceFormData>({
     CreatorId: user?.Id ?? 0,
@@ -108,6 +111,14 @@ const MainForm = () => {
     formDataToSend.append("FullDescription", formData.FullDescription);
     formDataToSend.append("Price", formData.Price);
     formDataToSend.append("ServiceURL", formData.ServiceURL);
+
+    if (
+      !formData.Image ||
+      !formData.GalleryImages ||
+      formData.Categories.length === 0
+    ) {
+      showToast("Please fill all fields and try again", "warning");
+    }
     if (formData.Image) {
       formDataToSend.append("Image", formData.Image);
     }
@@ -117,10 +128,11 @@ const MainForm = () => {
         formDataToSend.append("GalleryImages", file);
       });
     }
-
-    formData.Categories.forEach((category) => {
-      formDataToSend.append("Categories", category);
-    });
+    if (formData.Categories) {
+      formData.Categories.forEach((category) => {
+        formDataToSend.append("Categories", category);
+      });
+    }
 
     try {
       const response = await fetch(
@@ -133,10 +145,11 @@ const MainForm = () => {
       );
 
       if (response.ok) {
+        showToast("Service added to review queue successfully", "success");
         navigate("/");
       }
-    } catch (error) {
-      console.error("Błąd sieci:", error);
+    } catch {
+      showToast("An error occured, please try again later", "error");
     }
   };
 
