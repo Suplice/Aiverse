@@ -2,4 +2,3 @@ Server/bin
 Server/obj
 Client/.env
 Server/appsettings.Development.json
-Server/appsettings.json
