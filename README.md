@@ -1,5 +1,5 @@
 
-# Wezzer
+# AIverse
 
 
 This is a web application that allows users to discover, add, and review AI models. It serves as a community-driven catalog where users can share experiences and opinions, helping others choose the right model. Users can browse models by category, access detailed information, and contribute by adding new models with descriptions and links. The platform also enables users to rate and review models, creating a transparent ranking system. Each model has a dedicated page with key details, performance insights, and user feedback, making it easier to evaluate and compare AI solutions.
