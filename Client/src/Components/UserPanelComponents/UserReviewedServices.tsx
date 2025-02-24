@@ -7,7 +7,6 @@ import Block from "../UI/Block";
 import LoadingServicesSkeleton from "../SearchPageComponents/LoadingServicesSkeleton";
 import { useAuth } from "../../Utils/Context/AuthContext";
 import { useNavigate } from "react-router";
-import useToast from "../../Utils/hooks/useToast";
 
 const UserReviewedServices = () => {
   const [reviewedServices, setReviewedServices] = useState<AiService[]>([]);
@@ -16,8 +15,6 @@ const UserReviewedServices = () => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
-
-  const { showToast } = useToast();
 
   if (!user) {
     navigate("/login");
@@ -55,8 +52,8 @@ const UserReviewedServices = () => {
         if (data.success) {
           setReviewedServices(data.data);
         }
-      } catch {
-        showToast("An error occured, please try again later", "error");
+      } catch (error) {
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -65,7 +62,6 @@ const UserReviewedServices = () => {
     if (user!.Id > 0) {
       fetchLikedServices();
     } else {
-      showToast("An error occured, please try again later", "error");
       setIsLoading(false);
     }
   }, [user!.Id]);

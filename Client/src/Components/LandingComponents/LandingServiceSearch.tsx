@@ -55,7 +55,7 @@ const LandingServiceSearch = () => {
       className="w-full h-[400px] relative mt-3 rounded-xl overflow-hidden  shadow-lg shadow-gray-700 px-4"
       align="center"
       justify="center"
-      style={{ backgroundImage: "url('/public/Black_blinking_stars.gif')" }}
+      style={{ backgroundImage: "url('/Black_blinking_stars.gif')" }}
       direction="row"
     >
       <Block className="z-10 text-center " direction="column" align="center">

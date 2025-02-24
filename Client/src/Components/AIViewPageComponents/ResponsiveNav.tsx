@@ -1,5 +1,5 @@
 import { Tooltip } from "@mantine/core";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaFileAlt, FaImages, FaComments } from "react-icons/fa";
 
 const ResponsiveNav = () => {

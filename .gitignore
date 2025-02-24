@@ -2,3 +2,18 @@ Server/bin
 Server/obj
 Client/.env
 Server/appsettings.Development.json
+.vs/Aiverse/FileContentIndex/89b5ee5e-0e6a-400b-886a-e847901a61f0.vsidx
+.vs/Aiverse/DesignTimeBuild/.dtbcache.v2
+.vs/Aiverse/config/applicationhost.config
+.vs/Aiverse/v17/ResourceExplorer/settings.json
+.vs/Aiverse/v17/.futdcache.v2
+.vs/Aiverse/v17/.suo
+.vs/Aiverse/v17/DocumentLayout.backup.json
+.vs/Aiverse/v17/DocumentLayout.json
+.vs/ProjectEvaluation/aiverse.metadata.v9.bin
+.vs/ProjectEvaluation/aiverse.projects.v9.bin
+.vs/ProjectEvaluation/aiverse.strings.v9.bin
+Server/Properties/PublishProfiles/aiverse - Web Deploy.pubxml
+Server/Properties/PublishProfiles/aiverse - Web Deploy.pubxml.user
+Server/Properties/ServiceDependencies/aiverse - Web Deploy/profile.arm.json
+Server/Server.csproj.user
